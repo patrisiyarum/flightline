@@ -9,7 +9,7 @@ import * as XLSX from "xlsx";
 
 interface BulkUploadProps {
   onPredict: (text: string) => Promise<{ subPredictions: any[] }>;
-  onUploadComplete: (results: any[]) => void;
+  onUploadComplete: (results: any[], file: File) => void;
 }
 
 // Keywords to look for in the header row (Case Insensitive)
@@ -284,7 +284,7 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
       }
 
       setResults(processedResults);
-      onUploadComplete(processedResults);
+      onUploadComplete(processedResults, file!);
     } catch (err) {
       console.error("Processing error:", err);
       alert("An error occurred during processing.");

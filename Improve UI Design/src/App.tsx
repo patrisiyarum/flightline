@@ -19,7 +19,8 @@ import {
 import { PredictionCard } from "./components/PredictionCard";
 import { SampleComments } from "./components/SampleComments";
 import { BulkUpload } from "./components/BulkUpload";
-import { 
+import { UploadHistory, UploadSummary } from "./components/UploadHistory";
+import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, 
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer 
 } from "recharts";
@@ -45,6 +46,42 @@ async function predictText(text: string) {
   });
   if (!response.ok) throw new Error("Prediction failed");
   return await response.json();
+}
+
+async function saveUpload(fileName: string, fileBase64: string, results: any[]) {
+  const response = await fetch(`${API_URL}/uploads`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ file_name: fileName, file_base64: fileBase64, results }),
+  });
+  if (!response.ok) throw new Error("Failed to save upload");
+  return await response.json();
+}
+
+async function listUploads(): Promise<UploadSummary[]> {
+  const response = await fetch(`${API_URL}/uploads`);
+  if (!response.ok) throw new Error("Failed to list uploads");
+  const data = await response.json();
+  return data.uploads;
+}
+
+async function getUpload(uploadId: number) {
+  const response = await fetch(`${API_URL}/uploads/${uploadId}`);
+  if (!response.ok) throw new Error("Failed to get upload");
+  return await response.json();
+}
+
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      const base64 = result.split(",")[1];
+      resolve(base64);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
 }
 
 // --- Define types for results ---
@@ -289,9 +326,13 @@ export default function App() {
   const [modelLoaded, setModelLoaded] = useState(false);
   const [checking, setChecking] = useState(true);
   const [bulkResults, setBulkResults] = useState<BulkResultRow[]>([]);
+  const [uploads, setUploads] = useState<UploadSummary[]>([]);
+  const [currentUploadId, setCurrentUploadId] = useState<number | null>(null);
+  const [loadingUpload, setLoadingUpload] = useState(false);
 
   useEffect(() => {
     checkApiHealth();
+    loadUploadHistory();
   }, []);
 
   const checkApiHealth = async () => {
@@ -311,6 +352,31 @@ export default function App() {
       setModelLoaded(false);
     } finally {
       setChecking(false);
+    }
+  };
+
+  const loadUploadHistory = async () => {
+    try {
+      const uploadList = await listUploads();
+      setUploads(uploadList);
+      if (uploadList.length > 0) {
+        await loadUploadResults(uploadList[0].id);
+      }
+    } catch (err) {
+      console.error("Failed to load upload history:", err);
+    }
+  };
+
+  const loadUploadResults = async (uploadId: number) => {
+    setLoadingUpload(true);
+    try {
+      const detail = await getUpload(uploadId);
+      setCurrentUploadId(detail.id);
+      setBulkResults(detail.results as BulkResultRow[]);
+    } catch (err) {
+      console.error("Failed to load upload:", err);
+    } finally {
+      setLoadingUpload(false);
     }
   };
 
@@ -339,9 +405,18 @@ export default function App() {
     setPredictions(null);
   };
 
-  const handleBulkUploadComplete = (results: any[]) => {
+  const handleBulkUploadComplete = async (results: any[], file: File) => {
     setBulkResults(results as BulkResultRow[]);
-    alert("Bulk upload complete! Check the 'Analytics' tab for charts.");
+
+    try {
+      const base64 = await fileToBase64(file);
+      const saved = await saveUpload(file.name, base64, results);
+      setCurrentUploadId(saved.id);
+      const uploadList = await listUploads();
+      setUploads(uploadList);
+    } catch (err) {
+      console.error("Failed to save upload:", err);
+    }
   };
 
   return (
@@ -411,6 +486,12 @@ export default function App() {
 
           {/* Analyze Tab */}
           <TabsContent value="home">
+            <UploadHistory
+              uploads={uploads}
+              currentUploadId={currentUploadId}
+              onSelectUpload={loadUploadResults}
+              loading={loadingUpload}
+            />
             <Card>
               <CardHeader>
                 <SampleComments onSelectSample={handleSelectSample} /> 
