@@ -688,7 +688,7 @@ export default function App() {
               <CardHeader>
                 <CardTitle>About This Tool</CardTitle>
                 <CardDescription>
-                  A project by <strong>Patrisiya Rumyantseva</strong> to automate and scale operational feedback analysis.
+                  A project to automate and scale operational feedback analysis.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
