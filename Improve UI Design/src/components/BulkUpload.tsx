@@ -9,7 +9,7 @@ import * as XLSX from "xlsx";
 
 interface BulkUploadProps {
   onPredict: (text: string) => Promise<{ subPredictions: any[] }>;
-  onUploadComplete: (results: any[], file: File) => void;
+  onUploadComplete: (results: any[], file: File, processingTimeSec: number) => void;
 }
 
 // Keywords to look for in the header row (Case Insensitive)
@@ -27,6 +27,7 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
   const [previewData, setPreviewData] = useState<any[] | null>(null);
   const [columns, setColumns] = useState<string[]>([]);
   const [stitchCount, setStitchCount] = useState(0);
+  const [elapsedTime, setElapsedTime] = useState<number | null>(null);
 
   // --- Helper: Aggressive Data Cleaning (Fixed for Dates) ---
   const cleanValue = (val: any) => {
@@ -184,6 +185,8 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
     setProcessing(true);
     setProgress(0);
     setStitchCount(0);
+    setElapsedTime(null);
+    const startTime = performance.now();
 
     try {
       let rawData: any[] = [];
@@ -283,8 +286,11 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
         if (i % 5 === 0) await new Promise((resolve) => setTimeout(resolve, 10));
       }
 
+      const endTime = performance.now();
+      const timeSec = parseFloat(((endTime - startTime) / 1000).toFixed(1));
+      setElapsedTime(timeSec);
       setResults(processedResults);
-      onUploadComplete(processedResults, file!);
+      onUploadComplete(processedResults, file!, timeSec);
     } catch (err) {
       console.error("Processing error:", err);
       alert("An error occurred during processing.");
@@ -406,7 +412,8 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
             <Alert className="mb-4 border-green-500/50 text-green-600 dark:text-green-400 bg-green-500/10">
               <CheckCircle2 className="h-4 w-4" />
               <AlertDescription>
-                Success! {results.length} rows categorized.
+                Success! {results.length} rows categorized
+                {elapsedTime !== null && ` in ${elapsedTime}s`}.
                 {stitchCount > 0 &&
                   ` (Repaired ${stitchCount} broken text rows automatically)`}
               </AlertDescription>

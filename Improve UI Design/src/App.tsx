@@ -15,15 +15,21 @@ import {
   Tag,
   Zap,
   Percent,
+  Download,
+  Timer,
+  TrendingUp,
+  Target,
 } from "lucide-react";
 import { PredictionCard } from "./components/PredictionCard";
 import { SampleComments } from "./components/SampleComments";
 import { BulkUpload } from "./components/BulkUpload";
 import { UploadHistory, UploadSummary } from "./components/UploadHistory";
+import { ResultsTable } from "./components/ResultsTable";
 import {
-  BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, 
-  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer 
+  BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
+  XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from "recharts";
+import Papa from "papaparse";
 
 const API_URL = "https://feedback-webapp-5zc2.onrender.com";
 
@@ -91,14 +97,73 @@ interface BulkResultRow {
 }
 
 // --- AnalyticsDashboard Component ---
-function AnalyticsDashboard({ results }: { results: BulkResultRow[] }) {
-  
+function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRow[]; processingTime: number | null }) {
+  const [confidenceThreshold, setConfidenceThreshold] = useState(0);
+
+  // Filter results by confidence threshold
+  const filteredResults = useMemo(() => {
+    if (confidenceThreshold === 0) return results;
+    return results.filter(row => {
+      const confStr = row["Subcategory_Confidence"];
+      if (confStr && typeof confStr === "string") {
+        return parseFloat(confStr.replace("%", "")) >= confidenceThreshold;
+      }
+      return true;
+    });
+  }, [results, confidenceThreshold]);
+
+  // --- KPI calculations ---
+  const kpis = useMemo(() => {
+    if (!results.length) return null;
+    let totalConf = 0;
+    let confCount = 0;
+    let highConf = 0;
+    const catCounts: Record<string, number> = {};
+
+    results.forEach(row => {
+      const confStr = row["Subcategory_Confidence"];
+      if (confStr && typeof confStr === "string") {
+        const val = parseFloat(confStr.replace("%", ""));
+        if (!isNaN(val)) {
+          totalConf += val;
+          confCount++;
+          if (val >= 90) highConf++;
+        }
+      }
+      const cat = row["Predicted_Subcategory"];
+      if (cat) catCounts[cat] = (catCounts[cat] || 0) + 1;
+    });
+
+    const topCategory = Object.entries(catCounts).sort((a, b) => b[1] - a[1])[0];
+
+    return {
+      totalRows: results.length,
+      avgConfidence: confCount > 0 ? (totalConf / confCount).toFixed(1) : "N/A",
+      highConfCount: highConf,
+      topCategory: topCategory ? topCategory[0] : "N/A",
+      topCategoryPct: topCategory ? ((topCategory[1] / results.length) * 100).toFixed(0) : "0",
+    };
+  }, [results]);
+
+  // CSV export
+  const handleExportCSV = () => {
+    if (!filteredResults.length) return;
+    const csv = Papa.unparse(filteredResults);
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "classified_results.csv";
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   // 1. Operational Hotspots (Top 10 Airports)
   const airportData = useMemo(() => {
-    if (!results.length) return [];
+    if (!filteredResults.length) return [];
     const counts: { [key: string]: number } = {};
-    results.forEach(row => {
-      const apKey = Object.keys(row).find(k => 
+    filteredResults.forEach(row => {
+      const apKey = Object.keys(row).find(k =>
         ["Dpt A/P", "Station", "Base", "Departure"].some(term => k.includes(term))
       );
       const ap = row[apKey || "Dpt A/P"] || "Unknown";
@@ -108,17 +173,17 @@ function AnalyticsDashboard({ results }: { results: BulkResultRow[] }) {
       .map(([name, count]) => ({ name, count }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 10);
-  }, [results]);
+  }, [filteredResults]);
 
   // 2. Trends Over Time (Daily Volume)
   const trendData = useMemo(() => {
-    if (!results.length) return [];
+    if (!filteredResults.length) return [];
     const counts: { [key: string]: number } = {};
-    results.forEach(row => {
+    filteredResults.forEach(row => {
       const dateKey = Object.keys(row).find(k => k.includes("Date") || k.includes("Time"));
       const dateVal = row[dateKey || "Flt Date"];
       const date = dateVal ? new Date(dateVal).toLocaleDateString() : "Unknown";
-      
+
       if (date !== "Unknown" && date !== "Invalid Date") {
         counts[date] = (counts[date] || 0) + 1;
       }
@@ -126,13 +191,13 @@ function AnalyticsDashboard({ results }: { results: BulkResultRow[] }) {
     return Object.entries(counts)
       .map(([date, count]) => ({ date, count }))
       .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-  }, [results]);
+  }, [filteredResults]);
 
   // 3. Aircraft Fleet Breakdown
   const fleetData = useMemo(() => {
-    if (!results.length) return [];
+    if (!filteredResults.length) return [];
     const counts: { [key: string]: number } = {};
-    results.forEach(row => {
+    filteredResults.forEach(row => {
       const acKey = Object.keys(row).find(k => k === "A/C" || k === "Aircraft" || k === "Fleet");
       const ac = row[acKey || "A/C"] || "Unknown";
       counts[ac] = (counts[ac] || 0) + 1;
@@ -140,26 +205,26 @@ function AnalyticsDashboard({ results }: { results: BulkResultRow[] }) {
     return Object.entries(counts)
       .map(([name, value]) => ({ name, value }))
       .sort((a, b) => b.value - a.value);
-  }, [results]);
+  }, [filteredResults]);
 
   // 4. Crew vs. Passenger Breakdown
   const sourceData = useMemo(() => {
-    if (!results.length) return [];
+    if (!filteredResults.length) return [];
     const counts: { [key: string]: number } = {};
-    results.forEach(row => {
+    filteredResults.forEach(row => {
       const typeKey = Object.keys(row).find(k => k.includes("Meal Type") || k.includes("Service Type"));
       const type = row[typeKey || "Meal Type"] || "Unknown";
       counts[type] = (counts[type] || 0) + 1;
     });
     return Object.entries(counts).map(([name, value]) => ({ name, value }));
-  }, [results]);
+  }, [filteredResults]);
 
   // 5. Model Confidence Health
   const confidenceData = useMemo(() => {
-    if (!results.length) return [];
+    if (!filteredResults.length) return [];
     const buckets = { "Low (<70%)": 0, "Medium (70-90%)": 0, "High (>90%)": 0 };
-    
-    results.forEach(row => {
+
+    filteredResults.forEach(row => {
       const confStr = row["Subcategory_Confidence"];
       if (confStr && typeof confStr === 'string') {
         const val = parseFloat(confStr.replace("%", ""));
@@ -169,7 +234,7 @@ function AnalyticsDashboard({ results }: { results: BulkResultRow[] }) {
       }
     });
     return Object.entries(buckets).map(([name, count]) => ({ name, count }));
-  }, [results]);
+  }, [filteredResults]);
 
   if (!results.length) {
     return (
@@ -198,7 +263,88 @@ function AnalyticsDashboard({ results }: { results: BulkResultRow[] }) {
 
   return (
     <div className="space-y-6">
-      
+
+      {/* --- KPI SUMMARY CARDS --- */}
+      {kpis && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <Card className="border-primary/20">
+            <CardContent className="pt-6 pb-4">
+              <div className="flex items-center gap-2 mb-1">
+                <BarChart3 className="w-4 h-4 text-primary" />
+                <span className="text-xs text-muted-foreground">Total Rows</span>
+              </div>
+              <p className="text-2xl font-bold">{kpis.totalRows.toLocaleString()}</p>
+            </CardContent>
+          </Card>
+          <Card className="border-primary/20">
+            <CardContent className="pt-6 pb-4">
+              <div className="flex items-center gap-2 mb-1">
+                <Target className="w-4 h-4 text-green-500" />
+                <span className="text-xs text-muted-foreground">Avg Confidence</span>
+              </div>
+              <p className="text-2xl font-bold">{kpis.avgConfidence}%</p>
+            </CardContent>
+          </Card>
+          <Card className="border-primary/20">
+            <CardContent className="pt-6 pb-4">
+              <div className="flex items-center gap-2 mb-1">
+                <TrendingUp className="w-4 h-4 text-yellow-500" />
+                <span className="text-xs text-muted-foreground">High Confidence (&gt;90%)</span>
+              </div>
+              <p className="text-2xl font-bold">{kpis.highConfCount.toLocaleString()}</p>
+            </CardContent>
+          </Card>
+          <Card className="border-primary/20">
+            <CardContent className="pt-6 pb-4">
+              <div className="flex items-center gap-2 mb-1">
+                <Tag className="w-4 h-4 text-blue-500" />
+                <span className="text-xs text-muted-foreground">Top Category</span>
+              </div>
+              <p className="text-lg font-bold leading-tight">{kpis.topCategory}</p>
+              <span className="text-xs text-muted-foreground">{kpis.topCategoryPct}% of rows</span>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* --- Processing Time + Confidence Slider + Export --- */}
+      <Card>
+        <CardContent className="pt-6 pb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex items-center gap-6">
+              {processingTime !== null && (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Timer className="w-4 h-4" />
+                  <span>Processed in <strong className="text-foreground">{processingTime}s</strong></span>
+                </div>
+              )}
+              <div className="flex items-center gap-3">
+                <label className="text-sm text-muted-foreground whitespace-nowrap">
+                  Min. Confidence: <strong className="text-foreground">{confidenceThreshold}%</strong>
+                </label>
+                <input
+                  type="range"
+                  min={0}
+                  max={95}
+                  step={5}
+                  value={confidenceThreshold}
+                  onChange={(e) => setConfidenceThreshold(Number(e.target.value))}
+                  className="w-32 accent-primary"
+                />
+              </div>
+              {confidenceThreshold > 0 && (
+                <Badge variant="secondary" className="text-xs">
+                  {filteredResults.length} / {results.length} rows
+                </Badge>
+              )}
+            </div>
+            <Button size="sm" variant="outline" onClick={handleExportCSV}>
+              <Download className="w-4 h-4 mr-2" /> Export CSV
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* --- ROW 1: AI CONFIDENCE & TOP AIRPORTS (Side-by-Side) --- */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card className="border-primary/20 bg-primary/5">
@@ -206,7 +352,7 @@ function AnalyticsDashboard({ results }: { results: BulkResultRow[] }) {
             <div className="flex items-center gap-2">
               <CardTitle>AI Confidence Health Check</CardTitle>
             </div>
-            <CardDescription>Model certainty across {results.length} records</CardDescription>
+            <CardDescription>Model certainty across {filteredResults.length} records</CardDescription>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
@@ -329,6 +475,7 @@ export default function App() {
   const [uploads, setUploads] = useState<UploadSummary[]>([]);
   const [currentUploadId, setCurrentUploadId] = useState<number | null>(null);
   const [loadingUpload, setLoadingUpload] = useState(false);
+  const [processingTime, setProcessingTime] = useState<number | null>(null);
 
   useEffect(() => {
     checkApiHealth();
@@ -405,8 +552,9 @@ export default function App() {
     setPredictions(null);
   };
 
-  const handleBulkUploadComplete = async (results: any[], file: File) => {
+  const handleBulkUploadComplete = async (results: any[], file: File, processingTimeSec: number) => {
     setBulkResults(results as BulkResultRow[]);
+    setProcessingTime(processingTimeSec);
 
     try {
       const base64 = await fileToBase64(file);
@@ -526,11 +674,12 @@ export default function App() {
               onPredict={predictComment}
               onUploadComplete={handleBulkUploadComplete}
             />
+            <ResultsTable results={bulkResults} />
           </TabsContent>
 
           {/* Analytics Tab */}
           <TabsContent value="analytics">
-            <AnalyticsDashboard results={bulkResults} />
+            <AnalyticsDashboard results={bulkResults} processingTime={processingTime} />
           </TabsContent>
 
           {/* About Tab */}
