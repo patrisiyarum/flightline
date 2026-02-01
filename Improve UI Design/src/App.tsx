@@ -1,20 +1,14 @@
 import { useState, useEffect, useMemo } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./components/ui/card";
 import { Button } from "./components/ui/button";
 import { Textarea } from "./components/ui/textarea";
 import { Badge } from "./components/ui/badge";
 import { Alert, AlertDescription } from "./components/ui/alert";
 import {
-  Brain,
   BarChart3,
-  Info,
-  Sparkles,
   CheckCircle2,
   AlertCircle,
   Tag,
-  Zap,
-  Percent,
   Download,
   Timer,
   TrendingUp,
@@ -25,6 +19,8 @@ import { SampleComments } from "./components/SampleComments";
 import { BulkUpload } from "./components/BulkUpload";
 import { UploadHistory, UploadSummary } from "./components/UploadHistory";
 import { ResultsTable } from "./components/ResultsTable";
+import { Sidebar, Page } from "./components/Sidebar";
+import { HomePage } from "./components/HomePage";
 import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
@@ -90,17 +86,26 @@ function fileToBase64(file: File): Promise<string> {
   });
 }
 
-// --- Define types for results ---
+// --- Types ---
 interface BulkResultRow {
   Predicted_Subcategory: string;
   [key: string]: any;
 }
 
-// --- AnalyticsDashboard Component ---
+// --- Chart Colors (inline to survive Tailwind purge) ---
+const CHART_COLORS = ["#1DB954", "#1ed760", "#169c46", "#b3b3b3", "#535353", "#ffffff"];
+const TOOLTIP_STYLE = {
+  backgroundColor: "#282828",
+  color: "#ffffff",
+  border: "1px solid #404040",
+  borderRadius: "8px",
+};
+const LABEL_COLOR = "#b3b3b3";
+
+// --- AnalyticsDashboard ---
 function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRow[]; processingTime: number | null }) {
   const [confidenceThreshold, setConfidenceThreshold] = useState(0);
 
-  // Filter results by confidence threshold
   const filteredResults = useMemo(() => {
     if (confidenceThreshold === 0) return results;
     return results.filter(row => {
@@ -112,30 +117,20 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
     });
   }, [results, confidenceThreshold]);
 
-  // --- KPI calculations ---
   const kpis = useMemo(() => {
     if (!results.length) return null;
-    let totalConf = 0;
-    let confCount = 0;
-    let highConf = 0;
+    let totalConf = 0, confCount = 0, highConf = 0;
     const catCounts: Record<string, number> = {};
-
     results.forEach(row => {
       const confStr = row["Subcategory_Confidence"];
       if (confStr && typeof confStr === "string") {
         const val = parseFloat(confStr.replace("%", ""));
-        if (!isNaN(val)) {
-          totalConf += val;
-          confCount++;
-          if (val >= 90) highConf++;
-        }
+        if (!isNaN(val)) { totalConf += val; confCount++; if (val >= 90) highConf++; }
       }
       const cat = row["Predicted_Subcategory"];
       if (cat) catCounts[cat] = (catCounts[cat] || 0) + 1;
     });
-
     const topCategory = Object.entries(catCounts).sort((a, b) => b[1] - a[1])[0];
-
     return {
       totalRows: results.length,
       avgConfidence: confCount > 0 ? (totalConf / confCount).toFixed(1) : "N/A",
@@ -145,7 +140,6 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
     };
   }, [results]);
 
-  // CSV export
   const handleExportCSV = () => {
     if (!filteredResults.length) return;
     const csv = Papa.unparse(filteredResults);
@@ -158,75 +152,55 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
     URL.revokeObjectURL(url);
   };
 
-  // 1. Operational Hotspots (Top 10 Airports)
   const airportData = useMemo(() => {
     if (!filteredResults.length) return [];
-    const counts: { [key: string]: number } = {};
+    const counts: Record<string, number> = {};
     filteredResults.forEach(row => {
-      const apKey = Object.keys(row).find(k =>
-        ["Dpt A/P", "Station", "Base", "Departure"].some(term => k.includes(term))
-      );
+      const apKey = Object.keys(row).find(k => ["Dpt A/P", "Station", "Base", "Departure"].some(t => k.includes(t)));
       const ap = row[apKey || "Dpt A/P"] || "Unknown";
       counts[ap] = (counts[ap] || 0) + 1;
     });
-    return Object.entries(counts)
-      .map(([name, count]) => ({ name, count }))
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 10);
+    return Object.entries(counts).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count).slice(0, 10);
   }, [filteredResults]);
 
-  // 2. Trends Over Time (Daily Volume)
   const trendData = useMemo(() => {
     if (!filteredResults.length) return [];
-    const counts: { [key: string]: number } = {};
+    const counts: Record<string, number> = {};
     filteredResults.forEach(row => {
       const dateKey = Object.keys(row).find(k => k.includes("Date") || k.includes("Time"));
       const dateVal = row[dateKey || "Flt Date"];
       const date = dateVal ? new Date(dateVal).toLocaleDateString() : "Unknown";
-
-      if (date !== "Unknown" && date !== "Invalid Date") {
-        counts[date] = (counts[date] || 0) + 1;
-      }
+      if (date !== "Unknown" && date !== "Invalid Date") counts[date] = (counts[date] || 0) + 1;
     });
-    return Object.entries(counts)
-      .map(([date, count]) => ({ date, count }))
-      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+    return Object.entries(counts).map(([date, count]) => ({ date, count })).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   }, [filteredResults]);
 
-  // 3. Aircraft Fleet Breakdown
   const fleetData = useMemo(() => {
     if (!filteredResults.length) return [];
-    const counts: { [key: string]: number } = {};
+    const counts: Record<string, number> = {};
     filteredResults.forEach(row => {
       const acKey = Object.keys(row).find(k => k === "A/C" || k === "Aircraft" || k === "Fleet");
-      const ac = row[acKey || "A/C"] || "Unknown";
-      counts[ac] = (counts[ac] || 0) + 1;
+      counts[row[acKey || "A/C"] || "Unknown"] = (counts[row[acKey || "A/C"] || "Unknown"] || 0) + 1;
     });
-    return Object.entries(counts)
-      .map(([name, value]) => ({ name, value }))
-      .sort((a, b) => b.value - a.value);
+    return Object.entries(counts).map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value);
   }, [filteredResults]);
 
-  // 4. Crew vs. Passenger Breakdown
   const sourceData = useMemo(() => {
     if (!filteredResults.length) return [];
-    const counts: { [key: string]: number } = {};
+    const counts: Record<string, number> = {};
     filteredResults.forEach(row => {
       const typeKey = Object.keys(row).find(k => k.includes("Meal Type") || k.includes("Service Type"));
-      const type = row[typeKey || "Meal Type"] || "Unknown";
-      counts[type] = (counts[type] || 0) + 1;
+      counts[row[typeKey || "Meal Type"] || "Unknown"] = (counts[row[typeKey || "Meal Type"] || "Unknown"] || 0) + 1;
     });
     return Object.entries(counts).map(([name, value]) => ({ name, value }));
   }, [filteredResults]);
 
-  // 5. Model Confidence Health
   const confidenceData = useMemo(() => {
     if (!filteredResults.length) return [];
     const buckets = { "Low (<70%)": 0, "Medium (70-90%)": 0, "High (>90%)": 0 };
-
     filteredResults.forEach(row => {
       const confStr = row["Subcategory_Confidence"];
-      if (confStr && typeof confStr === 'string') {
+      if (confStr && typeof confStr === "string") {
         const val = parseFloat(confStr.replace("%", ""));
         if (val < 70) buckets["Low (<70%)"]++;
         else if (val < 90) buckets["Medium (70-90%)"]++;
@@ -238,226 +212,145 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
 
   if (!results.length) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle>Analytics Dashboard</CardTitle>
-          <CardDescription>Upload a file to see comprehensive insights.</CardDescription>
-        </CardHeader>
-        <CardContent className="py-12 text-center text-muted-foreground">
-          <BarChart3 className="w-16 h-16 mx-auto mb-4 opacity-50" />
-          <p>No data to display.</p>
-          <p className="text-sm mt-2">Upload a CSV or Excel file in the "Analyze" tab first.</p>
-        </CardContent>
-      </Card>
+      <div className="flex flex-col items-center justify-center py-24 text-center">
+        <BarChart3 className="w-16 h-16 mb-4 opacity-30" style={{ color: "#b3b3b3" }} />
+        <p className="text-white font-semibold mb-1">No data yet</p>
+        <p className="text-sm" style={{ color: "#b3b3b3" }}>Upload a file in the Upload tab to see analytics.</p>
+      </div>
     );
   }
 
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
-  const labelColor = "var(--muted-foreground)";
-  const tooltipStyle = {
-    backgroundColor: "var(--background)",
-    color: "var(--foreground)",
-    border: "1px solid var(--border)",
-    borderRadius: "var(--radius)",
-  };
-
   return (
     <div className="space-y-6">
-
-      {/* --- KPI SUMMARY CARDS --- */}
+      {/* KPI Cards */}
       {kpis && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Card className="border-primary/20">
-            <CardContent className="pt-6 pb-4">
-              <div className="flex items-center gap-2 mb-1">
-                <BarChart3 className="w-4 h-4 text-primary" />
-                <span className="text-xs text-muted-foreground">Total Rows</span>
+          {[
+            { icon: BarChart3, label: "Total Rows", value: kpis.totalRows.toLocaleString(), color: "#1DB954" },
+            { icon: Target, label: "Avg Confidence", value: `${kpis.avgConfidence}%`, color: "#1ed760" },
+            { icon: TrendingUp, label: "High Confidence", value: kpis.highConfCount.toLocaleString(), color: "#1DB954" },
+            { icon: Tag, label: "Top Category", value: kpis.topCategory, color: "#b3b3b3", sub: `${kpis.topCategoryPct}% of rows` },
+          ].map(({ icon: Icon, label, value, color, sub }) => (
+            <div key={label} className="rounded-lg p-5" style={{ backgroundColor: "#181818" }}>
+              <div className="flex items-center gap-2 mb-2">
+                <Icon className="w-4 h-4" style={{ color }} />
+                <span className="text-xs" style={{ color: "#b3b3b3" }}>{label}</span>
               </div>
-              <p className="text-2xl font-bold">{kpis.totalRows.toLocaleString()}</p>
-            </CardContent>
-          </Card>
-          <Card className="border-primary/20">
-            <CardContent className="pt-6 pb-4">
-              <div className="flex items-center gap-2 mb-1">
-                <Target className="w-4 h-4" style={{ color: "#22c55e" }} />
-                <span className="text-xs text-muted-foreground">Avg Confidence</span>
-              </div>
-              <p className="text-2xl font-bold">{kpis.avgConfidence}%</p>
-            </CardContent>
-          </Card>
-          <Card className="border-primary/20">
-            <CardContent className="pt-6 pb-4">
-              <div className="flex items-center gap-2 mb-1">
-                <TrendingUp className="w-4 h-4" style={{ color: "#eab308" }} />
-                <span className="text-xs text-muted-foreground">High Confidence (&gt;90%)</span>
-              </div>
-              <p className="text-2xl font-bold">{kpis.highConfCount.toLocaleString()}</p>
-            </CardContent>
-          </Card>
-          <Card className="border-primary/20">
-            <CardContent className="pt-6 pb-4">
-              <div className="flex items-center gap-2 mb-1">
-                <Tag className="w-4 h-4" style={{ color: "#3b82f6" }} />
-                <span className="text-xs text-muted-foreground">Top Category</span>
-              </div>
-              <p className="text-lg font-bold leading-tight">{kpis.topCategory}</p>
-              <span className="text-xs text-muted-foreground">{kpis.topCategoryPct}% of rows</span>
-            </CardContent>
-          </Card>
+              <p className="text-xl font-bold text-white">{value}</p>
+              {sub && <span className="text-xs" style={{ color: "#b3b3b3" }}>{sub}</span>}
+            </div>
+          ))}
         </div>
       )}
 
-      {/* --- Processing Time + Confidence Slider + Export --- */}
-      <Card>
-        <CardContent className="pt-6 pb-4">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div className="flex items-center gap-6">
-              {processingTime !== null && (
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Timer className="w-4 h-4" />
-                  <span>Processed in <strong className="text-foreground">{processingTime}s</strong></span>
-                </div>
-              )}
-              <div className="flex items-center gap-3">
-                <label className="text-sm text-muted-foreground whitespace-nowrap">
-                  Min. Confidence: <strong className="text-foreground">{confidenceThreshold}%</strong>
-                </label>
-                <input
-                  type="range"
-                  min={0}
-                  max={95}
-                  step={5}
-                  value={confidenceThreshold}
-                  onChange={(e) => setConfidenceThreshold(Number(e.target.value))}
-                  className="w-32 accent-primary"
-                />
-              </div>
-              {confidenceThreshold > 0 && (
-                <Badge variant="secondary" className="text-xs">
-                  {filteredResults.length} / {results.length} rows
-                </Badge>
-              )}
+      {/* Controls */}
+      <div className="rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4" style={{ backgroundColor: "#181818" }}>
+        <div className="flex items-center gap-6">
+          {processingTime !== null && (
+            <div className="flex items-center gap-2 text-sm" style={{ color: "#b3b3b3" }}>
+              <Timer className="w-4 h-4" />
+              <span>Processed in <strong className="text-white">{processingTime}s</strong></span>
             </div>
-            <Button size="sm" variant="outline" onClick={handleExportCSV}>
-              <Download className="w-4 h-4 mr-2" /> Export CSV
-            </Button>
+          )}
+          <div className="flex items-center gap-3">
+            <label className="text-sm whitespace-nowrap" style={{ color: "#b3b3b3" }}>
+              Min. Confidence: <strong className="text-white">{confidenceThreshold}%</strong>
+            </label>
+            <input
+              type="range" min={0} max={95} step={5}
+              value={confidenceThreshold}
+              onChange={(e) => setConfidenceThreshold(Number(e.target.value))}
+              className="w-32"
+              style={{ accentColor: "#1DB954" }}
+            />
           </div>
-        </CardContent>
-      </Card>
-
-      {/* --- ROW 1: AI CONFIDENCE & TOP AIRPORTS (Side-by-Side) --- */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="border-primary/20 bg-primary/5">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <CardTitle>AI Confidence Health Check</CardTitle>
-            </div>
-            <CardDescription>Model certainty across {filteredResults.length} records</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={confidenceData}>
-                <CartesianGrid strokeDasharray="3 3" opacity={0.2} vertical={false} />
-                <XAxis dataKey="name" tick={{ fill: labelColor, fontSize: 12 }} />
-                <YAxis tick={{ fill: labelColor }} />
-                <Tooltip contentStyle={tooltipStyle} cursor={{fill: 'transparent'}} />
-                <Bar dataKey="count" fill="#FFBB28" radius={[4, 4, 0, 0]} name="Records" barSize={60} />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Top 10 Problem Airports</CardTitle>
-            <CardDescription>Volume of reports by Departure Station</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={airportData} layout="vertical" margin={{ left: 0 }}>
-                <XAxis type="number" hide />
-                <YAxis dataKey="name" type="category" width={40} tick={{ fill: labelColor, fontSize: 11 }} />
-                <Tooltip contentStyle={tooltipStyle} cursor={{fill: 'transparent'}} />
-                <Bar dataKey="count" fill="#8884d8" radius={[0, 4, 4, 0]} name="Reports" barSize={20} />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+          {confidenceThreshold > 0 && (
+            <span className="text-xs px-2 py-1 rounded" style={{ backgroundColor: "#282828", color: "#b3b3b3" }}>
+              {filteredResults.length} / {results.length}
+            </span>
+          )}
+        </div>
+        <button
+          onClick={handleExportCSV}
+          className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-transform hover:scale-105"
+          style={{ backgroundColor: "#1DB954", color: "#000000" }}
+        >
+          <Download className="w-3.5 h-3.5" /> Export CSV
+        </button>
       </div>
 
-      {/* --- ROW 2: TRENDS (Full Width) --- */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Issue Volume Over Time</CardTitle>
-          <CardDescription>Daily trend based on Flight Date</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={trendData}>
-              <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
-              <XAxis dataKey="date" tick={{ fill: labelColor }} fontSize={12} />
-              <YAxis tick={{ fill: labelColor }} />
-              <Tooltip contentStyle={tooltipStyle} />
-              <Line type="monotone" dataKey="count" stroke="#82ca9d" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 6 }} />
-            </LineChart>
+      {/* Charts */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="rounded-lg p-5" style={{ backgroundColor: "#181818" }}>
+          <h3 className="text-white font-bold mb-1">AI Confidence</h3>
+          <p className="text-xs mb-4" style={{ color: "#b3b3b3" }}>Model certainty across {filteredResults.length} records</p>
+          <ResponsiveContainer width="100%" height={280}>
+            <BarChart data={confidenceData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#282828" vertical={false} />
+              <XAxis dataKey="name" tick={{ fill: LABEL_COLOR, fontSize: 11 }} />
+              <YAxis tick={{ fill: LABEL_COLOR }} />
+              <Tooltip contentStyle={TOOLTIP_STYLE} cursor={{ fill: "transparent" }} />
+              <Bar dataKey="count" fill="#1DB954" radius={[4, 4, 0, 0]} name="Records" barSize={50} />
+            </BarChart>
           </ResponsiveContainer>
-        </CardContent>
-      </Card>
+        </div>
 
-      {/* --- ROW 3: FLEET & SOURCE --- */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Fleet Breakdown</CardTitle>
-            <CardDescription>Issues by Aircraft Type</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={250}>
-              <PieChart>
-                <Pie 
-                  data={fleetData} 
-                  cx="50%" cy="50%" 
-                  innerRadius={60} 
-                  outerRadius={80} 
-                  paddingAngle={5} 
-                  dataKey="value"
-                >
-                  {fleetData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip contentStyle={tooltipStyle} />
-                <Legend verticalAlign="bottom" height={36}/>
-              </PieChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+        <div className="rounded-lg p-5" style={{ backgroundColor: "#181818" }}>
+          <h3 className="text-white font-bold mb-1">Top Airports</h3>
+          <p className="text-xs mb-4" style={{ color: "#b3b3b3" }}>Reports by departure station</p>
+          <ResponsiveContainer width="100%" height={280}>
+            <BarChart data={airportData} layout="vertical" margin={{ left: 0 }}>
+              <XAxis type="number" hide />
+              <YAxis dataKey="name" type="category" width={40} tick={{ fill: LABEL_COLOR, fontSize: 10 }} />
+              <Tooltip contentStyle={TOOLTIP_STYLE} cursor={{ fill: "transparent" }} />
+              <Bar dataKey="count" fill="#1ed760" radius={[0, 4, 4, 0]} name="Reports" barSize={16} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Report Source</CardTitle>
-            <CardDescription>Crew vs. Passenger Meals</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={250}>
-              <PieChart>
-                <Pie 
-                  data={sourceData} 
-                  cx="50%" cy="50%" 
-                  outerRadius={80} 
-                  dataKey="value" 
-                  label
-                >
-                  {sourceData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={index === 0 ? "#FF8042" : "#0088FE"} />
-                  ))}
-                </Pie>
-                <Tooltip contentStyle={tooltipStyle} />
-                <Legend verticalAlign="bottom" height={36}/>
-              </PieChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+      <div className="rounded-lg p-5" style={{ backgroundColor: "#181818" }}>
+        <h3 className="text-white font-bold mb-1">Volume Over Time</h3>
+        <p className="text-xs mb-4" style={{ color: "#b3b3b3" }}>Daily trend based on flight date</p>
+        <ResponsiveContainer width="100%" height={280}>
+          <LineChart data={trendData}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#282828" />
+            <XAxis dataKey="date" tick={{ fill: LABEL_COLOR }} fontSize={11} />
+            <YAxis tick={{ fill: LABEL_COLOR }} />
+            <Tooltip contentStyle={TOOLTIP_STYLE} />
+            <Line type="monotone" dataKey="count" stroke="#1DB954" strokeWidth={3} dot={{ r: 4, fill: "#1DB954" }} activeDot={{ r: 6 }} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="rounded-lg p-5" style={{ backgroundColor: "#181818" }}>
+          <h3 className="text-white font-bold mb-1">Fleet Breakdown</h3>
+          <p className="text-xs mb-4" style={{ color: "#b3b3b3" }}>Issues by aircraft type</p>
+          <ResponsiveContainer width="100%" height={240}>
+            <PieChart>
+              <Pie data={fleetData} cx="50%" cy="50%" innerRadius={55} outerRadius={75} paddingAngle={3} dataKey="value">
+                {fleetData.map((_, i) => (<Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />))}
+              </Pie>
+              <Tooltip contentStyle={TOOLTIP_STYLE} />
+              <Legend verticalAlign="bottom" height={36} />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="rounded-lg p-5" style={{ backgroundColor: "#181818" }}>
+          <h3 className="text-white font-bold mb-1">Report Source</h3>
+          <p className="text-xs mb-4" style={{ color: "#b3b3b3" }}>Crew vs. passenger meals</p>
+          <ResponsiveContainer width="100%" height={240}>
+            <PieChart>
+              <Pie data={sourceData} cx="50%" cy="50%" outerRadius={75} dataKey="value" label>
+                {sourceData.map((_, i) => (<Cell key={i} fill={i === 0 ? "#1DB954" : "#535353"} />))}
+              </Pie>
+              <Tooltip contentStyle={TOOLTIP_STYLE} />
+              <Legend verticalAlign="bottom" height={36} />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
   );
@@ -465,6 +358,7 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
 
 // --- Main App ---
 export default function App() {
+  const [activePage, setActivePage] = useState<Page>("home");
   const [commentText, setCommentText] = useState("");
   const [predictions, setPredictions] = useState<any | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -488,8 +382,7 @@ export default function App() {
       const health = await checkHealth();
       if (health.status === "healthy") {
         setApiOnline(true);
-        const isLoaded = (health.sub_classes_count && health.sub_classes_count > 0) || true;
-        setModelLoaded(isLoaded);
+        setModelLoaded((health.sub_classes_count && health.sub_classes_count > 0) || true);
       } else {
         setApiOnline(false);
         setModelLoaded(false);
@@ -506,9 +399,7 @@ export default function App() {
     try {
       const uploadList = await listUploads();
       setUploads(uploadList);
-      if (uploadList.length > 0) {
-        await loadUploadResults(uploadList[0].id);
-      }
+      if (uploadList.length > 0) await loadUploadResults(uploadList[0].id);
     } catch (err) {
       console.error("Failed to load upload history:", err);
     }
@@ -527,15 +418,8 @@ export default function App() {
     }
   };
 
-  const predictComment = async (text: string) => {
-    return await predictText(text);
-  };
-
   const handleAnalyze = async () => {
-    if (!commentText.trim()) {
-      alert("Please enter a comment first.");
-      return;
-    }
+    if (!commentText.trim()) return;
     setIsAnalyzing(true);
     try {
       const result = await predictText(commentText);
@@ -555,7 +439,6 @@ export default function App() {
   const handleBulkUploadComplete = async (results: any[], file: File, processingTimeSec: number) => {
     setBulkResults(results as BulkResultRow[]);
     setProcessingTime(processingTimeSec);
-
     try {
       const base64 = await fileToBase64(file);
       const saved = await saveUpload(file.name, base64, results);
@@ -568,199 +451,115 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-background dark">
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="p-2 rounded-lg bg-primary/10">
-              <Brain className="w-8 h-8 text-foreground" />
-            </div>
-            <div>
-              <h1 className="text-foreground text-2xl font-semibold">FCR Feedback Categorization</h1>
-              <p className="text-muted-foreground">
-                An AI-powered solution for strategic feedback analysis.
-              </p>
-            </div>
-          </div>
+    <div className="flex min-h-screen" style={{ backgroundColor: "#000000" }}>
+      {/* Sidebar */}
+      <Sidebar
+        activePage={activePage}
+        onNavigate={setActivePage}
+        apiOnline={apiOnline}
+        modelLoaded={modelLoaded}
+      />
 
-          <div className="flex flex-wrap gap-2 items-center">
-            <Badge variant="outline">Augmented BERT</Badge>
-            <Badge variant="outline">Subcategory Classification</Badge>
-            <Badge variant="outline">Version 3.0</Badge>
+      {/* Main Content */}
+      <main
+        className="flex-1 overflow-y-auto"
+        style={{ backgroundColor: "#121212", borderTopLeftRadius: 8 }}
+      >
+        <div className="max-w-5xl mx-auto px-8 py-8">
 
-            {checking ? (
-              <Badge variant="secondary" className="gap-1">
-                <span className="animate-pulse">●</span> Checking Connections...
-              </Badge>
-            ) : (
-              <>
-                <Badge
-                  variant={apiOnline ? "default" : "secondary"}
-                  className={`gap-1 ${apiOnline ? "bg-green-600 hover:bg-green-700" : ""}`}
-                >
-                  {apiOnline ? "● API Connected" : "API Offline"}
-                </Badge>
-                <Badge
-                  variant={modelLoaded ? "default" : "secondary"}
-                  className={`gap-1 ${modelLoaded ? "bg-green-600 hover:bg-green-700" : ""}`}
-                >
-                  {modelLoaded ? "● Model Loaded" : "Model Unavailable"}
-                </Badge>
-              </>
-            )}
-          </div>
-        </div>
-
-        {!modelLoaded && (
-          <Alert className="mb-6">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              Backend API is offline or the model is unavailable. Analysis is currently disabled.
-              <Button variant="link" className="p-0 h-auto ml-1" onClick={checkApiHealth}>
-                Retry connection
-              </Button>
-            </AlertDescription>
-          </Alert>
-        )}
-
-        {/* Tabs */}
-        <Tabs defaultValue="home" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-6">
-            <TabsTrigger value="home"><Sparkles className="w-4 h-4 mr-2" /> Analyze</TabsTrigger>
-            <TabsTrigger value="analytics"><BarChart3 className="w-4 h-4 mr-2" /> Analytics</TabsTrigger>
-            <TabsTrigger value="about"><Info className="w-4 h-4 mr-2" /> About</TabsTrigger>
-          </TabsList>
-
-          {/* Analyze Tab */}
-          <TabsContent value="home">
-            <UploadHistory
-              uploads={uploads}
-              currentUploadId={currentUploadId}
-              onSelectUpload={loadUploadResults}
-              loading={loadingUpload}
+          {/* HOME */}
+          {activePage === "home" && (
+            <HomePage
+              onNavigate={setActivePage}
+              modelLoaded={modelLoaded}
+              totalUploads={uploads.length}
             />
-            <Card>
-              <CardHeader>
-                <SampleComments onSelectSample={handleSelectSample} /> 
-                <CardTitle>Analyze Feedback</CardTitle>
-                <CardDescription>Enter a comment to classify it.</CardDescription>
-              </CardHeader>
-              <CardContent>
+          )}
+
+          {/* CLASSIFY */}
+          {activePage === "classify" && (
+            <div className="space-y-6">
+              <div>
+                <h1 className="text-2xl font-bold text-white mb-1">Classify Feedback</h1>
+                <p className="text-sm" style={{ color: "#b3b3b3" }}>
+                  Enter a single comment to see its predicted subcategory.
+                </p>
+              </div>
+
+              <SampleComments onSelectSample={handleSelectSample} />
+
+              <div className="rounded-lg p-6" style={{ backgroundColor: "#181818" }}>
                 <Textarea
-                  placeholder="Example: 'The burger was cold and soggy.'"
+                  placeholder="Paste a crew feedback comment here..."
                   value={commentText}
                   onChange={(e) => setCommentText(e.target.value)}
-                  className="min-h-[120px] mb-4"
+                  className="min-h-[120px] mb-4 border-0"
+                  style={{ backgroundColor: "#282828", color: "#ffffff" }}
                 />
-                <Button onClick={handleAnalyze} disabled={isAnalyzing || !modelLoaded} className="w-full">
-                  {isAnalyzing ? "Analyzing..." : modelLoaded ? "Analyze Feedback" : "Model Unavailable"}
-                </Button>
+                <button
+                  onClick={handleAnalyze}
+                  disabled={isAnalyzing || !modelLoaded}
+                  className="w-full py-3 rounded-full text-sm font-bold transition-transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{ backgroundColor: "#1DB954", color: "#000000" }}
+                >
+                  {isAnalyzing ? "Analyzing..." : modelLoaded ? "Classify Feedback" : "Model Unavailable"}
+                </button>
 
                 {predictions && (
                   <div className="mt-6">
-                    <Alert className="mb-4">
-                      <CheckCircle2 className="h-4 w-4" />
-                      <AlertDescription>Prediction complete! Results displayed below.</AlertDescription>
-                    </Alert>
-                    <PredictionCard
-                      subPredictions={predictions.subPredictions}
-                    />
+                    <div className="flex items-center gap-2 mb-4 text-sm" style={{ color: "#1DB954" }}>
+                      <CheckCircle2 className="w-4 h-4" />
+                      Prediction complete
+                    </div>
+                    <PredictionCard subPredictions={predictions.subPredictions} />
                   </div>
                 )}
-              </CardContent>
-            </Card>
-            <BulkUpload
-              onPredict={predictComment}
-              onUploadComplete={handleBulkUploadComplete}
-            />
-            <ResultsTable results={bulkResults} />
-          </TabsContent>
+              </div>
+            </div>
+          )}
 
-          {/* Analytics Tab */}
-          <TabsContent value="analytics">
-            <AnalyticsDashboard results={bulkResults} processingTime={processingTime} />
-          </TabsContent>
-
-          {/* About Tab */}
-          <TabsContent value="about">
-            <Card>
-              <CardHeader>
-                <CardTitle>About This Tool</CardTitle>
-                <CardDescription>
-                  A project to automate and scale operational feedback analysis.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p>
-                  This tool was developed to address a significant operational challenge: the manual processing of thousands of comments from Delta crew members regarding <strong>critical issues with their on-board meals</strong>.
+          {/* UPLOAD */}
+          {activePage === "upload" && (
+            <div className="space-y-6">
+              <div>
+                <h1 className="text-2xl font-bold text-white mb-1">Bulk Upload</h1>
+                <p className="text-sm" style={{ color: "#b3b3b3" }}>
+                  Upload a CSV or Excel file to classify all rows at once.
                 </p>
-                <p>
-                  Previously, this qualitative data was reviewed and categorized by team members, a labor-intensive process that limited the speed of analysis and response.
+              </div>
+
+              <UploadHistory
+                uploads={uploads}
+                currentUploadId={currentUploadId}
+                onSelectUpload={loadUploadResults}
+                loading={loadingUpload}
+              />
+
+              <BulkUpload
+                onPredict={async (text: string) => await predictText(text)}
+                onUploadComplete={handleBulkUploadComplete}
+              />
+
+              <ResultsTable results={bulkResults} />
+            </div>
+          )}
+
+          {/* INSIGHTS */}
+          {activePage === "insights" && (
+            <div className="space-y-6">
+              <div>
+                <h1 className="text-2xl font-bold text-white mb-1">Insights</h1>
+                <p className="text-sm" style={{ color: "#b3b3b3" }}>
+                  Analytics dashboard for your classified feedback data.
                 </p>
+              </div>
 
-                {/* --- What Does This Model Do --- */}
-                <div className="mt-6 p-6 rounded-lg bg-primary/5 border-2 border-primary/20">
-                  <h3 className="mb-3">Purpose & Functionality</h3>
-                  <p className="text-muted-foreground mb-6">
-                    The model automates the manual review process by analyzing each comment and classifying it into a precise <strong>Subcategory</strong> for immediate action.
-                  </p>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/30">
-                      <Brain className="w-5 h-5 mt-1 text-primary flex-shrink-0" />
-                      <div>
-                        <h4 className="font-medium">Hybrid Intelligence</h4>
-                        <p className="text-sm text-muted-foreground">Combines BERT deep learning with keyword feature extraction.</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/30">
-                      <Tag className="w-5 h-5 mt-1 text-primary flex-shrink-0" />
-                      <div>
-                        <h4 className="font-medium">Structured Classification</h4>
-                        <p className="text-sm text-muted-foreground">Sorts feedback into 8 specific operational subcategories.</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/30">
-                      <Zap className="w-5 h-5 mt-1 text-primary flex-shrink-0" />
-                      <div>
-                        <h4 className="font-medium">High-Volume Processing</h4>
-                        <p className="text-sm text-muted-foreground">Analyzes thousands of comments from a CSV file in seconds.</p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/30">
-                      <Percent className="w-5 h-5 mt-1 text-primary flex-shrink-0" />
-                      <div>
-                        <h4 className="font-medium">Confidence Scoring</h4>
-                        <p className="text-sm text-muted-foreground">Provides a probability score to highlight ambiguous feedback.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <AnalyticsDashboard results={bulkResults} processingTime={processingTime} />
+            </div>
+          )}
 
-                <div className="mt-6 p-3 rounded bg-muted/50 text-sm">
-                  <strong>The goal:</strong> Convert unstructured feedback into actionable data at scale, reducing manual effort and accelerating insights.
-                </div>
-
-                <div className="grid sm:grid-cols-2 gap-4 mt-6">
-                  <div className="p-4 rounded-lg border border-border bg-muted/30">
-                    <h4 className="mb-2">Project Owner</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Patrisiya Rumyantseva
-                    </p>
-                  </div>
-                  <div className="p-4 rounded-lg border border-border bg-muted/30">
-                    <h4 className="mb-2">Version Information</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Current version: 3.0<br />Last updated: November 2025
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
+        </div>
+      </main>
     </div>
   );
 }

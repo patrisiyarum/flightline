@@ -1,7 +1,4 @@
 import { useState } from "react";
-import { Card, CardContent } from "./ui/card";
-import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
 interface SampleCommentsProps {
@@ -30,46 +27,62 @@ export function SampleComments({ onSelectSample }: SampleCommentsProps) {
   const visible = expanded ? samples : samples.slice(0, 4);
 
   return (
-    <Card className="mb-6">
-      <CardContent className="pt-6">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold">Sample Comments by Category</h3>
-          <Badge variant="secondary" className="text-xs">{samples.length} examples</Badge>
-        </div>
-        <div className="grid sm:grid-cols-2 gap-3">
-          {visible.map(({ category, text }) => (
-            <div
-              key={category}
-              className="p-4 rounded-lg border border-border bg-muted/30 hover:bg-muted/50 transition-colors"
-            >
-              <div className="flex items-start justify-between gap-3 mb-2">
-                <h4 className="text-muted-foreground text-sm">{category}</h4>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => onSelectSample(text)}
-                  className="shrink-0"
-                >
-                  Try it
-                </Button>
-              </div>
-              <p className="text-muted-foreground text-sm">{text}</p>
-            </div>
-          ))}
-        </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => setExpanded(!expanded)}
-          className="mt-3 w-full text-muted-foreground"
+    <div className="mb-6 rounded-lg p-6" style={{ backgroundColor: "#181818" }}>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="font-semibold text-white">Sample Comments by Category</h3>
+        <span
+          className="text-xs font-medium px-2.5 py-0.5 rounded-full"
+          style={{ backgroundColor: "rgba(29,185,84,0.15)", color: "#1DB954" }}
         >
-          {expanded ? (
-            <><ChevronUp className="w-4 h-4 mr-1" /> Show fewer</>
-          ) : (
-            <><ChevronDown className="w-4 h-4 mr-1" /> Show all {samples.length} examples</>
-          )}
-        </Button>
-      </CardContent>
-    </Card>
+          {samples.length} examples
+        </span>
+      </div>
+
+      <div className="grid sm:grid-cols-2 gap-3">
+        {visible.map(({ category, text }) => (
+          <div
+            key={category}
+            className="p-4 rounded-lg transition-all hover:scale-[1.02]"
+            style={{ backgroundColor: "#282828" }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#333333"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#282828"; }}
+          >
+            <div className="flex items-start justify-between gap-3 mb-2">
+              <span className="text-sm" style={{ color: "#1DB954" }}>{category}</span>
+              <button
+                onClick={() => onSelectSample(text)}
+                className="shrink-0 px-3 py-1 rounded-full text-xs font-bold transition-all hover:scale-105"
+                style={{ backgroundColor: "rgba(29,185,84,0.15)", color: "#1DB954", border: "1px solid rgba(29,185,84,0.3)" }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#1DB954";
+                  e.currentTarget.style.color = "#000000";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "rgba(29,185,84,0.15)";
+                  e.currentTarget.style.color = "#1DB954";
+                }}
+              >
+                Try it
+              </button>
+            </div>
+            <p className="text-sm" style={{ color: "#b3b3b3", lineHeight: 1.5 }}>{text}</p>
+          </div>
+        ))}
+      </div>
+
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="mt-4 w-full flex items-center justify-center gap-1 py-2 rounded-full text-xs font-medium transition-colors"
+        style={{ color: "#b3b3b3", backgroundColor: "transparent" }}
+        onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff"; }}
+        onMouseLeave={(e) => { e.currentTarget.style.color = "#b3b3b3"; }}
+      >
+        {expanded ? (
+          <><ChevronUp className="w-4 h-4" /> Show fewer</>
+        ) : (
+          <><ChevronDown className="w-4 h-4" /> Show all {samples.length} examples</>
+        )}
+      </button>
+    </div>
   );
 }
