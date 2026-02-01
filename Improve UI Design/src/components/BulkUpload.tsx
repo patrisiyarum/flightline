@@ -259,7 +259,11 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
         const commentText = row[textCol]?.toString().trim() || "";
 
         if (!commentText) {
-          processedResults.push(row);
+          processedResults.push({
+            ...row,
+            Predicted_Subcategory: "No Text",
+            Subcategory_Confidence: "0%",
+          });
           continue;
         }
 

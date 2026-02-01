@@ -156,16 +156,20 @@ export function ResultsTable({ results }: ResultsTableProps) {
                     if (col === "Subcategory_Confidence") {
                       return (
                         <td key={col} className="px-4 py-2">
-                          <Badge variant={confidenceBadge(val)} className={confidenceColor(val)}>
-                            {val}
-                          </Badge>
+                          {val ? (
+                            <Badge variant={confidenceBadge(val)} className={confidenceColor(val)}>
+                              {val}
+                            </Badge>
+                          ) : (
+                            <span className="text-muted-foreground text-xs">--</span>
+                          )}
                         </td>
                       );
                     }
                     if (col === "Predicted_Subcategory") {
                       return (
                         <td key={col} className="px-4 py-2 font-medium whitespace-nowrap">
-                          {val}
+                          {val || <span className="text-muted-foreground text-xs">--</span>}
                         </td>
                       );
                     }
