@@ -279,7 +279,7 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
           <Card className="border-primary/20">
             <CardContent className="pt-6 pb-4">
               <div className="flex items-center gap-2 mb-1">
-                <Target className="w-4 h-4 text-green-500" />
+                <Target className="w-4 h-4" style={{ color: "#22c55e" }} />
                 <span className="text-xs text-muted-foreground">Avg Confidence</span>
               </div>
               <p className="text-2xl font-bold">{kpis.avgConfidence}%</p>
@@ -288,7 +288,7 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
           <Card className="border-primary/20">
             <CardContent className="pt-6 pb-4">
               <div className="flex items-center gap-2 mb-1">
-                <TrendingUp className="w-4 h-4 text-yellow-500" />
+                <TrendingUp className="w-4 h-4" style={{ color: "#eab308" }} />
                 <span className="text-xs text-muted-foreground">High Confidence (&gt;90%)</span>
               </div>
               <p className="text-2xl font-bold">{kpis.highConfCount.toLocaleString()}</p>
@@ -297,7 +297,7 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
           <Card className="border-primary/20">
             <CardContent className="pt-6 pb-4">
               <div className="flex items-center gap-2 mb-1">
-                <Tag className="w-4 h-4 text-blue-500" />
+                <Tag className="w-4 h-4" style={{ color: "#3b82f6" }} />
                 <span className="text-xs text-muted-foreground">Top Category</span>
               </div>
               <p className="text-lg font-bold leading-tight">{kpis.topCategory}</p>

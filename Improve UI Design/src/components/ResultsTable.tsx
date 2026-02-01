@@ -1,7 +1,7 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, CSSProperties } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "./ui/card";
 import { Button } from "./ui/button";
-import { Search, ArrowUpDown, ChevronLeft, ChevronRight, Filter } from "lucide-react";
+import { Search, ArrowUpDown, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface ResultsTableProps {
   results: any[];
@@ -14,31 +14,51 @@ function parseConf(raw: string | number): number {
   return isNaN(val) ? 0 : val;
 }
 
-// Explicit colors that work in dark mode
-function confStyle(val: number): { bg: string; text: string; bar: string } {
-  if (val >= 90) return { bg: "bg-green-500/15", text: "text-green-400", bar: "bg-green-500" };
-  if (val >= 70) return { bg: "bg-yellow-500/15", text: "text-yellow-400", bar: "bg-yellow-500" };
-  return { bg: "bg-red-500/15", text: "text-red-400", bar: "bg-red-500" };
+// Inline styles so colors survive Tailwind purging
+function confBarColor(val: number): string {
+  if (val >= 90) return "#22c55e"; // green-500
+  if (val >= 70) return "#eab308"; // yellow-500
+  return "#ef4444"; // red-500
 }
 
-// Category color palette for pills
-const CATEGORY_COLORS: Record<string, string> = {
-  "Food Quality/Portion": "bg-orange-500/15 text-orange-400 border-orange-500/30",
-  "Food Safety": "bg-red-500/15 text-red-400 border-red-500/30",
-  "Catering Error - Missing/Incorrect Meals": "bg-purple-500/15 text-purple-400 border-purple-500/30",
-  "Missing Meals - Crew Error": "bg-blue-500/15 text-blue-400 border-blue-500/30",
-  "Missing Meals - Pwa": "bg-cyan-500/15 text-cyan-400 border-cyan-500/30",
-  "Missing Meals - Ifx Error": "bg-teal-500/15 text-teal-400 border-teal-500/30",
-  "Missing Meals - Ferry/Deadhead/Swaps": "bg-indigo-500/15 text-indigo-400 border-indigo-500/30",
-  "Missing Meals - Redeye No Touch": "bg-violet-500/15 text-violet-400 border-violet-500/30",
-  "Missing Provisioning - T2": "bg-pink-500/15 text-pink-400 border-pink-500/30",
-  "Meal Choice Unavailable": "bg-amber-500/15 text-amber-400 border-amber-500/30",
-  "Ground Catering Issue": "bg-lime-500/15 text-lime-400 border-lime-500/30",
-  "Equipment": "bg-slate-500/15 text-slate-400 border-slate-500/30",
-  "Provisioning": "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
-  "Other": "bg-zinc-500/15 text-zinc-400 border-zinc-500/30",
+function confTextStyle(val: number): CSSProperties {
+  if (val >= 90) return { color: "#4ade80" }; // green-400
+  if (val >= 70) return { color: "#facc15" }; // yellow-400
+  return { color: "#f87171" }; // red-400
+}
+
+function lowConfRowStyle(conf: number): CSSProperties | undefined {
+  if (conf > 0 && conf < 70) return { backgroundColor: "rgba(239, 68, 68, 0.05)" };
+  return undefined;
+}
+
+// Category colors as inline styles
+interface CatStyle { bg: CSSProperties; pill: CSSProperties }
+
+const CATEGORY_STYLES: Record<string, CatStyle> = {
+  "Food Quality/Portion":                    { bg: { backgroundColor: "rgba(249,115,22,0.12)" }, pill: { color: "#fb923c", borderColor: "rgba(249,115,22,0.3)", backgroundColor: "rgba(249,115,22,0.12)" } },
+  "Food Safety":                             { bg: { backgroundColor: "rgba(239,68,68,0.12)" },  pill: { color: "#f87171", borderColor: "rgba(239,68,68,0.3)",  backgroundColor: "rgba(239,68,68,0.12)" } },
+  "Catering Error - Missing/Incorrect Meals":{ bg: { backgroundColor: "rgba(168,85,247,0.12)" }, pill: { color: "#c084fc", borderColor: "rgba(168,85,247,0.3)", backgroundColor: "rgba(168,85,247,0.12)" } },
+  "Missing Meals - Crew Error":              { bg: { backgroundColor: "rgba(59,130,246,0.12)" },  pill: { color: "#60a5fa", borderColor: "rgba(59,130,246,0.3)",  backgroundColor: "rgba(59,130,246,0.12)" } },
+  "Missing Meals - Pwa":                     { bg: { backgroundColor: "rgba(6,182,212,0.12)" },   pill: { color: "#22d3ee", borderColor: "rgba(6,182,212,0.3)",   backgroundColor: "rgba(6,182,212,0.12)" } },
+  "Missing Meals - Ifx Error":               { bg: { backgroundColor: "rgba(20,184,166,0.12)" },  pill: { color: "#2dd4bf", borderColor: "rgba(20,184,166,0.3)",  backgroundColor: "rgba(20,184,166,0.12)" } },
+  "Missing Meals - Ferry/Deadhead/Swaps":    { bg: { backgroundColor: "rgba(99,102,241,0.12)" },  pill: { color: "#818cf8", borderColor: "rgba(99,102,241,0.3)",  backgroundColor: "rgba(99,102,241,0.12)" } },
+  "Missing Meals - Redeye No Touch":         { bg: { backgroundColor: "rgba(139,92,246,0.12)" },  pill: { color: "#a78bfa", borderColor: "rgba(139,92,246,0.3)",  backgroundColor: "rgba(139,92,246,0.12)" } },
+  "Missing Provisioning - T2":               { bg: { backgroundColor: "rgba(236,72,153,0.12)" },  pill: { color: "#f472b6", borderColor: "rgba(236,72,153,0.3)",  backgroundColor: "rgba(236,72,153,0.12)" } },
+  "Meal Choice Unavailable":                 { bg: { backgroundColor: "rgba(245,158,11,0.12)" },  pill: { color: "#fbbf24", borderColor: "rgba(245,158,11,0.3)",  backgroundColor: "rgba(245,158,11,0.12)" } },
+  "Ground Catering Issue":                   { bg: { backgroundColor: "rgba(132,204,22,0.12)" },  pill: { color: "#a3e635", borderColor: "rgba(132,204,22,0.3)",  backgroundColor: "rgba(132,204,22,0.12)" } },
+  "Equipment":                               { bg: { backgroundColor: "rgba(148,163,184,0.12)" }, pill: { color: "#94a3b8", borderColor: "rgba(148,163,184,0.3)", backgroundColor: "rgba(148,163,184,0.12)" } },
+  "Provisioning":                            { bg: { backgroundColor: "rgba(52,211,153,0.12)" },  pill: { color: "#34d399", borderColor: "rgba(52,211,153,0.3)",  backgroundColor: "rgba(52,211,153,0.12)" } },
+  "Other":                                   { bg: { backgroundColor: "rgba(161,161,170,0.12)" }, pill: { color: "#a1a1aa", borderColor: "rgba(161,161,170,0.3)", backgroundColor: "rgba(161,161,170,0.12)" } },
 };
-const DEFAULT_CAT_COLOR = "bg-zinc-500/15 text-zinc-400 border-zinc-500/30";
+const DEFAULT_CAT_STYLE: CatStyle = {
+  bg:   { backgroundColor: "rgba(161,161,170,0.12)" },
+  pill: { color: "#a1a1aa", borderColor: "rgba(161,161,170,0.3)", backgroundColor: "rgba(161,161,170,0.12)" },
+};
+
+function getCatStyle(name: string): CatStyle {
+  return CATEGORY_STYLES[name] || DEFAULT_CAT_STYLE;
+}
 
 export function ResultsTable({ results }: ResultsTableProps) {
   const [search, setSearch] = useState("");
@@ -150,25 +170,31 @@ export function ResultsTable({ results }: ResultsTableProps) {
           {categoryFilter && (
             <button
               onClick={() => { setCategoryFilter(null); setPage(0); }}
-              className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs border border-dashed border-muted-foreground/40 text-muted-foreground hover:bg-muted/50 transition-colors"
+              className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs border border-dashed text-muted-foreground hover:bg-muted/50 transition-colors"
+              style={{ borderColor: "rgba(161,161,170,0.4)" }}
             >
               Clear filter
             </button>
           )}
-          {categoryStats.map(({ name, count, pct }) => (
-            <button
-              key={name}
-              onClick={() => { setCategoryFilter(categoryFilter === name ? null : name); setPage(0); }}
-              className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs border transition-colors ${
-                categoryFilter === name
-                  ? "ring-2 ring-primary ring-offset-1 ring-offset-background"
-                  : ""
-              } ${CATEGORY_COLORS[name] || DEFAULT_CAT_COLOR}`}
-            >
-              <span className="font-medium">{name}</span>
-              <span className="opacity-70">{count}</span>
-            </button>
-          ))}
+          {categoryStats.map(({ name, count }) => {
+            const cs = getCatStyle(name);
+            const isActive = categoryFilter === name;
+            return (
+              <button
+                key={name}
+                onClick={() => { setCategoryFilter(categoryFilter === name ? null : name); setPage(0); }}
+                className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium border transition-colors"
+                style={{
+                  ...cs.pill,
+                  outline: isActive ? "2px solid hsl(var(--primary))" : "none",
+                  outlineOffset: "1px",
+                }}
+              >
+                <span>{name}</span>
+                <span style={{ opacity: 0.7 }}>{count}</span>
+              </button>
+            );
+          })}
         </div>
 
         {/* Search */}
@@ -208,15 +234,11 @@ export function ResultsTable({ results }: ResultsTableProps) {
             <tbody>
               {pageData.map((row, idx) => {
                 const conf = parseConf(row["Subcategory_Confidence"] ?? 0);
-                const isLowConf = conf > 0 && conf < 70;
                 return (
                   <tr
                     key={idx}
-                    className={`border-t border-border transition-colors ${
-                      isLowConf
-                        ? "bg-red-500/5 hover:bg-red-500/10"
-                        : "hover:bg-muted/30"
-                    }`}
+                    className="border-t border-border transition-colors hover:bg-muted/30"
+                    style={lowConfRowStyle(conf)}
                   >
                     <td className="px-4 py-2.5 text-muted-foreground text-xs">
                       {page * PAGE_SIZE + idx + 1}
@@ -224,7 +246,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
                     {displayCols.map((col) => {
                       const val = row[col] ?? "";
 
-                      // --- Confidence column: colored pill with progress bar ---
+                      // --- Confidence column: progress bar + colored number ---
                       if (col === "Subcategory_Confidence") {
                         if (!val) {
                           return (
@@ -234,17 +256,22 @@ export function ResultsTable({ results }: ResultsTableProps) {
                           );
                         }
                         const numVal = parseConf(val);
-                        const style = confStyle(numVal);
                         return (
                           <td key={col} className="px-4 py-2.5">
-                            <div className="flex items-center gap-2 min-w-[140px]">
-                              <div className="flex-1 h-2 rounded-full bg-muted overflow-hidden">
+                            <div className="flex items-center gap-2" style={{ minWidth: 140 }}>
+                              <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ backgroundColor: "rgba(255,255,255,0.1)" }}>
                                 <div
-                                  className={`h-full rounded-full transition-all ${style.bar}`}
-                                  style={{ width: `${Math.min(numVal, 100)}%` }}
+                                  className="h-full rounded-full transition-all"
+                                  style={{
+                                    width: `${Math.min(numVal, 100)}%`,
+                                    backgroundColor: confBarColor(numVal),
+                                  }}
                                 />
                               </div>
-                              <span className={`text-xs font-semibold tabular-nums ${style.text}`}>
+                              <span
+                                className="text-xs font-semibold"
+                                style={{ ...confTextStyle(numVal), fontVariantNumeric: "tabular-nums" }}
+                              >
                                 {typeof val === "string" ? val : `${numVal.toFixed(1)}%`}
                               </span>
                             </div>
@@ -261,10 +288,13 @@ export function ResultsTable({ results }: ResultsTableProps) {
                             </td>
                           );
                         }
-                        const catColor = CATEGORY_COLORS[val] || DEFAULT_CAT_COLOR;
+                        const cs = getCatStyle(val);
                         return (
                           <td key={col} className="px-4 py-2.5">
-                            <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium border ${catColor}`}>
+                            <span
+                              className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium border"
+                              style={cs.pill}
+                            >
                               {val}
                             </span>
                           </td>
@@ -303,7 +333,6 @@ export function ResultsTable({ results }: ResultsTableProps) {
               >
                 <ChevronLeft className="w-4 h-4" />
               </Button>
-              {/* Page number buttons */}
               {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
                 const start = Math.max(0, Math.min(page - 2, totalPages - 5));
                 const p = start + i;
