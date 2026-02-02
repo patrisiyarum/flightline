@@ -25,7 +25,7 @@ function confTextStyle(val: number): CSSProperties {
 }
 
 function lowConfRowStyle(conf: number): CSSProperties | undefined {
-  if (conf > 0 && conf < 70) return { backgroundColor: "rgba(239, 68, 68, 0.05)" };
+  if (conf > 0 && conf < 70) return { backgroundColor: "rgba(239, 68, 68, 0.04)" };
   return undefined;
 }
 
@@ -132,13 +132,13 @@ export function ResultsTable({ results }: ResultsTableProps) {
   };
 
   return (
-    <div className="mt-6 rounded-lg overflow-hidden" style={{ backgroundColor: "#181818" }}>
+    <div className="rounded-lg overflow-hidden" style={{ backgroundColor: "#161616" }}>
       {/* Header */}
       <div className="p-6 pb-4">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="text-lg font-bold text-white">Classification Results</h3>
-            <p className="text-sm mt-0.5" style={{ color: "#b3b3b3" }}>
+            <p className="text-sm mt-1" style={{ color: "#A0A0A0" }}>
               {filtered.length} of {results.length} rows
               {categoryFilter && <> &middot; Filtered by: <strong style={{ color: "#ffffff" }}>{categoryFilter}</strong></>}
             </p>
@@ -146,17 +146,17 @@ export function ResultsTable({ results }: ResultsTableProps) {
         </div>
 
         {/* Category distribution strip */}
-        <div className="mt-3 flex flex-wrap gap-1.5">
+        <div className="mt-4 flex flex-wrap gap-1.5">
           {categoryFilter && (
             <button
               onClick={() => { setCategoryFilter(null); setPage(0); }}
-              className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs transition-colors"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs transition-colors"
               style={{
-                color: "#b3b3b3",
-                border: "1px dashed #404040",
+                color: "#A0A0A0",
+                border: "1px dashed #383838",
                 backgroundColor: "transparent",
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#282828"; }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#252525"; }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
             >
               Clear filter
@@ -169,10 +169,10 @@ export function ResultsTable({ results }: ResultsTableProps) {
               <button
                 key={name}
                 onClick={() => { setCategoryFilter(categoryFilter === name ? null : name); setPage(0); }}
-                className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium border transition-colors"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium border transition-colors"
                 style={{
                   ...cs.pill,
-                  outline: isActive ? "2px solid #1DB954" : "none",
+                  outline: isActive ? "2px solid #C8102E" : "none",
                   outlineOffset: "1px",
                 }}
               >
@@ -184,8 +184,8 @@ export function ResultsTable({ results }: ResultsTableProps) {
         </div>
 
         {/* Search */}
-        <div className="relative mt-3">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "#b3b3b3" }} />
+        <div className="relative mt-4">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "#A0A0A0" }} />
           <input
             type="text"
             placeholder="Search text, category, or confidence..."
@@ -193,37 +193,37 @@ export function ResultsTable({ results }: ResultsTableProps) {
             onChange={(e) => { setSearch(e.target.value); setPage(0); }}
             className="w-full pl-9 pr-4 py-2.5 rounded-lg text-sm"
             style={{
-              backgroundColor: "#282828",
+              backgroundColor: "#252525",
               color: "#ffffff",
-              border: "1px solid #404040",
+              border: "1px solid #383838",
               outline: "none",
             }}
-            onFocus={(e) => { e.currentTarget.style.borderColor = "#1DB954"; }}
-            onBlur={(e) => { e.currentTarget.style.borderColor = "#404040"; }}
+            onFocus={(e) => { e.currentTarget.style.borderColor = "#C8102E"; }}
+            onBlur={(e) => { e.currentTarget.style.borderColor = "#383838"; }}
           />
         </div>
       </div>
 
       {/* Table */}
       <div className="px-6 pb-6">
-        <div className="overflow-x-auto rounded-lg" style={{ border: "1px solid #282828" }}>
+        <div className="overflow-x-auto rounded-lg" style={{ border: "1px solid #252525" }}>
           <table className="w-full text-sm">
             <thead>
-              <tr style={{ backgroundColor: "#282828" }}>
-                <th className="px-4 py-3 text-left text-xs font-medium w-10" style={{ color: "#b3b3b3" }}>#</th>
+              <tr style={{ backgroundColor: "#252525" }}>
+                <th className="px-4 py-3 text-left text-xs font-medium w-10" style={{ color: "#A0A0A0" }}>#</th>
                 {displayCols.map((col) => (
-                  <th key={col} className="px-4 py-3 text-left text-xs font-medium" style={{ color: "#b3b3b3" }}>
+                  <th key={col} className="px-4 py-3 text-left text-xs font-medium" style={{ color: "#A0A0A0" }}>
                     <button
                       className="flex items-center gap-1 transition-colors"
-                      style={{ color: "#b3b3b3" }}
+                      style={{ color: "#A0A0A0" }}
                       onClick={() => handleSort(col)}
                       onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff"; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.color = "#b3b3b3"; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.color = "#A0A0A0"; }}
                     >
                       {colLabel(col)}
                       <ArrowUpDown className="w-3 h-3" />
                       {sortField === col && (
-                        <span style={{ color: "#1DB954" }}>{sortAsc ? "\u2191" : "\u2193"}</span>
+                        <span style={{ color: "#C8102E" }}>{sortAsc ? "\u2191" : "\u2193"}</span>
                       )}
                     </button>
                   </th>
@@ -238,17 +238,17 @@ export function ResultsTable({ results }: ResultsTableProps) {
                     key={idx}
                     className="transition-colors"
                     style={{
-                      borderTop: "1px solid #282828",
+                      borderTop: "1px solid #252525",
                       ...lowConfRowStyle(conf),
                     }}
                     onMouseEnter={(e) => {
-                      if (!lowConfRowStyle(conf)) e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.03)";
+                      if (!lowConfRowStyle(conf)) e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.02)";
                     }}
                     onMouseLeave={(e) => {
                       if (!lowConfRowStyle(conf)) e.currentTarget.style.backgroundColor = "transparent";
                     }}
                   >
-                    <td className="px-4 py-2.5 text-xs" style={{ color: "#b3b3b3" }}>
+                    <td className="px-4 py-2.5 text-xs" style={{ color: "#A0A0A0" }}>
                       {page * PAGE_SIZE + idx + 1}
                     </td>
                     {displayCols.map((col) => {
@@ -258,7 +258,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
                         if (!val) {
                           return (
                             <td key={col} className="px-4 py-2.5">
-                              <span className="text-xs" style={{ color: "#b3b3b3" }}>--</span>
+                              <span className="text-xs" style={{ color: "#A0A0A0" }}>--</span>
                             </td>
                           );
                         }
@@ -266,7 +266,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
                         return (
                           <td key={col} className="px-4 py-2.5">
                             <div className="flex items-center gap-2" style={{ minWidth: 140 }}>
-                              <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ backgroundColor: "rgba(255,255,255,0.1)" }}>
+                              <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ backgroundColor: "rgba(255,255,255,0.08)" }}>
                                 <div
                                   className="h-full rounded-full transition-all"
                                   style={{ width: `${Math.min(numVal, 100)}%`, backgroundColor: confBarColor(numVal) }}
@@ -287,7 +287,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
                         if (!val) {
                           return (
                             <td key={col} className="px-4 py-2.5">
-                              <span className="text-xs" style={{ color: "#b3b3b3" }}>--</span>
+                              <span className="text-xs" style={{ color: "#A0A0A0" }}>--</span>
                             </td>
                           );
                         }
@@ -295,7 +295,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
                         return (
                           <td key={col} className="px-4 py-2.5">
                             <span
-                              className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium border"
+                              className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium border"
                               style={cs.pill}
                             >
                               {val}
@@ -323,17 +323,17 @@ export function ResultsTable({ results }: ResultsTableProps) {
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex items-center justify-between mt-4">
-            <span className="text-xs" style={{ color: "#b3b3b3" }}>
+            <span className="text-xs" style={{ color: "#A0A0A0" }}>
               Page {page + 1} of {totalPages}
             </span>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <button
                 disabled={page === 0}
                 onClick={() => setPage(page - 1)}
                 className="w-8 h-8 flex items-center justify-center rounded-md transition-colors disabled:opacity-30"
-                style={{ backgroundColor: "#282828", color: "#ffffff" }}
-                onMouseEnter={(e) => { if (page > 0) e.currentTarget.style.backgroundColor = "#404040"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#282828"; }}
+                style={{ backgroundColor: "#252525", color: "#ffffff" }}
+                onMouseEnter={(e) => { if (page > 0) e.currentTarget.style.backgroundColor = "#383838"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#252525"; }}
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -348,11 +348,11 @@ export function ResultsTable({ results }: ResultsTableProps) {
                     onClick={() => setPage(p)}
                     className="w-8 h-8 flex items-center justify-center rounded-md text-xs font-medium transition-colors"
                     style={{
-                      backgroundColor: isActive ? "#1DB954" : "#282828",
-                      color: isActive ? "#000000" : "#ffffff",
+                      backgroundColor: isActive ? "#C8102E" : "#252525",
+                      color: "#ffffff",
                     }}
-                    onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = "#404040"; }}
-                    onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = isActive ? "#1DB954" : "#282828"; }}
+                    onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = "#383838"; }}
+                    onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = isActive ? "#C8102E" : "#252525"; }}
                   >
                     {p + 1}
                   </button>
@@ -362,9 +362,9 @@ export function ResultsTable({ results }: ResultsTableProps) {
                 disabled={page >= totalPages - 1}
                 onClick={() => setPage(page + 1)}
                 className="w-8 h-8 flex items-center justify-center rounded-md transition-colors disabled:opacity-30"
-                style={{ backgroundColor: "#282828", color: "#ffffff" }}
-                onMouseEnter={(e) => { if (page < totalPages - 1) e.currentTarget.style.backgroundColor = "#404040"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#282828"; }}
+                style={{ backgroundColor: "#252525", color: "#ffffff" }}
+                onMouseEnter={(e) => { if (page < totalPages - 1) e.currentTarget.style.backgroundColor = "#383838"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#252525"; }}
               >
                 <ChevronRight className="w-4 h-4" />
               </button>

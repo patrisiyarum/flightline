@@ -27,12 +27,12 @@ export function SampleComments({ onSelectSample }: SampleCommentsProps) {
   const visible = expanded ? samples : samples.slice(0, 4);
 
   return (
-    <div className="mb-6 rounded-lg p-6" style={{ backgroundColor: "#181818" }}>
-      <div className="flex items-center justify-between mb-4">
+    <div className="rounded-lg p-6" style={{ backgroundColor: "#161616" }}>
+      <div className="flex items-center justify-between mb-5">
         <h3 className="font-semibold text-white">Sample Comments by Category</h3>
         <span
-          className="text-xs font-medium px-2.5 py-0.5 rounded-full"
-          style={{ backgroundColor: "rgba(29,185,84,0.15)", color: "#1DB954" }}
+          className="text-xs font-medium px-2.5 py-1 rounded-full"
+          style={{ backgroundColor: "rgba(200,16,46,0.12)", color: "#C8102E" }}
         >
           {samples.length} examples
         </span>
@@ -42,40 +42,40 @@ export function SampleComments({ onSelectSample }: SampleCommentsProps) {
         {visible.map(({ category, text }) => (
           <div
             key={category}
-            className="p-4 rounded-lg transition-all hover:scale-[1.02]"
-            style={{ backgroundColor: "#282828" }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#333333"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#282828"; }}
+            className="p-4 rounded-lg transition-all hover:scale-[1.01]"
+            style={{ backgroundColor: "#252525" }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#2D2D2D"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#252525"; }}
           >
             <div className="flex items-start justify-between gap-3 mb-2">
-              <span className="text-sm" style={{ color: "#1DB954" }}>{category}</span>
+              <span className="text-sm font-medium" style={{ color: "#C8102E" }}>{category}</span>
               <button
                 onClick={() => onSelectSample(text)}
                 className="shrink-0 px-3 py-1 rounded-full text-xs font-bold transition-all hover:scale-105"
-                style={{ backgroundColor: "rgba(29,185,84,0.15)", color: "#1DB954", border: "1px solid rgba(29,185,84,0.3)" }}
+                style={{ backgroundColor: "rgba(200,16,46,0.12)", color: "#C8102E", border: "1px solid rgba(200,16,46,0.25)" }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#1DB954";
-                  e.currentTarget.style.color = "#000000";
+                  e.currentTarget.style.backgroundColor = "#C8102E";
+                  e.currentTarget.style.color = "#ffffff";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "rgba(29,185,84,0.15)";
-                  e.currentTarget.style.color = "#1DB954";
+                  e.currentTarget.style.backgroundColor = "rgba(200,16,46,0.12)";
+                  e.currentTarget.style.color = "#C8102E";
                 }}
               >
                 Try it
               </button>
             </div>
-            <p className="text-sm" style={{ color: "#b3b3b3", lineHeight: 1.5 }}>{text}</p>
+            <p className="text-sm" style={{ color: "#A0A0A0", lineHeight: 1.6 }}>{text}</p>
           </div>
         ))}
       </div>
 
       <button
         onClick={() => setExpanded(!expanded)}
-        className="mt-4 w-full flex items-center justify-center gap-1 py-2 rounded-full text-xs font-medium transition-colors"
-        style={{ color: "#b3b3b3", backgroundColor: "transparent" }}
+        className="mt-4 w-full flex items-center justify-center gap-1 py-2.5 rounded-full text-xs font-medium transition-colors"
+        style={{ color: "#A0A0A0", backgroundColor: "transparent" }}
         onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff"; }}
-        onMouseLeave={(e) => { e.currentTarget.style.color = "#b3b3b3"; }}
+        onMouseLeave={(e) => { e.currentTarget.style.color = "#A0A0A0"; }}
       >
         {expanded ? (
           <><ChevronUp className="w-4 h-4" /> Show fewer</>

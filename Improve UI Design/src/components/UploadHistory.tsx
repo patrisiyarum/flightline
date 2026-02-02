@@ -20,19 +20,19 @@ export function UploadHistory({ uploads, currentUploadId, onSelectUpload, loadin
   if (uploads.length === 0 && !loading) return null;
 
   return (
-    <div className="mb-6 rounded-lg p-6" style={{ backgroundColor: "#181818" }}>
-      <div className="flex items-center justify-between mb-3">
+    <div className="rounded-lg p-6" style={{ backgroundColor: "#161616" }}>
+      <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <History className="w-4 h-4" style={{ color: "#b3b3b3" }} />
+          <History className="w-4 h-4" style={{ color: "#A0A0A0" }} />
           <h3 className="font-semibold text-sm text-white">Upload History</h3>
         </div>
         {currentUploadId && (
           <a
             href={`${API_URL}/uploads/${currentUploadId}/file`}
             className="flex items-center gap-1 text-xs transition-colors"
-            style={{ color: "#1DB954" }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = "#1ed760"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = "#1DB954"; }}
+            style={{ color: "#0032A0" }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = "#2563EB"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = "#0032A0"; }}
           >
             <Download className="w-3 h-3" />
             Download Original File
@@ -41,7 +41,7 @@ export function UploadHistory({ uploads, currentUploadId, onSelectUpload, loadin
       </div>
 
       {loading ? (
-        <div className="flex items-center gap-2 text-sm" style={{ color: "#b3b3b3" }}>
+        <div className="flex items-center gap-2 text-sm" style={{ color: "#A0A0A0" }}>
           <Loader2 className="w-4 h-4 animate-spin" />
           Loading saved results...
         </div>
@@ -52,13 +52,13 @@ export function UploadHistory({ uploads, currentUploadId, onSelectUpload, loadin
           disabled={loading}
           className="w-full p-2.5 rounded-lg text-sm"
           style={{
-            backgroundColor: "#282828",
+            backgroundColor: "#252525",
             color: "#ffffff",
-            border: "1px solid #404040",
+            border: "1px solid #383838",
             outline: "none",
           }}
-          onFocus={(e) => { e.currentTarget.style.borderColor = "#1DB954"; }}
-          onBlur={(e) => { e.currentTarget.style.borderColor = "#404040"; }}
+          onFocus={(e) => { e.currentTarget.style.borderColor = "#C8102E"; }}
+          onBlur={(e) => { e.currentTarget.style.borderColor = "#383838"; }}
         >
           {uploads.map((u) => (
             <option key={u.id} value={u.id}>

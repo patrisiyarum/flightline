@@ -93,14 +93,14 @@ interface BulkResultRow {
 }
 
 // --- Chart Colors (inline to survive Tailwind purge) ---
-const CHART_COLORS = ["#1DB954", "#1ed760", "#169c46", "#b3b3b3", "#535353", "#ffffff"];
+const CHART_COLORS = ["#C8102E", "#E31837", "#0032A0", "#2563EB", "#A0A0A0", "#525252"];
 const TOOLTIP_STYLE = {
-  backgroundColor: "#282828",
+  backgroundColor: "#252525",
   color: "#ffffff",
-  border: "1px solid #404040",
+  border: "1px solid #383838",
   borderRadius: "8px",
 };
-const LABEL_COLOR = "#b3b3b3";
+const LABEL_COLOR = "#A0A0A0";
 
 // --- AnalyticsDashboard ---
 function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRow[]; processingTime: number | null }) {
@@ -213,47 +213,47 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
   if (!results.length) {
     return (
       <div className="flex flex-col items-center justify-center py-24 text-center">
-        <BarChart3 className="w-16 h-16 mb-4 opacity-30" style={{ color: "#b3b3b3" }} />
+        <BarChart3 className="w-16 h-16 mb-4 opacity-30" style={{ color: "#A0A0A0" }} />
         <p className="text-white font-semibold mb-1">No data yet</p>
-        <p className="text-sm" style={{ color: "#b3b3b3" }}>Upload a file in the Upload tab to see analytics.</p>
+        <p className="text-sm" style={{ color: "#A0A0A0" }}>Upload a file in the Upload tab to see analytics.</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* KPI Cards */}
       {kpis && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { icon: BarChart3, label: "Total Rows", value: kpis.totalRows.toLocaleString(), color: "#1DB954" },
-            { icon: Target, label: "Avg Confidence", value: `${kpis.avgConfidence}%`, color: "#1ed760" },
-            { icon: TrendingUp, label: "High Confidence", value: kpis.highConfCount.toLocaleString(), color: "#1DB954" },
-            { icon: Tag, label: "Top Category", value: kpis.topCategory, color: "#b3b3b3", sub: `${kpis.topCategoryPct}% of rows` },
+            { icon: BarChart3, label: "Total Rows", value: kpis.totalRows.toLocaleString(), color: "#C8102E" },
+            { icon: Target, label: "Avg Confidence", value: `${kpis.avgConfidence}%`, color: "#0032A0" },
+            { icon: TrendingUp, label: "High Confidence", value: kpis.highConfCount.toLocaleString(), color: "#C8102E" },
+            { icon: Tag, label: "Top Category", value: kpis.topCategory, color: "#A0A0A0", sub: `${kpis.topCategoryPct}% of rows` },
           ].map(({ icon: Icon, label, value, color, sub }) => (
-            <div key={label} className="rounded-lg p-5" style={{ backgroundColor: "#181818" }}>
+            <div key={label} className="rounded-lg p-6" style={{ backgroundColor: "#161616" }}>
               <div className="flex items-center gap-2 mb-2">
                 <Icon className="w-4 h-4" style={{ color }} />
-                <span className="text-xs" style={{ color: "#b3b3b3" }}>{label}</span>
+                <span className="text-xs" style={{ color: "#A0A0A0" }}>{label}</span>
               </div>
               <p className="text-xl font-bold text-white">{value}</p>
-              {sub && <span className="text-xs" style={{ color: "#b3b3b3" }}>{sub}</span>}
+              {sub && <span className="text-xs" style={{ color: "#A0A0A0" }}>{sub}</span>}
             </div>
           ))}
         </div>
       )}
 
       {/* Controls */}
-      <div className="rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4" style={{ backgroundColor: "#181818" }}>
+      <div className="rounded-lg p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4" style={{ backgroundColor: "#161616" }}>
         <div className="flex items-center gap-6">
           {processingTime !== null && (
-            <div className="flex items-center gap-2 text-sm" style={{ color: "#b3b3b3" }}>
+            <div className="flex items-center gap-2 text-sm" style={{ color: "#A0A0A0" }}>
               <Timer className="w-4 h-4" />
               <span>Processed in <strong className="text-white">{processingTime}s</strong></span>
             </div>
           )}
           <div className="flex items-center gap-3">
-            <label className="text-sm whitespace-nowrap" style={{ color: "#b3b3b3" }}>
+            <label className="text-sm whitespace-nowrap" style={{ color: "#A0A0A0" }}>
               Min. Confidence: <strong className="text-white">{confidenceThreshold}%</strong>
             </label>
             <input
@@ -261,11 +261,11 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
               value={confidenceThreshold}
               onChange={(e) => setConfidenceThreshold(Number(e.target.value))}
               className="w-32"
-              style={{ accentColor: "#1DB954" }}
+              style={{ accentColor: "#C8102E" }}
             />
           </div>
           {confidenceThreshold > 0 && (
-            <span className="text-xs px-2 py-1 rounded" style={{ backgroundColor: "#282828", color: "#b3b3b3" }}>
+            <span className="text-xs px-2 py-1 rounded" style={{ backgroundColor: "#252525", color: "#A0A0A0" }}>
               {filteredResults.length} / {results.length}
             </span>
           )}
@@ -273,7 +273,7 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
         <button
           onClick={handleExportCSV}
           className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-transform hover:scale-105"
-          style={{ backgroundColor: "#1DB954", color: "#000000" }}
+          style={{ backgroundColor: "#0032A0", color: "#ffffff" }}
         >
           <Download className="w-3.5 h-3.5" /> Export CSV
         </button>
@@ -281,52 +281,52 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
 
       {/* Charts */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="rounded-lg p-5" style={{ backgroundColor: "#181818" }}>
+        <div className="rounded-lg p-6" style={{ backgroundColor: "#161616" }}>
           <h3 className="text-white font-bold mb-1">AI Confidence</h3>
-          <p className="text-xs mb-4" style={{ color: "#b3b3b3" }}>Model certainty across {filteredResults.length} records</p>
+          <p className="text-xs mb-4" style={{ color: "#A0A0A0" }}>Model certainty across {filteredResults.length} records</p>
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={confidenceData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#282828" vertical={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#252525" vertical={false} />
               <XAxis dataKey="name" tick={{ fill: LABEL_COLOR, fontSize: 11 }} />
               <YAxis tick={{ fill: LABEL_COLOR }} />
               <Tooltip contentStyle={TOOLTIP_STYLE} cursor={{ fill: "transparent" }} />
-              <Bar dataKey="count" fill="#1DB954" radius={[4, 4, 0, 0]} name="Records" barSize={50} />
+              <Bar dataKey="count" fill="#C8102E" radius={[4, 4, 0, 0]} name="Records" barSize={50} />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="rounded-lg p-5" style={{ backgroundColor: "#181818" }}>
+        <div className="rounded-lg p-6" style={{ backgroundColor: "#161616" }}>
           <h3 className="text-white font-bold mb-1">Top Airports</h3>
-          <p className="text-xs mb-4" style={{ color: "#b3b3b3" }}>Reports by departure station</p>
+          <p className="text-xs mb-4" style={{ color: "#A0A0A0" }}>Reports by departure station</p>
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={airportData} layout="vertical" margin={{ left: 0 }}>
               <XAxis type="number" hide />
               <YAxis dataKey="name" type="category" width={40} tick={{ fill: LABEL_COLOR, fontSize: 10 }} />
               <Tooltip contentStyle={TOOLTIP_STYLE} cursor={{ fill: "transparent" }} />
-              <Bar dataKey="count" fill="#1ed760" radius={[0, 4, 4, 0]} name="Reports" barSize={16} />
+              <Bar dataKey="count" fill="#0032A0" radius={[0, 4, 4, 0]} name="Reports" barSize={16} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      <div className="rounded-lg p-5" style={{ backgroundColor: "#181818" }}>
+      <div className="rounded-lg p-6" style={{ backgroundColor: "#161616" }}>
         <h3 className="text-white font-bold mb-1">Volume Over Time</h3>
-        <p className="text-xs mb-4" style={{ color: "#b3b3b3" }}>Daily trend based on flight date</p>
+        <p className="text-xs mb-4" style={{ color: "#A0A0A0" }}>Daily trend based on flight date</p>
         <ResponsiveContainer width="100%" height={280}>
           <LineChart data={trendData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#282828" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#252525" />
             <XAxis dataKey="date" tick={{ fill: LABEL_COLOR }} fontSize={11} />
             <YAxis tick={{ fill: LABEL_COLOR }} />
             <Tooltip contentStyle={TOOLTIP_STYLE} />
-            <Line type="monotone" dataKey="count" stroke="#1DB954" strokeWidth={3} dot={{ r: 4, fill: "#1DB954" }} activeDot={{ r: 6 }} />
+            <Line type="monotone" dataKey="count" stroke="#C8102E" strokeWidth={3} dot={{ r: 4, fill: "#C8102E" }} activeDot={{ r: 6 }} />
           </LineChart>
         </ResponsiveContainer>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="rounded-lg p-5" style={{ backgroundColor: "#181818" }}>
+        <div className="rounded-lg p-6" style={{ backgroundColor: "#161616" }}>
           <h3 className="text-white font-bold mb-1">Fleet Breakdown</h3>
-          <p className="text-xs mb-4" style={{ color: "#b3b3b3" }}>Issues by aircraft type</p>
+          <p className="text-xs mb-4" style={{ color: "#A0A0A0" }}>Issues by aircraft type</p>
           <ResponsiveContainer width="100%" height={240}>
             <PieChart>
               <Pie data={fleetData} cx="50%" cy="50%" innerRadius={55} outerRadius={75} paddingAngle={3} dataKey="value">
@@ -338,13 +338,13 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
           </ResponsiveContainer>
         </div>
 
-        <div className="rounded-lg p-5" style={{ backgroundColor: "#181818" }}>
+        <div className="rounded-lg p-6" style={{ backgroundColor: "#161616" }}>
           <h3 className="text-white font-bold mb-1">Report Source</h3>
-          <p className="text-xs mb-4" style={{ color: "#b3b3b3" }}>Crew vs. passenger meals</p>
+          <p className="text-xs mb-4" style={{ color: "#A0A0A0" }}>Crew vs. passenger meals</p>
           <ResponsiveContainer width="100%" height={240}>
             <PieChart>
               <Pie data={sourceData} cx="50%" cy="50%" outerRadius={75} dataKey="value" label>
-                {sourceData.map((_, i) => (<Cell key={i} fill={i === 0 ? "#1DB954" : "#535353"} />))}
+                {sourceData.map((_, i) => (<Cell key={i} fill={i === 0 ? "#C8102E" : "#525252"} />))}
               </Pie>
               <Tooltip contentStyle={TOOLTIP_STYLE} />
               <Legend verticalAlign="bottom" height={36} />
@@ -463,7 +463,7 @@ export default function App() {
       {/* Main Content */}
       <main
         className="flex-1 overflow-y-auto"
-        style={{ backgroundColor: "#121212", borderTopLeftRadius: 8 }}
+        style={{ backgroundColor: "#0D0D0D", borderTopLeftRadius: 8 }}
       >
         <div className="max-w-5xl mx-auto px-8 py-8">
 
@@ -478,36 +478,36 @@ export default function App() {
 
           {/* CLASSIFY */}
           {activePage === "classify" && (
-            <div className="space-y-6">
+            <div className="space-y-8">
               <div>
                 <h1 className="text-2xl font-bold text-white mb-1">Classify Feedback</h1>
-                <p className="text-sm" style={{ color: "#b3b3b3" }}>
+                <p className="text-sm" style={{ color: "#A0A0A0" }}>
                   Enter a single comment to see its predicted subcategory.
                 </p>
               </div>
 
               <SampleComments onSelectSample={handleSelectSample} />
 
-              <div className="rounded-lg p-6" style={{ backgroundColor: "#181818" }}>
+              <div className="rounded-lg p-6" style={{ backgroundColor: "#161616" }}>
                 <Textarea
                   placeholder="Paste a crew feedback comment here..."
                   value={commentText}
                   onChange={(e) => setCommentText(e.target.value)}
                   className="min-h-[120px] mb-4 border-0"
-                  style={{ backgroundColor: "#282828", color: "#ffffff" }}
+                  style={{ backgroundColor: "#252525", color: "#ffffff" }}
                 />
                 <button
                   onClick={handleAnalyze}
                   disabled={isAnalyzing || !modelLoaded}
                   className="w-full py-3 rounded-full text-sm font-bold transition-transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{ backgroundColor: "#1DB954", color: "#000000" }}
+                  style={{ backgroundColor: "#C8102E", color: "#ffffff" }}
                 >
                   {isAnalyzing ? "Analyzing..." : modelLoaded ? "Classify Feedback" : "Model Unavailable"}
                 </button>
 
                 {predictions && (
                   <div className="mt-6">
-                    <div className="flex items-center gap-2 mb-4 text-sm" style={{ color: "#1DB954" }}>
+                    <div className="flex items-center gap-2 mb-4 text-sm" style={{ color: "#22C55E" }}>
                       <CheckCircle2 className="w-4 h-4" />
                       Prediction complete
                     </div>
@@ -520,10 +520,10 @@ export default function App() {
 
           {/* UPLOAD */}
           {activePage === "upload" && (
-            <div className="space-y-6">
+            <div className="space-y-8">
               <div>
                 <h1 className="text-2xl font-bold text-white mb-1">Bulk Upload</h1>
-                <p className="text-sm" style={{ color: "#b3b3b3" }}>
+                <p className="text-sm" style={{ color: "#A0A0A0" }}>
                   Upload a CSV or Excel file to classify all rows at once.
                 </p>
               </div>
@@ -546,10 +546,10 @@ export default function App() {
 
           {/* INSIGHTS */}
           {activePage === "insights" && (
-            <div className="space-y-6">
+            <div className="space-y-8">
               <div>
                 <h1 className="text-2xl font-bold text-white mb-1">Insights</h1>
-                <p className="text-sm" style={{ color: "#b3b3b3" }}>
+                <p className="text-sm" style={{ color: "#A0A0A0" }}>
                   Analytics dashboard for your classified feedback data.
                 </p>
               </div>
