@@ -20,45 +20,47 @@ export function UploadHistory({ uploads, currentUploadId, onSelectUpload, loadin
   if (uploads.length === 0 && !loading) return null;
 
   return (
-    <div className="rounded-lg p-6" style={{ backgroundColor: "#161616" }}>
+    <div className="p-6" style={{ backgroundColor: "#161616", borderTop: "1px solid #2a2a2a" }}>
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <History className="w-4 h-4" style={{ color: "#A0A0A0" }} />
-          <h3 className="font-semibold text-sm text-white">Upload History</h3>
+          <History className="w-4 h-4" style={{ color: "#6b6b6b" }} strokeWidth={1.5} />
+          <h3 style={{ fontSize: 11, fontWeight: 400, color: "#6b6b6b", letterSpacing: "0.1em", textTransform: "uppercase" }}>UPLOAD HISTORY</h3>
         </div>
         {currentUploadId && (
           <a
             href={`${API_URL}/uploads/${currentUploadId}/file`}
             className="flex items-center gap-1 text-xs transition-colors"
-            style={{ color: "#0032A0" }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = "#2563EB"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = "#0032A0"; }}
+            style={{ color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 400 }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = "#6b6b6b"; }}
           >
-            <Download className="w-3 h-3" />
-            Download Original File
+            <Download className="w-3 h-3" strokeWidth={1.5} />
+            DOWNLOAD ORIGINAL
           </a>
         )}
       </div>
 
       {loading ? (
-        <div className="flex items-center gap-2 text-sm" style={{ color: "#A0A0A0" }}>
-          <Loader2 className="w-4 h-4 animate-spin" />
-          Loading saved results...
+        <div className="flex items-center gap-2" style={{ color: "#6b6b6b", fontSize: 13 }}>
+          <Loader2 className="w-4 h-4 animate-spin" strokeWidth={1.5} />
+          <span style={{ fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase" }}>LOADING SAVED RESULTS...</span>
         </div>
       ) : (
         <select
           value={currentUploadId ?? ""}
           onChange={(e) => onSelectUpload(Number(e.target.value))}
           disabled={loading}
-          className="w-full p-2.5 rounded-lg text-sm"
+          className="w-full p-2.5 text-sm"
           style={{
-            backgroundColor: "#252525",
+            backgroundColor: "#1a1a1a",
             color: "#ffffff",
-            border: "1px solid #383838",
+            border: "1px solid #2a2a2a",
+            borderRadius: 0,
             outline: "none",
+            fontWeight: 300,
           }}
           onFocus={(e) => { e.currentTarget.style.borderColor = "#C8102E"; }}
-          onBlur={(e) => { e.currentTarget.style.borderColor = "#383838"; }}
+          onBlur={(e) => { e.currentTarget.style.borderColor = "#2a2a2a"; }}
         >
           {uploads.map((u) => (
             <option key={u.id} value={u.id}>

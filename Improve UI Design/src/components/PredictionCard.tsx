@@ -10,38 +10,42 @@ interface PredictionCardProps {
 }
 
 function confColor(val: number): string {
-  if (val >= 90) return "#22C55E";
-  if (val >= 70) return "#eab308";
-  return "#ef4444";
+  if (val >= 90) return "#2d8a4e";
+  if (val >= 70) return "#b8860b";
+  return "#c0392b";
 }
 
 export function PredictionCard({ subPredictions }: PredictionCardProps) {
   return (
     <div className="mt-6 max-w-2xl mx-auto">
-      <div className="rounded-lg overflow-hidden" style={{ backgroundColor: "#161616" }}>
-        {/* Red accent bar for top prediction */}
-        <div style={{ height: 3, background: "linear-gradient(90deg, #C8102E, #0032A0)" }} />
+      <div className="overflow-hidden" style={{ backgroundColor: "#161616" }}>
+        {/* Thin 1px line instead of gradient bar */}
+        <div style={{ height: 1, backgroundColor: "#2a2a2a" }} />
 
         <div className="p-6">
           <div className="flex items-center gap-2 mb-6">
             <span
-              className="w-3 h-3 rounded-full animate-pulse"
-              style={{ backgroundColor: "#C8102E" }}
+              style={{
+                width: 6,
+                height: 6,
+                backgroundColor: "#C8102E",
+                display: "inline-block",
+              }}
             />
-            <h3 className="text-lg font-semibold text-white">Predicted Subcategory</h3>
+            <h3 style={{ fontSize: 12, fontWeight: 400, color: "#ffffff", letterSpacing: "0.08em", textTransform: "uppercase" }}>PREDICTED SUBCATEGORY</h3>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-0">
             {subPredictions.slice(0, 5).map((pred, idx) => {
               const isTop = idx === 0;
               const barWidth = `${Math.min(pred.probability, 100)}%`;
-              const barColor = isTop ? "#C8102E" : "#383838";
+              const barColor = isTop ? "#C8102E" : "#2a2a2a";
 
               const rowStyle: CSSProperties = {
-                backgroundColor: isTop ? "rgba(200,16,46,0.08)" : "transparent",
-                borderRadius: 8,
+                backgroundColor: isTop ? "rgba(200,16,46,0.06)" : "transparent",
                 padding: "10px 12px",
                 transition: "background-color 0.15s",
+                borderBottom: "1px solid #2a2a2a",
               };
 
               return (
@@ -50,17 +54,17 @@ export function PredictionCard({ subPredictions }: PredictionCardProps) {
                   className="flex items-center justify-between gap-4"
                   style={rowStyle}
                   onMouseEnter={(e) => {
-                    if (!isTop) e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.04)";
+                    if (!isTop) e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.02)";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = isTop ? "rgba(200,16,46,0.08)" : "transparent";
+                    e.currentTarget.style.backgroundColor = isTop ? "rgba(200,16,46,0.06)" : "transparent";
                   }}
                 >
                   <span
                     className="text-sm flex-shrink-0"
                     style={{
-                      color: isTop ? "#ffffff" : "#A0A0A0",
-                      fontWeight: isTop ? 600 : 400,
+                      color: isTop ? "#ffffff" : "#6b6b6b",
+                      fontWeight: isTop ? 400 : 300,
                     }}
                   >
                     {pred.label}
@@ -68,20 +72,20 @@ export function PredictionCard({ subPredictions }: PredictionCardProps) {
 
                   <div className="flex items-center gap-3 flex-1 justify-end">
                     <div
-                      className="h-1.5 rounded-full overflow-hidden"
-                      style={{ width: 80, backgroundColor: "rgba(255,255,255,0.08)" }}
+                      className="overflow-hidden"
+                      style={{ width: 80, height: 3, backgroundColor: "rgba(255,255,255,0.06)" }}
                     >
                       <div
-                        className="h-full rounded-full"
-                        style={{ width: barWidth, backgroundColor: barColor }}
+                        style={{ width: barWidth, height: "100%", backgroundColor: barColor }}
                       />
                     </div>
 
                     <span
-                      className="text-xs font-semibold"
                       style={{
-                        color: isTop ? confColor(pred.probability) : "#A0A0A0",
-                        fontVariantNumeric: "tabular-nums",
+                        color: isTop ? confColor(pred.probability) : "#6b6b6b",
+                        fontFamily: "'JetBrains Mono', monospace",
+                        fontSize: 12,
+                        fontWeight: 400,
                         minWidth: 48,
                         textAlign: "right",
                       }}

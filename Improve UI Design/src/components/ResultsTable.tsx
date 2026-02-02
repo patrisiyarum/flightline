@@ -13,48 +13,33 @@ function parseConf(raw: string | number): number {
 }
 
 function confBarColor(val: number): string {
-  if (val >= 90) return "#22c55e";
-  if (val >= 70) return "#eab308";
-  return "#ef4444";
+  if (val >= 90) return "#2d8a4e";
+  if (val >= 70) return "#b8860b";
+  return "#c0392b";
 }
 
 function confTextStyle(val: number): CSSProperties {
-  if (val >= 90) return { color: "#4ade80" };
-  if (val >= 70) return { color: "#facc15" };
-  return { color: "#f87171" };
+  if (val >= 90) return { color: "#2d8a4e" };
+  if (val >= 70) return { color: "#b8860b" };
+  return { color: "#c0392b" };
 }
 
 function lowConfRowStyle(conf: number): CSSProperties | undefined {
-  if (conf > 0 && conf < 70) return { backgroundColor: "rgba(239, 68, 68, 0.04)" };
+  if (conf > 0 && conf < 70) return { backgroundColor: "rgba(192, 57, 43, 0.04)" };
   return undefined;
 }
 
-interface CatStyle { bg: CSSProperties; pill: CSSProperties }
-
-const CATEGORY_STYLES: Record<string, CatStyle> = {
-  "Food Quality/Portion":                    { bg: { backgroundColor: "rgba(249,115,22,0.12)" }, pill: { color: "#fb923c", borderColor: "rgba(249,115,22,0.3)", backgroundColor: "rgba(249,115,22,0.12)" } },
-  "Food Safety":                             { bg: { backgroundColor: "rgba(239,68,68,0.12)" },  pill: { color: "#f87171", borderColor: "rgba(239,68,68,0.3)",  backgroundColor: "rgba(239,68,68,0.12)" } },
-  "Catering Error - Missing/Incorrect Meals":{ bg: { backgroundColor: "rgba(168,85,247,0.12)" }, pill: { color: "#c084fc", borderColor: "rgba(168,85,247,0.3)", backgroundColor: "rgba(168,85,247,0.12)" } },
-  "Missing Meals - Crew Error":              { bg: { backgroundColor: "rgba(59,130,246,0.12)" },  pill: { color: "#60a5fa", borderColor: "rgba(59,130,246,0.3)",  backgroundColor: "rgba(59,130,246,0.12)" } },
-  "Missing Meals - Pwa":                     { bg: { backgroundColor: "rgba(6,182,212,0.12)" },   pill: { color: "#22d3ee", borderColor: "rgba(6,182,212,0.3)",   backgroundColor: "rgba(6,182,212,0.12)" } },
-  "Missing Meals - Ifx Error":               { bg: { backgroundColor: "rgba(20,184,166,0.12)" },  pill: { color: "#2dd4bf", borderColor: "rgba(20,184,166,0.3)",  backgroundColor: "rgba(20,184,166,0.12)" } },
-  "Missing Meals - Ferry/Deadhead/Swaps":    { bg: { backgroundColor: "rgba(99,102,241,0.12)" },  pill: { color: "#818cf8", borderColor: "rgba(99,102,241,0.3)",  backgroundColor: "rgba(99,102,241,0.12)" } },
-  "Missing Meals - Redeye No Touch":         { bg: { backgroundColor: "rgba(139,92,246,0.12)" },  pill: { color: "#a78bfa", borderColor: "rgba(139,92,246,0.3)",  backgroundColor: "rgba(139,92,246,0.12)" } },
-  "Missing Provisioning - T2":               { bg: { backgroundColor: "rgba(236,72,153,0.12)" },  pill: { color: "#f472b6", borderColor: "rgba(236,72,153,0.3)",  backgroundColor: "rgba(236,72,153,0.12)" } },
-  "Meal Choice Unavailable":                 { bg: { backgroundColor: "rgba(245,158,11,0.12)" },  pill: { color: "#fbbf24", borderColor: "rgba(245,158,11,0.3)",  backgroundColor: "rgba(245,158,11,0.12)" } },
-  "Ground Catering Issue":                   { bg: { backgroundColor: "rgba(132,204,22,0.12)" },  pill: { color: "#a3e635", borderColor: "rgba(132,204,22,0.3)",  backgroundColor: "rgba(132,204,22,0.12)" } },
-  "Equipment":                               { bg: { backgroundColor: "rgba(148,163,184,0.12)" }, pill: { color: "#94a3b8", borderColor: "rgba(148,163,184,0.3)", backgroundColor: "rgba(148,163,184,0.12)" } },
-  "Provisioning":                            { bg: { backgroundColor: "rgba(52,211,153,0.12)" },  pill: { color: "#34d399", borderColor: "rgba(52,211,153,0.3)",  backgroundColor: "rgba(52,211,153,0.12)" } },
-  "Other":                                   { bg: { backgroundColor: "rgba(161,161,170,0.12)" }, pill: { color: "#a1a1aa", borderColor: "rgba(161,161,170,0.3)", backgroundColor: "rgba(161,161,170,0.12)" } },
+// Monochrome category style — all categories use same bordered tag style
+const MONO_PILL_STYLE: CSSProperties = {
+  color: "#6b6b6b",
+  borderColor: "#2a2a2a",
+  backgroundColor: "transparent",
+  border: "1px solid #2a2a2a",
+  fontSize: 10,
+  fontWeight: 400,
+  letterSpacing: "0.06em",
+  textTransform: "uppercase",
 };
-const DEFAULT_CAT_STYLE: CatStyle = {
-  bg:   { backgroundColor: "rgba(161,161,170,0.12)" },
-  pill: { color: "#a1a1aa", borderColor: "rgba(161,161,170,0.3)", backgroundColor: "rgba(161,161,170,0.12)" },
-};
-
-function getCatStyle(name: string): CatStyle {
-  return CATEGORY_STYLES[name] || DEFAULT_CAT_STYLE;
-}
 
 export function ResultsTable({ results }: ResultsTableProps) {
   const [search, setSearch] = useState("");
@@ -126,19 +111,19 @@ export function ResultsTable({ results }: ResultsTableProps) {
   if (!results.length) return null;
 
   const colLabel = (col: string) => {
-    if (col === "Predicted_Subcategory") return "Predicted Category";
-    if (col === "Subcategory_Confidence") return "Confidence";
-    return col;
+    if (col === "Predicted_Subcategory") return "PREDICTED CATEGORY";
+    if (col === "Subcategory_Confidence") return "CONFIDENCE";
+    return col.toUpperCase();
   };
 
   return (
-    <div className="rounded-lg overflow-hidden" style={{ backgroundColor: "#161616" }}>
+    <div className="overflow-hidden" style={{ backgroundColor: "#161616" }}>
       {/* Header */}
       <div className="p-6 pb-4">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-lg font-bold text-white">Classification Results</h3>
-            <p className="text-sm mt-1" style={{ color: "#A0A0A0" }}>
+            <h3 style={{ fontSize: 12, fontWeight: 400, color: "#ffffff", letterSpacing: "0.08em", textTransform: "uppercase" }}>CLASSIFICATION RESULTS</h3>
+            <p style={{ fontSize: 11, color: "#6b6b6b", marginTop: 4, fontFamily: "'JetBrains Mono', monospace" }}>
               {filtered.length} of {results.length} rows
               {categoryFilter && <> &middot; Filtered by: <strong style={{ color: "#ffffff" }}>{categoryFilter}</strong></>}
             </p>
@@ -150,34 +135,39 @@ export function ResultsTable({ results }: ResultsTableProps) {
           {categoryFilter && (
             <button
               onClick={() => { setCategoryFilter(null); setPage(0); }}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs transition-colors"
+              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs transition-colors"
               style={{
-                color: "#A0A0A0",
-                border: "1px dashed #383838",
+                color: "#6b6b6b",
+                border: "1px dashed #2a2a2a",
                 backgroundColor: "transparent",
+                textTransform: "uppercase",
+                letterSpacing: "0.06em",
+                fontSize: 10,
+                fontWeight: 400,
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#252525"; }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#1e1e1e"; }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
             >
-              Clear filter
+              CLEAR FILTER
             </button>
           )}
           {categoryStats.map(({ name, count }) => {
-            const cs = getCatStyle(name);
             const isActive = categoryFilter === name;
             return (
               <button
                 key={name}
                 onClick={() => { setCategoryFilter(categoryFilter === name ? null : name); setPage(0); }}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium border transition-colors"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 transition-colors"
                 style={{
-                  ...cs.pill,
-                  outline: isActive ? "2px solid #C8102E" : "none",
+                  ...MONO_PILL_STYLE,
+                  outline: isActive ? "1px solid #ffffff" : "none",
                   outlineOffset: "1px",
                 }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#6b6b6b"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#2a2a2a"; }}
               >
                 <span>{name}</span>
-                <span style={{ opacity: 0.7 }}>{count}</span>
+                <span style={{ opacity: 0.5, fontFamily: "'JetBrains Mono', monospace" }}>{count}</span>
               </button>
             );
           })}
@@ -185,43 +175,50 @@ export function ResultsTable({ results }: ResultsTableProps) {
 
         {/* Search */}
         <div className="relative mt-4">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "#A0A0A0" }} />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: "#6b6b6b" }} strokeWidth={1.5} />
           <input
             type="text"
             placeholder="Search text, category, or confidence..."
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(0); }}
-            className="w-full pl-9 pr-4 py-2.5 rounded-lg text-sm"
+            className="w-full pl-9 pr-4 py-2.5 text-sm"
             style={{
-              backgroundColor: "#252525",
+              backgroundColor: "#1a1a1a",
               color: "#ffffff",
-              border: "1px solid #383838",
+              border: "1px solid #2a2a2a",
+              borderRadius: 0,
               outline: "none",
+              fontWeight: 300,
             }}
             onFocus={(e) => { e.currentTarget.style.borderColor = "#C8102E"; }}
-            onBlur={(e) => { e.currentTarget.style.borderColor = "#383838"; }}
+            onBlur={(e) => { e.currentTarget.style.borderColor = "#2a2a2a"; }}
           />
         </div>
       </div>
 
       {/* Table */}
       <div className="px-6 pb-6">
-        <div className="overflow-x-auto rounded-lg" style={{ border: "1px solid #252525" }}>
+        <div className="overflow-x-auto" style={{ border: "1px solid #2a2a2a" }}>
           <table className="w-full text-sm">
             <thead>
-              <tr style={{ backgroundColor: "#252525" }}>
-                <th className="px-4 py-3 text-left text-xs font-medium w-10" style={{ color: "#A0A0A0" }}>#</th>
+              <tr style={{ backgroundColor: "#1a1a1a" }}>
+                <th
+                  className="px-4 py-3 text-left w-10"
+                  style={{ color: "#6b6b6b", fontSize: 10, fontWeight: 400, letterSpacing: "0.08em" }}
+                >
+                  #
+                </th>
                 {displayCols.map((col) => (
-                  <th key={col} className="px-4 py-3 text-left text-xs font-medium" style={{ color: "#A0A0A0" }}>
+                  <th key={col} className="px-4 py-3 text-left" style={{ color: "#6b6b6b", fontSize: 10, fontWeight: 400, letterSpacing: "0.08em" }}>
                     <button
                       className="flex items-center gap-1 transition-colors"
-                      style={{ color: "#A0A0A0" }}
+                      style={{ color: "#6b6b6b", textTransform: "uppercase", letterSpacing: "0.08em", fontSize: 10, fontWeight: 400 }}
                       onClick={() => handleSort(col)}
                       onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff"; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.color = "#A0A0A0"; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.color = "#6b6b6b"; }}
                     >
                       {colLabel(col)}
-                      <ArrowUpDown className="w-3 h-3" />
+                      <ArrowUpDown className="w-3 h-3" strokeWidth={1.5} />
                       {sortField === col && (
                         <span style={{ color: "#C8102E" }}>{sortAsc ? "\u2191" : "\u2193"}</span>
                       )}
@@ -238,7 +235,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
                     key={idx}
                     className="transition-colors"
                     style={{
-                      borderTop: "1px solid #252525",
+                      borderTop: "1px solid #2a2a2a",
                       ...lowConfRowStyle(conf),
                     }}
                     onMouseEnter={(e) => {
@@ -248,7 +245,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
                       if (!lowConfRowStyle(conf)) e.currentTarget.style.backgroundColor = "transparent";
                     }}
                   >
-                    <td className="px-4 py-2.5 text-xs" style={{ color: "#A0A0A0" }}>
+                    <td className="px-4 py-2.5" style={{ color: "#6b6b6b", fontFamily: "'JetBrains Mono', monospace", fontSize: 11 }}>
                       {page * PAGE_SIZE + idx + 1}
                     </td>
                     {displayCols.map((col) => {
@@ -258,7 +255,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
                         if (!val) {
                           return (
                             <td key={col} className="px-4 py-2.5">
-                              <span className="text-xs" style={{ color: "#A0A0A0" }}>--</span>
+                              <span style={{ color: "#6b6b6b", fontSize: 11 }}>--</span>
                             </td>
                           );
                         }
@@ -266,15 +263,21 @@ export function ResultsTable({ results }: ResultsTableProps) {
                         return (
                           <td key={col} className="px-4 py-2.5">
                             <div className="flex items-center gap-2" style={{ minWidth: 140 }}>
-                              <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ backgroundColor: "rgba(255,255,255,0.08)" }}>
+                              <div className="flex-1 overflow-hidden" style={{ height: 3, backgroundColor: "rgba(255,255,255,0.06)" }}>
                                 <div
-                                  className="h-full rounded-full transition-all"
-                                  style={{ width: `${Math.min(numVal, 100)}%`, backgroundColor: confBarColor(numVal) }}
+                                  className="transition-all"
+                                  style={{ width: `${Math.min(numVal, 100)}%`, height: "100%", backgroundColor: confBarColor(numVal) }}
                                 />
                               </div>
                               <span
-                                className="text-xs font-semibold"
-                                style={{ ...confTextStyle(numVal), fontVariantNumeric: "tabular-nums" }}
+                                style={{
+                                  ...confTextStyle(numVal),
+                                  fontFamily: "'JetBrains Mono', monospace",
+                                  fontSize: 12,
+                                  fontWeight: 400,
+                                  minWidth: 48,
+                                  textAlign: "right",
+                                }}
                               >
                                 {typeof val === "string" ? val : `${numVal.toFixed(1)}%`}
                               </span>
@@ -287,16 +290,15 @@ export function ResultsTable({ results }: ResultsTableProps) {
                         if (!val) {
                           return (
                             <td key={col} className="px-4 py-2.5">
-                              <span className="text-xs" style={{ color: "#A0A0A0" }}>--</span>
+                              <span style={{ color: "#6b6b6b", fontSize: 11 }}>--</span>
                             </td>
                           );
                         }
-                        const cs = getCatStyle(val);
                         return (
                           <td key={col} className="px-4 py-2.5">
                             <span
-                              className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium border"
-                              style={cs.pill}
+                              className="inline-flex items-center px-2.5 py-0.5"
+                              style={MONO_PILL_STYLE}
                             >
                               {val}
                             </span>
@@ -307,7 +309,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
                       const text = String(val);
                       return (
                         <td key={col} className="px-4 py-2.5 max-w-lg">
-                          <span className="text-sm leading-relaxed text-white" title={text}>
+                          <span style={{ fontSize: 13, lineHeight: 1.5, color: "#ffffff", fontWeight: 300 }} title={text}>
                             {text.length > 150 ? text.substring(0, 150) + "..." : text}
                           </span>
                         </td>
@@ -323,19 +325,19 @@ export function ResultsTable({ results }: ResultsTableProps) {
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex items-center justify-between mt-4">
-            <span className="text-xs" style={{ color: "#A0A0A0" }}>
+            <span style={{ fontSize: 11, color: "#6b6b6b", fontFamily: "'JetBrains Mono', monospace" }}>
               Page {page + 1} of {totalPages}
             </span>
             <div className="flex items-center gap-1.5">
               <button
                 disabled={page === 0}
                 onClick={() => setPage(page - 1)}
-                className="w-8 h-8 flex items-center justify-center rounded-md transition-colors disabled:opacity-30"
-                style={{ backgroundColor: "#252525", color: "#ffffff" }}
+                className="w-8 h-8 flex items-center justify-center transition-colors disabled:opacity-30"
+                style={{ backgroundColor: "#2a2a2a", color: "#ffffff" }}
                 onMouseEnter={(e) => { if (page > 0) e.currentTarget.style.backgroundColor = "#383838"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#252525"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#2a2a2a"; }}
               >
-                <ChevronLeft className="w-4 h-4" />
+                <ChevronLeft className="w-4 h-4" strokeWidth={1.5} />
               </button>
               {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
                 const start = Math.max(0, Math.min(page - 2, totalPages - 5));
@@ -346,13 +348,15 @@ export function ResultsTable({ results }: ResultsTableProps) {
                   <button
                     key={p}
                     onClick={() => setPage(p)}
-                    className="w-8 h-8 flex items-center justify-center rounded-md text-xs font-medium transition-colors"
+                    className="w-8 h-8 flex items-center justify-center text-xs transition-colors"
                     style={{
-                      backgroundColor: isActive ? "#C8102E" : "#252525",
-                      color: "#ffffff",
+                      backgroundColor: isActive ? "#ffffff" : "#2a2a2a",
+                      color: isActive ? "#0D0D0D" : "#ffffff",
+                      fontFamily: "'JetBrains Mono', monospace",
+                      fontWeight: 400,
                     }}
                     onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = "#383838"; }}
-                    onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = isActive ? "#C8102E" : "#252525"; }}
+                    onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.backgroundColor = isActive ? "#ffffff" : "#2a2a2a"; }}
                   >
                     {p + 1}
                   </button>
@@ -361,12 +365,12 @@ export function ResultsTable({ results }: ResultsTableProps) {
               <button
                 disabled={page >= totalPages - 1}
                 onClick={() => setPage(page + 1)}
-                className="w-8 h-8 flex items-center justify-center rounded-md transition-colors disabled:opacity-30"
-                style={{ backgroundColor: "#252525", color: "#ffffff" }}
+                className="w-8 h-8 flex items-center justify-center transition-colors disabled:opacity-30"
+                style={{ backgroundColor: "#2a2a2a", color: "#ffffff" }}
                 onMouseEnter={(e) => { if (page < totalPages - 1) e.currentTarget.style.backgroundColor = "#383838"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#252525"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#2a2a2a"; }}
               >
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="w-4 h-4" strokeWidth={1.5} />
               </button>
             </div>
           </div>

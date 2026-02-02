@@ -27,14 +27,18 @@ export function SampleComments({ onSelectSample }: SampleCommentsProps) {
   const visible = expanded ? samples : samples.slice(0, 4);
 
   return (
-    <div className="rounded-lg p-6" style={{ backgroundColor: "#161616" }}>
+    <div className="p-6" style={{ backgroundColor: "#161616", borderTop: "1px solid #2a2a2a" }}>
       <div className="flex items-center justify-between mb-5">
-        <h3 className="font-semibold text-white">Sample Comments by Category</h3>
+        <h3 style={{ fontSize: 11, fontWeight: 400, color: "#6b6b6b", letterSpacing: "0.1em", textTransform: "uppercase" }}>SAMPLE COMMENTS BY CATEGORY</h3>
         <span
-          className="text-xs font-medium px-2.5 py-1 rounded-full"
-          style={{ backgroundColor: "rgba(200,16,46,0.12)", color: "#C8102E" }}
+          style={{
+            fontSize: 11,
+            fontWeight: 400,
+            color: "#C8102E",
+            fontFamily: "'JetBrains Mono', monospace",
+          }}
         >
-          {samples.length} examples
+          {samples.length}
         </span>
       </div>
 
@@ -42,45 +46,63 @@ export function SampleComments({ onSelectSample }: SampleCommentsProps) {
         {visible.map(({ category, text }) => (
           <div
             key={category}
-            className="p-4 rounded-lg transition-all hover:scale-[1.01]"
-            style={{ backgroundColor: "#252525" }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#2D2D2D"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#252525"; }}
+            className="p-4 transition-colors"
+            style={{
+              backgroundColor: "#0D0D0D",
+              borderBottom: "1px solid #2a2a2a",
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#161616"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#0D0D0D"; }}
           >
             <div className="flex items-start justify-between gap-3 mb-2">
-              <span className="text-sm font-medium" style={{ color: "#C8102E" }}>{category}</span>
+              <span style={{ fontSize: 11, fontWeight: 400, color: "#C8102E", textTransform: "uppercase", letterSpacing: "0.08em" }}>{category}</span>
               <button
                 onClick={() => onSelectSample(text)}
-                className="shrink-0 px-3 py-1 rounded-full text-xs font-bold transition-all hover:scale-105"
-                style={{ backgroundColor: "rgba(200,16,46,0.12)", color: "#C8102E", border: "1px solid rgba(200,16,46,0.25)" }}
+                className="shrink-0 px-3 py-1 text-xs transition-colors"
+                style={{
+                  backgroundColor: "transparent",
+                  color: "#6b6b6b",
+                  border: "1px solid #2a2a2a",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
+                  fontWeight: 400,
+                }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#C8102E";
-                  e.currentTarget.style.color = "#ffffff";
+                  e.currentTarget.style.backgroundColor = "#ffffff";
+                  e.currentTarget.style.color = "#0D0D0D";
+                  e.currentTarget.style.borderColor = "#ffffff";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "rgba(200,16,46,0.12)";
-                  e.currentTarget.style.color = "#C8102E";
+                  e.currentTarget.style.backgroundColor = "transparent";
+                  e.currentTarget.style.color = "#6b6b6b";
+                  e.currentTarget.style.borderColor = "#2a2a2a";
                 }}
               >
-                Try it
+                TRY IT
               </button>
             </div>
-            <p className="text-sm" style={{ color: "#A0A0A0", lineHeight: 1.6 }}>{text}</p>
+            <p style={{ color: "#6b6b6b", fontSize: 13, lineHeight: 1.6, fontWeight: 300 }}>{text}</p>
           </div>
         ))}
       </div>
 
       <button
         onClick={() => setExpanded(!expanded)}
-        className="mt-4 w-full flex items-center justify-center gap-1 py-2.5 rounded-full text-xs font-medium transition-colors"
-        style={{ color: "#A0A0A0", backgroundColor: "transparent" }}
+        className="mt-4 w-full flex items-center justify-center gap-1 py-2.5 text-xs transition-colors"
+        style={{
+          color: "#6b6b6b",
+          backgroundColor: "transparent",
+          textTransform: "uppercase",
+          letterSpacing: "0.08em",
+          fontWeight: 400,
+        }}
         onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff"; }}
-        onMouseLeave={(e) => { e.currentTarget.style.color = "#A0A0A0"; }}
+        onMouseLeave={(e) => { e.currentTarget.style.color = "#6b6b6b"; }}
       >
         {expanded ? (
-          <><ChevronUp className="w-4 h-4" /> Show fewer</>
+          <><ChevronUp className="w-4 h-4" strokeWidth={1.5} /> SHOW FEWER</>
         ) : (
-          <><ChevronDown className="w-4 h-4" /> Show all {samples.length} examples</>
+          <><ChevronDown className="w-4 h-4" strokeWidth={1.5} /> SHOW ALL {samples.length} EXAMPLES</>
         )}
       </button>
     </div>
