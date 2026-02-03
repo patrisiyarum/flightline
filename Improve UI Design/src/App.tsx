@@ -482,7 +482,17 @@ export default function App() {
         className="flex-1 overflow-y-auto"
         style={{ backgroundColor: "#0D0D0D" }}
       >
-        <div className="max-w-5xl mx-auto px-10 py-10">
+        <div
+          style={{
+            maxWidth: "var(--content-max-width, 1152px)",
+            marginLeft: "auto",
+            marginRight: "auto",
+            paddingLeft: "var(--content-padding-x, 40px)",
+            paddingRight: "var(--content-padding-x, 40px)",
+            paddingTop: "var(--content-padding-y, 40px)",
+            paddingBottom: "var(--content-padding-y, 40px)",
+          }}
+        >
 
           {/* HOME */}
           {activePage === "home" && (

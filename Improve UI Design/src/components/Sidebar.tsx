@@ -21,14 +21,20 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
     <aside
       className="flex flex-col h-screen sticky top-0"
       style={{
-        width: 200,
-        minWidth: 200,
+        width: "var(--sidebar-width, 248px)",
+        minWidth: "var(--sidebar-width, 248px)",
         backgroundColor: "#d9d9d9",
         borderRight: "1px solid #c0c0c0",
       }}
     >
       {/* Logo */}
-      <div className="px-5 pt-6 pb-4">
+      <div
+        style={{
+          padding: "24px var(--sidebar-padding-x, 24px) 16px",
+          borderBottom: "1px solid #c0c0c0",
+          marginBottom: 8,
+        }}
+      >
         <div>
           <h1
             style={{
@@ -58,27 +64,35 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
 
       {/* Navigation */}
       <nav className="flex-1 py-2">
-        <div className="space-y-0">
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "var(--sidebar-nav-gap, 2px)",
+          }}
+        >
           {NAV_ITEMS.map(({ page, label, icon: Icon }) => {
             const isActive = activePage === page;
             return (
               <button
                 key={page}
                 onClick={() => onNavigate(page)}
-                className="w-full flex items-center gap-3 px-5 py-2.5 text-left transition-colors"
+                className="w-full flex items-center gap-3 text-left transition-colors"
                 style={{
-                  backgroundColor: "transparent",
+                  padding: "10px var(--sidebar-padding-x, 24px)",
+                  backgroundColor: isActive ? "rgba(0,0,0,0.06)" : "transparent",
                   color: isActive ? "#0f0e12" : "#6b6b6b",
                   borderLeft: isActive ? "2px solid #0f0e12" : "2px solid transparent",
                   fontSize: 11,
-                  fontWeight: 400,
+                  fontWeight: isActive ? 500 : 400,
                   letterSpacing: "0.1em",
                   textTransform: "uppercase",
+                  lineHeight: 1.6,
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive) {
                     e.currentTarget.style.color = "#0f0e12";
-                    e.currentTarget.style.backgroundColor = "#c0c0c0";
+                    e.currentTarget.style.backgroundColor = "rgba(0,0,0,0.04)";
                   }
                 }}
                 onMouseLeave={(e) => {
@@ -97,7 +111,12 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
       </nav>
 
       {/* Status */}
-      <div className="px-5 pb-6 space-y-2">
+      <div
+        className="space-y-2"
+        style={{
+          padding: "0 var(--sidebar-padding-x, 24px) 24px",
+        }}
+      >
         <div className="flex items-center gap-2 py-1">
           <span
             style={{

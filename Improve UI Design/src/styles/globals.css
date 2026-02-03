@@ -32,6 +32,24 @@
   --chart-5: #8ABCC4;
   --radius: 0rem;
 
+  /* Layout tokens */
+  --sidebar-width: 248px;
+  --content-max-width: 1152px;
+  --content-padding-x: 40px;
+  --content-padding-y: 40px;
+
+  /* Spacing scale */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-6: 48px;
+  --space-8: 64px;
+
+  /* Sidebar internal */
+  --sidebar-padding-x: 24px;
+  --sidebar-nav-gap: 2px;
+
   /* Sidebar light palette */
   --sidebar: #d9d9d9;
   --sidebar-foreground: #6b6b6b;
@@ -70,6 +88,25 @@
   --chart-3: #B8A9C9;
   --chart-4: #C4B7A6;
   --chart-5: #8ABCC4;
+
+  /* Layout tokens */
+  --sidebar-width: 248px;
+  --content-max-width: 1152px;
+  --content-padding-x: 40px;
+  --content-padding-y: 40px;
+
+  /* Spacing scale */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-6: 48px;
+  --space-8: 64px;
+
+  /* Sidebar internal */
+  --sidebar-padding-x: 24px;
+  --sidebar-nav-gap: 2px;
+
   --sidebar: #d9d9d9;
   --sidebar-foreground: #6b6b6b;
   --sidebar-primary: #0f0e12;
@@ -168,7 +205,7 @@
     p {
       font-size: var(--text-sm);
       font-weight: 300;
-      line-height: 1.6;
+      line-height: 1.7;
     }
 
     label {
