@@ -188,7 +188,7 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
             </p>
 
             <p style={{ color: "#6b6b6b", fontSize: 14, lineHeight: 1.7, fontWeight: 300, marginBottom: 32 }}>
-              Turning crew feedback into actionable categories — automatically, powered by fine-tuned BERT.
+              Turning crew feedback into actionable categories.
             </p>
 
             <div className="flex items-center gap-6">
@@ -283,56 +283,6 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
               </button>
             ))}
           </div>
-        </div>
-      </div>
-
-      {/* The Problem This Solves + Pipeline */}
-      <div
-        style={{
-          backgroundColor: "#161616",
-          borderTop: "1px solid #2a2a2a",
-          padding: "32px 32px",
-        }}
-      >
-        <div style={{ marginBottom: 32 }}>
-          <h2 style={{ color: "#ffffff", fontSize: 16, fontWeight: 300, letterSpacing: "-0.02em", marginBottom: 8 }}>The Problem This Solves</h2>
-          <p style={{ color: "#6b6b6b", fontSize: 13, lineHeight: 1.7, fontWeight: 300 }}>
-            Thousands of crew comments were categorized manually. This tool automates that workflow, reducing hours to seconds.
-          </p>
-        </div>
-
-        <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 40 }}>
-          {[
-            { icon: Zap, value: "Seconds" },
-            { icon: Target, value: "14 categories" },
-            { icon: Layers, value: "BERT" },
-          ].map(({ icon: Icon, value }) => (
-            <div
-              key={value}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                padding: "6px 12px",
-                backgroundColor: "#0D0D0D",
-                border: "1px solid #2a2a2a",
-              }}
-            >
-              <Icon className="w-4 h-4" style={{ color: "#6b6b6b" }} strokeWidth={1.5} />
-              <span style={{ fontSize: 12, fontWeight: 400, color: "#ffffff", fontFamily: "'JetBrains Mono', monospace" }}>{value}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* Model Processing Flow sub-section */}
-        <div style={{ borderTop: "1px solid #2a2a2a", paddingTop: 24 }}>
-          <h3 style={{ fontSize: 11, fontWeight: 400, color: "#6b6b6b", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 4 }}>
-            MODEL PROCESSING FLOW
-          </h3>
-          <p style={{ fontSize: 12, color: "#444", fontWeight: 300, marginBottom: 8 }}>
-            Each piece of feedback is actively processed through four stages before results appear.
-          </p>
-          <PipelineVisualization />
         </div>
       </div>
 

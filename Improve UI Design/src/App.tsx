@@ -8,7 +8,7 @@ import { PredictionCard } from "./components/PredictionCard";
 import { SampleComments } from "./components/SampleComments";
 import { BulkUpload } from "./components/BulkUpload";
 import { UploadHistory, UploadSummary } from "./components/UploadHistory";
-import { ResultsTable } from "./components/ResultsTable";
+
 import { Sidebar, Page } from "./components/Sidebar";
 import { HomePage } from "./components/HomePage";
 import {
@@ -205,7 +205,7 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       {/* KPI Cards — compact row */}
       {kpis && (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
@@ -218,9 +218,9 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
             <div
               key={label}
               className="p-3"
-              style={{ backgroundColor: "#161616", borderBottom: "1px solid #1e1e1e" }}
+              style={{ backgroundColor: "#161616" }}
             >
-              <span style={{ fontSize: 9, color: "#555", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 400, display: "block", marginBottom: 4 }}>{label}</span>
+              <span style={{ fontSize: 9, color: "#555", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 400, display: "block", marginBottom: 4, fontFamily: "'Space Grotesk', sans-serif" }}>{label}</span>
               <p style={{ fontSize: 16, fontWeight: 300, color: "#ffffff", fontFamily: "'JetBrains Mono', monospace", lineHeight: 1.2 }}>{value}</p>
               {sub && <span style={{ fontSize: 10, color: "#555", fontFamily: "'JetBrains Mono', monospace", marginTop: 2, display: "block" }}>{sub}</span>}
             </div>
@@ -231,13 +231,13 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
       {/* Processing time + confidence filter */}
       <div className="flex items-center gap-4" style={{ padding: "2px 0" }}>
         {processingTime !== null && (
-          <div className="flex items-center gap-2" style={{ color: "#555", fontSize: 11 }}>
+          <div className="flex items-center gap-2" style={{ color: "#555", fontSize: 11, fontFamily: "'Space Grotesk', sans-serif" }}>
             <Timer className="w-3.5 h-3.5" strokeWidth={1.5} />
             <span>Processed in <strong style={{ color: "#ffffff", fontFamily: "'JetBrains Mono', monospace" }}>{processingTime}s</strong></span>
           </div>
         )}
         <div className="flex items-center gap-2 ml-auto">
-          <span style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 400, whiteSpace: "nowrap" }}>
+          <span style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 400, whiteSpace: "nowrap", fontFamily: "'Space Grotesk', sans-serif" }}>
             MIN: <strong style={{ color: "#ffffff", fontFamily: "'JetBrains Mono', monospace" }}>{confidenceThreshold}%</strong>
           </span>
           <input
@@ -255,46 +255,46 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
         </div>
       </div>
 
-      {/* Card 1: AI Confidence + Top Airports in one rectangle */}
-      <div className="p-4" style={{ backgroundColor: "#161616", borderBottom: "1px solid #1e1e1e" }}>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* Card 1: AI Confidence + Top Airports */}
+      <div className="p-3" style={{ backgroundColor: "#161616" }}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div>
-            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em" }}>AI Confidence</h3>
-            <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2 }}>MODEL CERTAINTY ACROSS {filteredResults.length} RECORDS</p>
-            <ResponsiveContainer width="100%" height={180}>
+            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 12, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>AI Confidence</h3>
+            <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 6, marginTop: 2, fontFamily: "'Space Grotesk', sans-serif" }}>MODEL CERTAINTY ACROSS {filteredResults.length} RECORDS</p>
+            <ResponsiveContainer width="100%" height={120}>
               <BarChart data={confidenceData} margin={{ left: 0, right: 8 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e1e1e" vertical={false} />
-                <XAxis dataKey="name" tick={{ fill: "#555", fontSize: 9 }} />
-                <YAxis tick={{ fill: "#555", fontSize: 9 }} />
+                <XAxis dataKey="name" tick={{ fill: "#555", fontSize: 8 }} />
+                <YAxis tick={{ fill: "#555", fontSize: 8 }} />
                 <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
-                <Bar dataKey="count" fill="#7C9CBF" radius={[0, 0, 0, 0]} name="Records" barSize={36} />
+                <Bar dataKey="count" fill="#7C9CBF" radius={[0, 0, 0, 0]} name="Records" barSize={28} />
               </BarChart>
             </ResponsiveContainer>
           </div>
           <div>
-            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em" }}>Top Airports</h3>
-            <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2 }}>REPORTS BY DEPARTURE STATION</p>
-            <ResponsiveContainer width="100%" height={180}>
+            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 12, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Top Airports</h3>
+            <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 6, marginTop: 2, fontFamily: "'Space Grotesk', sans-serif" }}>REPORTS BY DEPARTURE STATION</p>
+            <ResponsiveContainer width="100%" height={120}>
               <BarChart data={airportData} layout="vertical" margin={{ left: 0, right: 16 }}>
                 <XAxis type="number" hide />
-                <YAxis dataKey="name" type="category" width={48} tick={{ fill: "#555", fontSize: 9 }} />
+                <YAxis dataKey="name" type="category" width={48} tick={{ fill: "#555", fontSize: 8 }} />
                 <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
-                <Bar dataKey="count" fill="#8BAF8B" radius={[0, 0, 0, 0]} name="Reports" barSize={12} />
+                <Bar dataKey="count" fill="#8BAF8B" radius={[0, 0, 0, 0]} name="Reports" barSize={10} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
       </div>
 
-      {/* Card 2: Fleet Breakdown + Report Source in one rectangle */}
-      <div className="p-4" style={{ backgroundColor: "#161616", borderBottom: "1px solid #1e1e1e" }}>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* Card 2: Fleet Breakdown + Report Source */}
+      <div className="p-3" style={{ backgroundColor: "#161616" }}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div>
-            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em" }}>Fleet Breakdown</h3>
-            <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2 }}>BY AIRCRAFT TYPE</p>
-            <ResponsiveContainer width="100%" height={180}>
+            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 12, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Fleet Breakdown</h3>
+            <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 6, marginTop: 2, fontFamily: "'Space Grotesk', sans-serif" }}>BY AIRCRAFT TYPE</p>
+            <ResponsiveContainer width="100%" height={130}>
               <PieChart>
-                <Pie data={fleetData} cx="50%" cy="50%" innerRadius={35} outerRadius={55} paddingAngle={0} dataKey="value">
+                <Pie data={fleetData} cx="50%" cy="45%" innerRadius={28} outerRadius={45} paddingAngle={0} dataKey="value">
                   {fleetData.map((_, i) => (<Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />))}
                 </Pie>
                 <Tooltip
@@ -307,16 +307,16 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
                     );
                   }}
                 />
-                <Legend verticalAlign="bottom" height={28} wrapperStyle={{ fontSize: 9, color: "#555" }} />
+                <Legend verticalAlign="bottom" height={24} wrapperStyle={{ fontSize: 8, color: "#555" }} />
               </PieChart>
             </ResponsiveContainer>
           </div>
           <div>
-            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em" }}>Report Source</h3>
-            <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2 }}>CREW VS. PASSENGER</p>
-            <ResponsiveContainer width="100%" height={180}>
+            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 12, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Report Source</h3>
+            <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 6, marginTop: 2, fontFamily: "'Space Grotesk', sans-serif" }}>CREW VS. PASSENGER</p>
+            <ResponsiveContainer width="100%" height={130}>
               <PieChart>
-                <Pie data={sourceData} cx="50%" cy="50%" outerRadius={55} dataKey="value" label={({ name, percent }: any) => `${(percent * 100).toFixed(0)}%`}>
+                <Pie data={sourceData} cx="50%" cy="45%" outerRadius={45} dataKey="value" label={({ name, percent }: any) => `${(percent * 100).toFixed(0)}%`}>
                   {sourceData.map((_, i) => (<Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />))}
                 </Pie>
                 <Tooltip
@@ -329,24 +329,24 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
                     );
                   }}
                 />
-                <Legend verticalAlign="bottom" height={28} wrapperStyle={{ fontSize: 9, color: "#555" }} />
+                <Legend verticalAlign="bottom" height={24} wrapperStyle={{ fontSize: 8, color: "#555" }} />
               </PieChart>
             </ResponsiveContainer>
           </div>
         </div>
       </div>
 
-      {/* Volume Over Time — full width */}
-      <div className="p-4" style={{ backgroundColor: "#161616", borderBottom: "1px solid #1e1e1e" }}>
-        <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em" }}>Volume Over Time</h3>
-        <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2 }}>DAILY TREND</p>
-        <ResponsiveContainer width="100%" height={160}>
+      {/* Volume Over Time */}
+      <div className="p-3" style={{ backgroundColor: "#161616" }}>
+        <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 12, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Volume Over Time</h3>
+        <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 6, marginTop: 2, fontFamily: "'Space Grotesk', sans-serif" }}>DAILY TREND</p>
+        <ResponsiveContainer width="100%" height={100}>
           <LineChart data={trendData}>
             <CartesianGrid strokeDasharray="3 3" stroke="#1e1e1e" />
-            <XAxis dataKey="date" tick={{ fill: "#555", fontSize: 8 }} />
-            <YAxis tick={{ fill: "#555", fontSize: 9 }} />
+            <XAxis dataKey="date" tick={{ fill: "#555", fontSize: 7 }} />
+            <YAxis tick={{ fill: "#555", fontSize: 8 }} />
             <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ stroke: "#2a2a2a" }} />
-            <Line type="monotone" dataKey="count" stroke="#7C9CBF" strokeWidth={1.5} dot={{ r: 2, fill: "#7C9CBF" }} activeDot={{ r: 3 }} />
+            <Line type="monotone" dataKey="count" stroke="#7C9CBF" strokeWidth={1.5} dot={{ r: 1.5, fill: "#7C9CBF" }} activeDot={{ r: 3 }} />
           </LineChart>
         </ResponsiveContainer>
       </div>
@@ -512,20 +512,20 @@ export default function App() {
             <div className="space-y-8">
               <BackButton />
               <div>
-                <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em" }}>Classify Feedback</h1>
-                <p style={{ fontSize: 10, color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 4 }}>
+                <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Feedback Demo</h1>
+                <p style={{ fontSize: 10, color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 6, fontFamily: "'Space Grotesk', sans-serif" }}>
                   ENTER A SINGLE COMMENT TO SEE ITS PREDICTED SUBCATEGORY
                 </p>
               </div>
 
               <SampleComments onSelectSample={handleSelectSample} />
 
-              <div className="p-6" style={{ backgroundColor: "#161616", borderTop: "1px solid #2a2a2a" }}>
+              <div className="p-8" style={{ backgroundColor: "#161616" }}>
                 <textarea
                   placeholder="Paste a crew feedback comment here..."
                   value={commentText}
                   onChange={(e) => setCommentText(e.target.value)}
-                  className="w-full min-h-[120px] mb-4 p-3 text-sm"
+                  className="w-full min-h-[120px] mb-6 p-4 text-sm"
                   style={{
                     backgroundColor: "#1a1a1a",
                     color: "#ffffff",
@@ -557,10 +557,44 @@ export default function App() {
                 </button>
 
                 {predictions && (
-                  <div className="mt-6">
-                    <div className="flex items-center gap-2 text-sm mb-4" style={{ color: "#2d8a4e" }}>
-                      <CheckCircle2 className="w-4 h-4" strokeWidth={1.5} />
-                      <span style={{ fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase" }}>PREDICTION COMPLETE</span>
+                  <div className="mt-8">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-2 text-sm" style={{ color: "#2d8a4e" }}>
+                        <CheckCircle2 className="w-4 h-4" strokeWidth={1.5} />
+                        <span style={{ fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: "'Space Grotesk', sans-serif" }}>PREDICTION COMPLETE</span>
+                      </div>
+                      <button
+                        onClick={() => {
+                          if (!predictions?.subPredictions) return;
+                          const header = "Category,Confidence\n";
+                          const rows = predictions.subPredictions.map((p: any) =>
+                            `"${p.label}","${p.probability.toFixed(2)}%"`
+                          ).join("\n");
+                          const blob = new Blob([header + rows], { type: "text/csv;charset=utf-8;" });
+                          const url = URL.createObjectURL(blob);
+                          const link = document.createElement("a");
+                          link.href = url;
+                          link.download = "classification_result.csv";
+                          link.click();
+                          URL.revokeObjectURL(url);
+                        }}
+                        className="text-xs transition-colors"
+                        style={{
+                          background: "none",
+                          border: "none",
+                          color: "#6b6b6b",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.08em",
+                          fontWeight: 400,
+                          fontFamily: "'Space Grotesk', sans-serif",
+                          fontSize: 10,
+                          cursor: "pointer",
+                        }}
+                        onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff"; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.color = "#6b6b6b"; }}
+                      >
+                        DOWNLOAD REPORT
+                      </button>
                     </div>
                     <PredictionCard subPredictions={predictions.subPredictions} />
                   </div>
@@ -574,8 +608,8 @@ export default function App() {
             <div className="space-y-8">
               <BackButton />
               <div>
-                <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em" }}>Bulk Upload</h1>
-                <p style={{ fontSize: 10, color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 4 }}>
+                <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Bulk Upload</h1>
+                <p style={{ fontSize: 10, color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 6, fontFamily: "'Space Grotesk', sans-serif" }}>
                   UPLOAD A CSV OR EXCEL FILE TO CLASSIFY ALL ROWS AT ONCE
                 </p>
               </div>
@@ -585,7 +619,24 @@ export default function App() {
                 onUploadComplete={handleBulkUploadComplete}
               />
 
-              <ResultsTable results={bulkResults} />
+              {bulkResults.length > 0 && (
+                <button
+                  onClick={() => setActivePage("insights")}
+                  className="w-full py-3 text-sm transition-colors"
+                  style={{
+                    backgroundColor: "#ffffff",
+                    color: "#0D0D0D",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.08em",
+                    fontWeight: 400,
+                    fontFamily: "'Space Grotesk', sans-serif",
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#e5e5e5"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
+                >
+                  VIEW RESULTS
+                </button>
+              )}
 
               <UploadHistory
                 uploads={uploads}
@@ -601,8 +652,8 @@ export default function App() {
             <div className="space-y-4" style={{ maxWidth: 1400, marginLeft: "auto", marginRight: "auto" }}>
               <BackButton />
               <div>
-                <h1 style={{ fontSize: 20, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em" }}>Insights</h1>
-                <p style={{ fontSize: 10, color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 2 }}>
+                <h1 style={{ fontSize: 20, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Insights</h1>
+                <p style={{ fontSize: 10, color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 4, fontFamily: "'Space Grotesk', sans-serif" }}>
                   ANALYTICS DASHBOARD FOR YOUR CLASSIFIED FEEDBACK DATA
                 </p>
               </div>

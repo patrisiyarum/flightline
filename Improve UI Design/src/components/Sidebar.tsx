@@ -11,8 +11,8 @@ interface SidebarProps {
 
 const NAV_ITEMS: { page: Page; label: string; icon: typeof Home }[] = [
   { page: "home", label: "HOME", icon: Home },
-  { page: "classify", label: "CLASSIFY", icon: Brain },
-  { page: "upload", label: "UPLOAD", icon: Upload },
+  { page: "classify", label: "FEEDBACK DEMO", icon: Brain },
+  { page: "upload", label: "BULK UPLOAD", icon: Upload },
   { page: "insights", label: "INSIGHTS", icon: BarChart3 },
 ];
 
