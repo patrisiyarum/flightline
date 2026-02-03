@@ -39,6 +39,7 @@ const MONO_PILL_STYLE: CSSProperties = {
   fontWeight: 400,
   letterSpacing: "0.06em",
   textTransform: "uppercase",
+  fontFamily: "'Space Grotesk', sans-serif",
 };
 
 export function ResultsTable({ results }: ResultsTableProps) {

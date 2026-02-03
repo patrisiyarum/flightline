@@ -65,6 +65,7 @@ export function PredictionCard({ subPredictions }: PredictionCardProps) {
                     style={{
                       color: isTop ? "#ffffff" : "#6b6b6b",
                       fontWeight: isTop ? 400 : 300,
+                      fontFamily: "'Space Grotesk', sans-serif",
                     }}
                   >
                     {pred.label}

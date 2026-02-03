@@ -46,7 +46,7 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
               lineHeight: 1.4,
             }}
           >
-            FCR FEEDBACK
+            SORTLINE
           </h1>
           <p
             style={{
@@ -57,7 +57,7 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
               textTransform: "uppercase",
             }}
           >
-            Intelligence
+            Text Classifier
           </p>
         </div>
       </div>

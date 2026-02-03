@@ -55,7 +55,7 @@ export function SampleComments({ onSelectSample }: SampleCommentsProps) {
             onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#0D0D0D"; }}
           >
             <div className="flex items-start justify-between gap-3 mb-2">
-              <span style={{ fontSize: 11, fontWeight: 400, color: "#ffffff", textTransform: "uppercase", letterSpacing: "0.08em" }}>{category}</span>
+              <span style={{ fontSize: 11, fontWeight: 400, color: "#ffffff", textTransform: "uppercase", letterSpacing: "0.08em", fontFamily: "'Space Grotesk', sans-serif" }}>{category}</span>
               <button
                 onClick={() => onSelectSample(text)}
                 className="shrink-0 px-3 py-1 text-xs transition-colors"

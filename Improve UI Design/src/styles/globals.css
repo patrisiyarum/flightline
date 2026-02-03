@@ -239,3 +239,22 @@
 html {
   font-size: var(--font-size);
 }
+
+@keyframes pipeline-dot {
+  0% { left: 0; }
+  100% { left: calc(100% - 5px); }
+}
+
+@keyframes pipeline-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@media (max-width: 640px) {
+  .pipeline-connector {
+    display: none !important;
+  }
+  .pipeline-stages {
+    flex-wrap: wrap;
+  }
+}

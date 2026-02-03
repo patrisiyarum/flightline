@@ -1,10 +1,97 @@
-import { Upload, Brain, BarChart3, ArrowRight, Zap, Target, Layers } from "lucide-react";
+import { Upload, Brain, BarChart3, Zap, Target, Layers } from "lucide-react";
 import type { Page } from "./Sidebar";
 
 interface HomePageProps {
   onNavigate: (page: Page) => void;
   modelLoaded: boolean;
   totalUploads: number;
+}
+
+function PipelineVisualization() {
+  const stages = [
+    { label: "INPUT", sub: "raw text" },
+    { label: "TOKENIZE", sub: "bert tokens" },
+    { label: "CLASSIFY", sub: "inference" },
+    { label: "OUTPUT", sub: "categories" },
+  ];
+
+  return (
+    <div
+      className="pipeline-stages"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 0,
+        padding: "32px 0",
+      }}
+    >
+      {stages.map((stage, i) => (
+        <div key={stage.label} style={{ display: "flex", alignItems: "center" }}>
+          {/* Stage box */}
+          <div
+            style={{
+              backgroundColor: "#0D0D0D",
+              border: "1px solid #2a2a2a",
+              padding: "12px 20px",
+              textAlign: "center",
+              minWidth: 100,
+            }}
+          >
+            <div
+              style={{
+                fontSize: 11,
+                fontWeight: 400,
+                color: "#ffffff",
+                letterSpacing: "0.1em",
+                fontFamily: "'JetBrains Mono', monospace",
+                marginBottom: 4,
+              }}
+            >
+              {stage.label}
+            </div>
+            <div
+              style={{
+                fontSize: 9,
+                color: "#6b6b6b",
+                letterSpacing: "0.08em",
+                fontFamily: "'JetBrains Mono', monospace",
+                textTransform: "uppercase",
+              }}
+            >
+              {stage.sub}
+            </div>
+          </div>
+
+          {/* Connector line with animated dot */}
+          {i < stages.length - 1 && (
+            <div
+              className="pipeline-connector"
+              style={{
+                position: "relative",
+                width: 48,
+                height: 1,
+                backgroundColor: "#2a2a2a",
+                overflow: "hidden",
+              }}
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  top: -2,
+                  left: 0,
+                  width: 5,
+                  height: 5,
+                  backgroundColor: "#7C9CBF",
+                  animation: `pipeline-dot 1.5s linear infinite, pipeline-pulse 1.5s ease-in-out infinite`,
+                  animationDelay: `${i * 0.4}s`,
+                }}
+              />
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
 }
 
 export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProps) {
@@ -21,14 +108,12 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
         <div className="grid gap-12 md:grid-cols-2">
           {/* Left column: headline + CTA */}
           <div>
-            {/* Status pill */}
+            {/* Status pill — bare inline indicator */}
             {modelLoaded && (
               <div
-                className="inline-flex items-center gap-2 px-3 py-1.5 text-xs mb-6"
+                className="inline-flex items-center gap-2 text-xs mb-6"
                 style={{
-                  backgroundColor: "#0D0D0D",
-                  color: "#ffffff",
-                  border: "1px solid #2a2a2a",
+                  color: "#6b6b6b",
                   fontWeight: 400,
                   letterSpacing: "0.08em",
                   textTransform: "uppercase",
@@ -54,48 +139,71 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
                 lineHeight: 1.1,
                 letterSpacing: "-0.03em",
                 color: "#ffffff",
+                marginBottom: 8,
+              }}
+            >
+              Sortline
+            </h1>
+
+            <p
+              style={{
+                fontSize: 11,
+                fontWeight: 400,
+                color: "#6b6b6b",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                fontFamily: "'JetBrains Mono', monospace",
                 marginBottom: 16,
               }}
             >
-              FCR Feedback
-              <br />
-              Intelligence
-            </h1>
-
-            <p style={{ color: "#6b6b6b", fontSize: 14, lineHeight: 1.7, fontWeight: 300, marginBottom: 32 }}>
-              Turning crew feedback into actionable insights — automatically, powered by fine-tuned BERT.
+              NLP CLASSIFICATION ENGINE
             </p>
 
-            <div className="flex items-center gap-3">
+            <p style={{ color: "#6b6b6b", fontSize: 14, lineHeight: 1.7, fontWeight: 300, marginBottom: 32 }}>
+              Turning unstructured text into actionable categories — automatically, powered by fine-tuned BERT.
+            </p>
+
+            <div className="flex items-center gap-6">
               <button
                 onClick={() => onNavigate("classify")}
-                className="inline-flex items-center gap-2 px-5 py-2.5 text-sm transition-colors"
+                className="inline-flex items-center gap-2 text-sm transition-colors"
                 style={{
-                  backgroundColor: "#ffffff",
-                  color: "#0D0D0D",
+                  background: "none",
+                  border: "none",
+                  padding: 0,
+                  color: "#ffffff",
                   textTransform: "uppercase",
                   letterSpacing: "0.08em",
                   fontWeight: 400,
+                  cursor: "pointer",
+                  textDecoration: "none",
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#e5e5e5"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.textDecoration = "underline";
+                  (e.currentTarget.style as any).textUnderlineOffset = "4px";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.textDecoration = "none";
+                }}
               >
                 GET STARTED
-                <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
+                <span style={{ fontFamily: "'JetBrains Mono', monospace" }}>&rarr;</span>
               </button>
               <button
                 onClick={() => onNavigate("upload")}
-                className="inline-flex items-center gap-2 px-5 py-2.5 text-sm transition-colors"
+                className="inline-flex items-center gap-2 text-sm transition-colors"
                 style={{
-                  backgroundColor: "transparent",
+                  background: "none",
+                  border: "none",
+                  padding: 0,
                   color: "#6b6b6b",
-                  border: "1px solid #2a2a2a",
                   textTransform: "uppercase",
                   letterSpacing: "0.08em",
                   fontWeight: 400,
+                  cursor: "pointer",
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#6b6b6b"; e.currentTarget.style.color = "#ffffff"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#2a2a2a"; e.currentTarget.style.color = "#6b6b6b"; }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = "#6b6b6b"; }}
               >
                 UPLOAD FILE
               </button>
@@ -150,6 +258,9 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
         </div>
       </div>
 
+      {/* Pipeline Visualization */}
+      <PipelineVisualization />
+
       {/* The Problem This Solves — compact flex row */}
       <div
         style={{
@@ -192,37 +303,51 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
         </div>
       </div>
 
-      {/* Quick Stats */}
+      {/* Recent Activity — compact inline row */}
       {totalUploads > 0 && (
-        <div>
-          <h2 style={{ color: "#ffffff", fontSize: 20, fontWeight: 300, letterSpacing: "-0.02em", marginBottom: 16 }}>Recent Activity</h2>
-          <div
-            className="p-6 flex items-center justify-between"
-            style={{
-              backgroundColor: "#161616",
-              borderTop: "1px solid #2a2a2a",
-            }}
-          >
-            <div>
-              <p style={{ color: "#ffffff", fontWeight: 400 }}>{totalUploads} file{totalUploads !== 1 ? "s" : ""} processed</p>
-              <p style={{ fontSize: 11, color: "#6b6b6b" }}>Your upload history is available in the Upload tab</p>
-            </div>
-            <button
-              onClick={() => onNavigate("upload")}
-              className="px-5 py-2.5 text-xs transition-colors"
-              style={{
-                backgroundColor: "#2a2a2a",
-                color: "#ffffff",
-                textTransform: "uppercase",
-                letterSpacing: "0.08em",
-                fontWeight: 400,
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#383838"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#2a2a2a"; }}
-            >
-              VIEW UPLOADS
-            </button>
+        <div
+          style={{
+            borderTop: "1px solid #2a2a2a",
+            paddingTop: 16,
+            display: "flex",
+            alignItems: "center",
+            gap: 12,
+          }}
+        >
+          {/* Decorative dot cluster */}
+          <div style={{ display: "flex", gap: 3 }}>
+            <span style={{ width: 4, height: 4, backgroundColor: "#7C9CBF", opacity: 1, display: "inline-block" }} />
+            <span style={{ width: 4, height: 4, backgroundColor: "#8BAF8B", opacity: 0.7, display: "inline-block" }} />
+            <span style={{ width: 4, height: 4, backgroundColor: "#B8A9C9", opacity: 0.4, display: "inline-block" }} />
           </div>
+
+          {/* Stat text */}
+          <span style={{ fontSize: 12, color: "#6b6b6b", fontWeight: 300 }}>
+            <span style={{ fontFamily: "'JetBrains Mono', monospace", color: "#ffffff" }}>{totalUploads}</span> file{totalUploads !== 1 ? "s" : ""} processed
+          </span>
+
+          <span style={{ color: "#2a2a2a" }}>&middot;</span>
+
+          {/* View history link */}
+          <button
+            onClick={() => onNavigate("upload")}
+            style={{
+              background: "none",
+              border: "none",
+              padding: 0,
+              color: "#6b6b6b",
+              fontSize: 10,
+              fontWeight: 400,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              cursor: "pointer",
+              fontFamily: "'Space Grotesk', sans-serif",
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = "#6b6b6b"; }}
+          >
+            VIEW HISTORY
+          </button>
         </div>
       )}
     </div>
