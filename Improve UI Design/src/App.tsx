@@ -255,82 +255,84 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
         </div>
       </div>
 
-      {/* Row 1: Confidence + Top Airports side by side */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-        <div className="p-4" style={{ backgroundColor: "#161616", borderBottom: "1px solid #1e1e1e" }}>
-          <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em" }}>AI Confidence</h3>
-          <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2 }}>MODEL CERTAINTY ACROSS {filteredResults.length} RECORDS</p>
-          <ResponsiveContainer width="100%" height={160}>
-            <BarChart data={confidenceData} margin={{ left: 0, right: 8 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1e1e1e" vertical={false} />
-              <XAxis dataKey="name" tick={{ fill: "#555", fontSize: 9 }} />
-              <YAxis tick={{ fill: "#555", fontSize: 9 }} />
-              <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
-              <Bar dataKey="count" fill="#7C9CBF" radius={[0, 0, 0, 0]} name="Records" barSize={36} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="p-4" style={{ backgroundColor: "#161616", borderBottom: "1px solid #1e1e1e" }}>
-          <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em" }}>Top Airports</h3>
-          <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2 }}>REPORTS BY DEPARTURE STATION</p>
-          <ResponsiveContainer width="100%" height={160}>
-            <BarChart data={airportData} layout="vertical" margin={{ left: 0, right: 16 }}>
-              <XAxis type="number" hide />
-              <YAxis dataKey="name" type="category" width={48} tick={{ fill: "#555", fontSize: 9 }} />
-              <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
-              <Bar dataKey="count" fill="#8BAF8B" radius={[0, 0, 0, 0]} name="Reports" barSize={12} />
-            </BarChart>
-          </ResponsiveContainer>
+      {/* Card 1: AI Confidence + Top Airports in one rectangle */}
+      <div className="p-4" style={{ backgroundColor: "#161616", borderBottom: "1px solid #1e1e1e" }}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div>
+            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em" }}>AI Confidence</h3>
+            <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2 }}>MODEL CERTAINTY ACROSS {filteredResults.length} RECORDS</p>
+            <ResponsiveContainer width="100%" height={180}>
+              <BarChart data={confidenceData} margin={{ left: 0, right: 8 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#1e1e1e" vertical={false} />
+                <XAxis dataKey="name" tick={{ fill: "#555", fontSize: 9 }} />
+                <YAxis tick={{ fill: "#555", fontSize: 9 }} />
+                <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
+                <Bar dataKey="count" fill="#7C9CBF" radius={[0, 0, 0, 0]} name="Records" barSize={36} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <div>
+            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em" }}>Top Airports</h3>
+            <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2 }}>REPORTS BY DEPARTURE STATION</p>
+            <ResponsiveContainer width="100%" height={180}>
+              <BarChart data={airportData} layout="vertical" margin={{ left: 0, right: 16 }}>
+                <XAxis type="number" hide />
+                <YAxis dataKey="name" type="category" width={48} tick={{ fill: "#555", fontSize: 9 }} />
+                <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
+                <Bar dataKey="count" fill="#8BAF8B" radius={[0, 0, 0, 0]} name="Reports" barSize={12} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
 
-      {/* Row 2: Fleet + Report Source side by side */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-        <div className="p-4" style={{ backgroundColor: "#161616", borderBottom: "1px solid #1e1e1e" }}>
-          <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em" }}>Fleet Breakdown</h3>
-          <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2 }}>BY AIRCRAFT TYPE</p>
-          <ResponsiveContainer width="100%" height={160}>
-            <PieChart>
-              <Pie data={fleetData} cx="50%" cy="50%" innerRadius={35} outerRadius={55} paddingAngle={0} dataKey="value">
-                {fleetData.map((_, i) => (<Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />))}
-              </Pie>
-              <Tooltip
-                content={({ active, payload }: any) => {
-                  if (!active || !payload?.length) return null;
-                  return (
-                    <div style={{ ...TOOLTIP_STYLE, padding: "6px 10px" }}>
-                      {payload[0].name}: {payload[0].value}
-                    </div>
-                  );
-                }}
-              />
-              <Legend verticalAlign="bottom" height={28} wrapperStyle={{ fontSize: 9, color: "#555" }} />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="p-4" style={{ backgroundColor: "#161616", borderBottom: "1px solid #1e1e1e" }}>
-          <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em" }}>Report Source</h3>
-          <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2 }}>CREW VS. PASSENGER</p>
-          <ResponsiveContainer width="100%" height={160}>
-            <PieChart>
-              <Pie data={sourceData} cx="50%" cy="50%" outerRadius={55} dataKey="value" label={({ name, percent }: any) => `${(percent * 100).toFixed(0)}%`}>
-                {sourceData.map((_, i) => (<Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />))}
-              </Pie>
-              <Tooltip
-                content={({ active, payload }: any) => {
-                  if (!active || !payload?.length) return null;
-                  return (
-                    <div style={{ ...TOOLTIP_STYLE, padding: "6px 10px" }}>
-                      {payload[0].name}: {payload[0].value}
-                    </div>
-                  );
-                }}
-              />
-              <Legend verticalAlign="bottom" height={28} wrapperStyle={{ fontSize: 9, color: "#555" }} />
-            </PieChart>
-          </ResponsiveContainer>
+      {/* Card 2: Fleet Breakdown + Report Source in one rectangle */}
+      <div className="p-4" style={{ backgroundColor: "#161616", borderBottom: "1px solid #1e1e1e" }}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div>
+            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em" }}>Fleet Breakdown</h3>
+            <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2 }}>BY AIRCRAFT TYPE</p>
+            <ResponsiveContainer width="100%" height={180}>
+              <PieChart>
+                <Pie data={fleetData} cx="50%" cy="50%" innerRadius={35} outerRadius={55} paddingAngle={0} dataKey="value">
+                  {fleetData.map((_, i) => (<Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />))}
+                </Pie>
+                <Tooltip
+                  content={({ active, payload }: any) => {
+                    if (!active || !payload?.length) return null;
+                    return (
+                      <div style={{ ...TOOLTIP_STYLE, padding: "6px 10px" }}>
+                        {payload[0].name}: {payload[0].value}
+                      </div>
+                    );
+                  }}
+                />
+                <Legend verticalAlign="bottom" height={28} wrapperStyle={{ fontSize: 9, color: "#555" }} />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div>
+            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em" }}>Report Source</h3>
+            <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2 }}>CREW VS. PASSENGER</p>
+            <ResponsiveContainer width="100%" height={180}>
+              <PieChart>
+                <Pie data={sourceData} cx="50%" cy="50%" outerRadius={55} dataKey="value" label={({ name, percent }: any) => `${(percent * 100).toFixed(0)}%`}>
+                  {sourceData.map((_, i) => (<Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />))}
+                </Pie>
+                <Tooltip
+                  content={({ active, payload }: any) => {
+                    if (!active || !payload?.length) return null;
+                    return (
+                      <div style={{ ...TOOLTIP_STYLE, padding: "6px 10px" }}>
+                        {payload[0].name}: {payload[0].value}
+                      </div>
+                    );
+                  }}
+                />
+                <Legend verticalAlign="bottom" height={28} wrapperStyle={{ fontSize: 9, color: "#555" }} />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
 
@@ -395,7 +397,6 @@ export default function App() {
     try {
       const uploadList = await listUploads();
       setUploads(uploadList);
-      if (uploadList.length > 0) await loadUploadResults(uploadList[0].id);
     } catch (err) {
       console.error("Failed to load upload history:", err);
     }

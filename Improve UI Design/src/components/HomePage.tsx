@@ -259,7 +259,7 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
                 icon: BarChart3,
                 step: "03",
                 title: "ANALYZE",
-                desc: "Interactive charts, filters, and CSV export.",
+                desc: "Interactive charts and filters for your classified data.",
                 action: () => onNavigate("insights"),
               },
             ].map(({ icon: Icon, step, title, desc, action }) => (

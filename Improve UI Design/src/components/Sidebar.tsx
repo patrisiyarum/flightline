@@ -57,7 +57,7 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
               textTransform: "uppercase",
             }}
           >
-            Feedback Classifier
+            Delta Airlines
           </p>
         </div>
       </div>
