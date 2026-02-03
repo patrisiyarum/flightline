@@ -144,7 +144,7 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
       const ap = row[apKey || "Dpt A/P"] || "Unknown";
       counts[ap] = (counts[ap] || 0) + 1;
     });
-    return Object.entries(counts).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count).slice(0, 10);
+    return Object.entries(counts).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count).slice(0, 5);
   }, [filteredResults]);
 
   const trendData = useMemo(() => {
@@ -204,32 +204,12 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
     );
   }
 
-  return (
-    <div className="space-y-2">
-      {/* KPI Cards — compact row */}
-      {kpis && (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
-          {[
-            { label: "TOTAL ROWS", value: kpis.totalRows.toLocaleString() },
-            { label: "AVG CONFIDENCE", value: `${kpis.avgConfidence}%` },
-            { label: "HIGH CONF (>90%)", value: kpis.highConfCount.toLocaleString() },
-            { label: "TOP CATEGORY", value: kpis.topCategory, sub: `${kpis.topCategoryPct}% of rows` },
-          ].map(({ label, value, sub }) => (
-            <div
-              key={label}
-              className="p-3"
-              style={{ backgroundColor: "#161616" }}
-            >
-              <span style={{ fontSize: 9, color: "#555", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 400, display: "block", marginBottom: 4, fontFamily: "'Space Grotesk', sans-serif" }}>{label}</span>
-              <p style={{ fontSize: 16, fontWeight: 300, color: "#ffffff", fontFamily: "'JetBrains Mono', monospace", lineHeight: 1.2 }}>{value}</p>
-              {sub && <span style={{ fontSize: 10, color: "#555", fontFamily: "'JetBrains Mono', monospace", marginTop: 2, display: "block" }}>{sub}</span>}
-            </div>
-          ))}
-        </div>
-      )}
+  const highConfPct = kpis ? ((kpis.highConfCount / kpis.totalRows) * 100).toFixed(0) : "0";
 
-      {/* Processing time + confidence filter */}
-      <div className="flex items-center gap-4" style={{ padding: "2px 0" }}>
+  return (
+    <div>
+      {/* Toolbar — processing time + confidence filter */}
+      <div className="flex items-center gap-4" style={{ marginBottom: 8 }}>
         {processingTime !== null && (
           <div className="flex items-center gap-2" style={{ color: "#555", fontSize: 11, fontFamily: "'Space Grotesk', sans-serif" }}>
             <Timer className="w-3.5 h-3.5" strokeWidth={1.5} />
@@ -255,100 +235,128 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
         </div>
       </div>
 
-      {/* Card 1: AI Confidence + Top Airports */}
-      <div className="p-3" style={{ backgroundColor: "#161616" }}>
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 12, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>AI Confidence</h3>
-            <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 6, marginTop: 2, fontFamily: "'Space Grotesk', sans-serif" }}>MODEL CERTAINTY ACROSS {filteredResults.length} RECORDS</p>
-            <ResponsiveContainer width="100%" height={120}>
+      {/* Two-column dashboard */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+
+        {/* ── LEFT COLUMN ── */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+
+          {/* Summary Card — 2×2 metric grid */}
+          {kpis && (
+            <div style={{ backgroundColor: "#161616", padding: 16 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                {[
+                  { label: "TOTAL ROWS", value: kpis.totalRows.toLocaleString() },
+                  { label: "AVG CONFIDENCE", value: `${kpis.avgConfidence}%` },
+                  { label: "HIGH CONF", value: `${highConfPct}%`, sub: `${kpis.highConfCount} of ${kpis.totalRows}` },
+                  { label: "TOP CATEGORY", value: kpis.topCategory, sub: `${kpis.topCategoryPct}% of rows` },
+                ].map(({ label, value, sub }) => (
+                  <div key={label}>
+                    <span style={{ fontSize: 9, color: "#555", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 400, display: "block", marginBottom: 3, fontFamily: "'Space Grotesk', sans-serif" }}>{label}</span>
+                    <p style={{ fontSize: 18, fontWeight: 300, color: "#ffffff", fontFamily: "'JetBrains Mono', monospace", lineHeight: 1.2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</p>
+                    {sub && <span style={{ fontSize: 9, color: "#555", fontFamily: "'JetBrains Mono', monospace", marginTop: 1, display: "block" }}>{sub}</span>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Top 5 Airports */}
+          <div style={{ backgroundColor: "#161616", padding: 16, flex: 1 }}>
+            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 12, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Top Airports</h3>
+            <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2, fontFamily: "'Space Grotesk', sans-serif" }}>REPORTS BY DEPARTURE STATION</p>
+            <ResponsiveContainer width="100%" height={140}>
+              <BarChart data={airportData} layout="vertical" margin={{ left: 0, right: 16 }}>
+                <XAxis type="number" hide />
+                <YAxis dataKey="name" type="category" width={48} tick={{ fill: "#555", fontSize: 9 }} />
+                <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
+                <Bar dataKey="count" fill="#8BAF8B" radius={[0, 0, 0, 0]} name="Reports" barSize={12} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* AI Confidence Breakdown */}
+          <div style={{ backgroundColor: "#161616", padding: 16 }}>
+            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 12, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Confidence Breakdown</h3>
+            <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2, fontFamily: "'Space Grotesk', sans-serif" }}>MODEL CERTAINTY ACROSS {filteredResults.length} RECORDS</p>
+            <ResponsiveContainer width="100%" height={100}>
               <BarChart data={confidenceData} margin={{ left: 0, right: 8 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e1e1e" vertical={false} />
                 <XAxis dataKey="name" tick={{ fill: "#555", fontSize: 8 }} />
                 <YAxis tick={{ fill: "#555", fontSize: 8 }} />
                 <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
-                <Bar dataKey="count" fill="#7C9CBF" radius={[0, 0, 0, 0]} name="Records" barSize={28} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-          <div>
-            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 12, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Top Airports</h3>
-            <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 6, marginTop: 2, fontFamily: "'Space Grotesk', sans-serif" }}>REPORTS BY DEPARTURE STATION</p>
-            <ResponsiveContainer width="100%" height={120}>
-              <BarChart data={airportData} layout="vertical" margin={{ left: 0, right: 16 }}>
-                <XAxis type="number" hide />
-                <YAxis dataKey="name" type="category" width={48} tick={{ fill: "#555", fontSize: 8 }} />
-                <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
-                <Bar dataKey="count" fill="#8BAF8B" radius={[0, 0, 0, 0]} name="Reports" barSize={10} />
+                <Bar dataKey="count" fill="#7C9CBF" radius={[0, 0, 0, 0]} name="Records" barSize={24} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
-      </div>
 
-      {/* Card 2: Fleet Breakdown + Report Source */}
-      <div className="p-3" style={{ backgroundColor: "#161616" }}>
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 12, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Fleet Breakdown</h3>
-            <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 6, marginTop: 2, fontFamily: "'Space Grotesk', sans-serif" }}>BY AIRCRAFT TYPE</p>
-            <ResponsiveContainer width="100%" height={130}>
-              <PieChart>
-                <Pie data={fleetData} cx="50%" cy="45%" innerRadius={28} outerRadius={45} paddingAngle={0} dataKey="value">
-                  {fleetData.map((_, i) => (<Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />))}
-                </Pie>
-                <Tooltip
-                  content={({ active, payload }: any) => {
-                    if (!active || !payload?.length) return null;
-                    return (
-                      <div style={{ ...TOOLTIP_STYLE, padding: "6px 10px" }}>
-                        {payload[0].name}: {payload[0].value}
-                      </div>
-                    );
-                  }}
-                />
-                <Legend verticalAlign="bottom" height={24} wrapperStyle={{ fontSize: 8, color: "#555" }} />
-              </PieChart>
+        {/* ── RIGHT COLUMN ── */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+
+          {/* Volume Over Time — primary trend */}
+          <div style={{ backgroundColor: "#161616", padding: 16, flex: 1 }}>
+            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 12, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Volume Over Time</h3>
+            <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2, fontFamily: "'Space Grotesk', sans-serif" }}>DAILY TREND</p>
+            <ResponsiveContainer width="100%" height={180}>
+              <LineChart data={trendData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#1e1e1e" />
+                <XAxis dataKey="date" tick={{ fill: "#555", fontSize: 7 }} />
+                <YAxis tick={{ fill: "#555", fontSize: 8 }} />
+                <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ stroke: "#2a2a2a" }} />
+                <Line type="monotone" dataKey="count" stroke="#7C9CBF" strokeWidth={1.5} dot={{ r: 1.5, fill: "#7C9CBF" }} activeDot={{ r: 3 }} />
+              </LineChart>
             </ResponsiveContainer>
           </div>
-          <div>
-            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 12, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Report Source</h3>
-            <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 6, marginTop: 2, fontFamily: "'Space Grotesk', sans-serif" }}>CREW VS. PASSENGER</p>
-            <ResponsiveContainer width="100%" height={130}>
-              <PieChart>
-                <Pie data={sourceData} cx="50%" cy="45%" outerRadius={45} dataKey="value" label={({ name, percent }: any) => `${(percent * 100).toFixed(0)}%`}>
-                  {sourceData.map((_, i) => (<Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />))}
-                </Pie>
-                <Tooltip
-                  content={({ active, payload }: any) => {
-                    if (!active || !payload?.length) return null;
-                    return (
-                      <div style={{ ...TOOLTIP_STYLE, padding: "6px 10px" }}>
-                        {payload[0].name}: {payload[0].value}
-                      </div>
-                    );
-                  }}
-                />
-                <Legend verticalAlign="bottom" height={24} wrapperStyle={{ fontSize: 8, color: "#555" }} />
-              </PieChart>
-            </ResponsiveContainer>
+
+          {/* Fleet + Source — secondary, side-by-side */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+            <div style={{ backgroundColor: "#161616", padding: 12 }}>
+              <h3 style={{ color: "#999", fontWeight: 300, fontSize: 11, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Fleet</h3>
+              <p style={{ fontSize: 8, color: "#444", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 4, marginTop: 1, fontFamily: "'Space Grotesk', sans-serif" }}>BY AIRCRAFT</p>
+              <ResponsiveContainer width="100%" height={120}>
+                <PieChart>
+                  <Pie data={fleetData} cx="50%" cy="42%" innerRadius={22} outerRadius={38} paddingAngle={0} dataKey="value">
+                    {fleetData.map((_, i) => (<Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />))}
+                  </Pie>
+                  <Tooltip
+                    content={({ active, payload }: any) => {
+                      if (!active || !payload?.length) return null;
+                      return (
+                        <div style={{ ...TOOLTIP_STYLE, padding: "4px 8px", fontSize: 11 }}>
+                          {payload[0].name}: {payload[0].value}
+                        </div>
+                      );
+                    }}
+                  />
+                  <Legend verticalAlign="bottom" height={20} wrapperStyle={{ fontSize: 7, color: "#555" }} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <div style={{ backgroundColor: "#161616", padding: 12 }}>
+              <h3 style={{ color: "#999", fontWeight: 300, fontSize: 11, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Source</h3>
+              <p style={{ fontSize: 8, color: "#444", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 4, marginTop: 1, fontFamily: "'Space Grotesk', sans-serif" }}>CREW VS. PASSENGER</p>
+              <ResponsiveContainer width="100%" height={120}>
+                <PieChart>
+                  <Pie data={sourceData} cx="50%" cy="42%" outerRadius={38} dataKey="value" label={({ percent }: any) => `${(percent * 100).toFixed(0)}%`}>
+                    {sourceData.map((_, i) => (<Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />))}
+                  </Pie>
+                  <Tooltip
+                    content={({ active, payload }: any) => {
+                      if (!active || !payload?.length) return null;
+                      return (
+                        <div style={{ ...TOOLTIP_STYLE, padding: "4px 8px", fontSize: 11 }}>
+                          {payload[0].name}: {payload[0].value}
+                        </div>
+                      );
+                    }}
+                  />
+                  <Legend verticalAlign="bottom" height={20} wrapperStyle={{ fontSize: 7, color: "#555" }} />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* Volume Over Time */}
-      <div className="p-3" style={{ backgroundColor: "#161616" }}>
-        <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 12, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Volume Over Time</h3>
-        <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 6, marginTop: 2, fontFamily: "'Space Grotesk', sans-serif" }}>DAILY TREND</p>
-        <ResponsiveContainer width="100%" height={100}>
-          <LineChart data={trendData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#1e1e1e" />
-            <XAxis dataKey="date" tick={{ fill: "#555", fontSize: 7 }} />
-            <YAxis tick={{ fill: "#555", fontSize: 8 }} />
-            <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ stroke: "#2a2a2a" }} />
-            <Line type="monotone" dataKey="count" stroke="#7C9CBF" strokeWidth={1.5} dot={{ r: 1.5, fill: "#7C9CBF" }} activeDot={{ r: 3 }} />
-          </LineChart>
-        </ResponsiveContainer>
       </div>
     </div>
   );
