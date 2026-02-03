@@ -10,7 +10,7 @@ import { BulkUpload } from "./components/BulkUpload";
 import { UploadHistory, UploadSummary } from "./components/UploadHistory";
 import { ResultsTable } from "./components/ResultsTable";
 import { Sidebar, Page } from "./components/Sidebar";
-import { HomePage, PipelineVisualization } from "./components/HomePage";
+import { HomePage } from "./components/HomePage";
 import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
@@ -285,22 +285,8 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
         </div>
       </div>
 
-      {/* Row 2: Volume Over Time + Fleet + Report Source */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        <div className="p-4" style={{ backgroundColor: "#161616", borderBottom: "1px solid #1e1e1e" }}>
-          <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em" }}>Volume Over Time</h3>
-          <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2 }}>DAILY TREND</p>
-          <ResponsiveContainer width="100%" height={160}>
-            <LineChart data={trendData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1e1e1e" />
-              <XAxis dataKey="date" tick={{ fill: "#555", fontSize: 8 }} />
-              <YAxis tick={{ fill: "#555", fontSize: 9 }} />
-              <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ stroke: "#2a2a2a" }} />
-              <Line type="monotone" dataKey="count" stroke="#7C9CBF" strokeWidth={1.5} dot={{ r: 2, fill: "#7C9CBF" }} activeDot={{ r: 3 }} />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-
+      {/* Row 2: Fleet + Report Source side by side */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
         <div className="p-4" style={{ backgroundColor: "#161616", borderBottom: "1px solid #1e1e1e" }}>
           <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em" }}>Fleet Breakdown</h3>
           <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2 }}>BY AIRCRAFT TYPE</p>
@@ -346,6 +332,21 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
             </PieChart>
           </ResponsiveContainer>
         </div>
+      </div>
+
+      {/* Volume Over Time — full width */}
+      <div className="p-4" style={{ backgroundColor: "#161616", borderBottom: "1px solid #1e1e1e" }}>
+        <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em" }}>Volume Over Time</h3>
+        <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2 }}>DAILY TREND</p>
+        <ResponsiveContainer width="100%" height={160}>
+          <LineChart data={trendData}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#1e1e1e" />
+            <XAxis dataKey="date" tick={{ fill: "#555", fontSize: 8 }} />
+            <YAxis tick={{ fill: "#555", fontSize: 9 }} />
+            <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ stroke: "#2a2a2a" }} />
+            <Line type="monotone" dataKey="count" stroke="#7C9CBF" strokeWidth={1.5} dot={{ r: 2, fill: "#7C9CBF" }} activeDot={{ r: 3 }} />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );
@@ -576,17 +577,6 @@ export default function App() {
                 <p style={{ fontSize: 10, color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 4 }}>
                   UPLOAD A CSV OR EXCEL FILE TO CLASSIFY ALL ROWS AT ONCE
                 </p>
-              </div>
-
-              {/* Model Processing Flow */}
-              <div style={{ borderTop: "1px solid #2a2a2a", paddingTop: 24 }}>
-                <h3 style={{ fontSize: 11, fontWeight: 400, color: "#6b6b6b", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 4 }}>
-                  MODEL PROCESSING FLOW
-                </h3>
-                <p style={{ fontSize: 12, color: "#444", fontWeight: 300, marginBottom: 8 }}>
-                  Each row is processed through four stages before results appear.
-                </p>
-                <PipelineVisualization />
               </div>
 
               <BulkUpload
