@@ -28,7 +28,7 @@ export function PredictionCard({ subPredictions }: PredictionCardProps) {
               style={{
                 width: 6,
                 height: 6,
-                backgroundColor: "#C8102E",
+                backgroundColor: "#7C9CBF",
                 display: "inline-block",
               }}
             />
@@ -39,10 +39,10 @@ export function PredictionCard({ subPredictions }: PredictionCardProps) {
             {subPredictions.slice(0, 5).map((pred, idx) => {
               const isTop = idx === 0;
               const barWidth = `${Math.min(pred.probability, 100)}%`;
-              const barColor = isTop ? "#C8102E" : "#2a2a2a";
+              const barColor = isTop ? "#7C9CBF" : "#2a2a2a";
 
               const rowStyle: CSSProperties = {
-                backgroundColor: isTop ? "rgba(200,16,46,0.06)" : "transparent",
+                backgroundColor: isTop ? "rgba(124,156,191,0.06)" : "transparent",
                 padding: "10px 12px",
                 transition: "background-color 0.15s",
                 borderBottom: "1px solid #2a2a2a",
@@ -57,7 +57,7 @@ export function PredictionCard({ subPredictions }: PredictionCardProps) {
                     if (!isTop) e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.02)";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = isTop ? "rgba(200,16,46,0.06)" : "transparent";
+                    e.currentTarget.style.backgroundColor = isTop ? "rgba(124,156,191,0.06)" : "transparent";
                   }}
                 >
                   <span

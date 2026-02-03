@@ -69,7 +69,7 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
                 style={{
                   backgroundColor: "transparent",
                   color: isActive ? "#0f0e12" : "#6b6b6b",
-                  borderLeft: isActive ? "2px solid #C8102E" : "2px solid transparent",
+                  borderLeft: isActive ? "2px solid #0f0e12" : "2px solid transparent",
                   fontSize: 11,
                   fontWeight: 400,
                   letterSpacing: "0.1em",

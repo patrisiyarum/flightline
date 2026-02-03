@@ -59,7 +59,7 @@ export function UploadHistory({ uploads, currentUploadId, onSelectUpload, loadin
             outline: "none",
             fontWeight: 300,
           }}
-          onFocus={(e) => { e.currentTarget.style.borderColor = "#C8102E"; }}
+          onFocus={(e) => { e.currentTarget.style.borderColor = "#6b6b6b"; }}
           onBlur={(e) => { e.currentTarget.style.borderColor = "#2a2a2a"; }}
         >
           {uploads.map((u) => (

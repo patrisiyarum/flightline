@@ -190,7 +190,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
               outline: "none",
               fontWeight: 300,
             }}
-            onFocus={(e) => { e.currentTarget.style.borderColor = "#C8102E"; }}
+            onFocus={(e) => { e.currentTarget.style.borderColor = "#6b6b6b"; }}
             onBlur={(e) => { e.currentTarget.style.borderColor = "#2a2a2a"; }}
           />
         </div>
@@ -220,7 +220,7 @@ export function ResultsTable({ results }: ResultsTableProps) {
                       {colLabel(col)}
                       <ArrowUpDown className="w-3 h-3" strokeWidth={1.5} />
                       {sortField === col && (
-                        <span style={{ color: "#C8102E" }}>{sortAsc ? "\u2191" : "\u2193"}</span>
+                        <span style={{ color: "#ffffff" }}>{sortAsc ? "\u2191" : "\u2193"}</span>
                       )}
                     </button>
                   </th>

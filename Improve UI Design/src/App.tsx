@@ -93,7 +93,7 @@ interface BulkResultRow {
 }
 
 // --- Chart Colors (monochrome + one accent) ---
-const CHART_COLORS = ["#C8102E", "#ffffff", "#6b6b6b", "#999999", "#444444", "#2a2a2a"];
+const CHART_COLORS = ["#7C9CBF", "#8BAF8B", "#B8A9C9", "#C4B7A6", "#8ABCC4", "#A3A3A3"];
 const TOOLTIP_STYLE = {
   backgroundColor: "#0f0e12",
   color: "#e5e5e5",
@@ -270,7 +270,7 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
               value={confidenceThreshold}
               onChange={(e) => setConfidenceThreshold(Number(e.target.value))}
               className="w-32"
-              style={{ accentColor: "#C8102E" }}
+              style={{ accentColor: "#7C9CBF" }}
             />
           </div>
           {confidenceThreshold > 0 && (
@@ -307,7 +307,7 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
               <XAxis dataKey="name" tick={{ fill: LABEL_COLOR, fontSize: 11 }} />
               <YAxis tick={{ fill: LABEL_COLOR }} />
               <Tooltip contentStyle={TOOLTIP_STYLE} cursor={{ fill: "transparent" }} />
-              <Bar dataKey="count" fill="#C8102E" radius={[0, 0, 0, 0]} name="Records" barSize={50} />
+              <Bar dataKey="count" fill="#7C9CBF" radius={[0, 0, 0, 0]} name="Records" barSize={50} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -320,7 +320,7 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
               <XAxis type="number" hide />
               <YAxis dataKey="name" type="category" width={40} tick={{ fill: LABEL_COLOR, fontSize: 10 }} />
               <Tooltip contentStyle={TOOLTIP_STYLE} cursor={{ fill: "transparent" }} />
-              <Bar dataKey="count" fill="#ffffff" radius={[0, 0, 0, 0]} name="Reports" barSize={16} />
+              <Bar dataKey="count" fill="#8BAF8B" radius={[0, 0, 0, 0]} name="Reports" barSize={16} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -335,7 +335,7 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
             <XAxis dataKey="date" tick={{ fill: LABEL_COLOR }} fontSize={11} />
             <YAxis tick={{ fill: LABEL_COLOR }} />
             <Tooltip contentStyle={TOOLTIP_STYLE} />
-            <Line type="monotone" dataKey="count" stroke="#C8102E" strokeWidth={1.5} dot={{ r: 3, fill: "#C8102E" }} activeDot={{ r: 5 }} />
+            <Line type="monotone" dataKey="count" stroke="#7C9CBF" strokeWidth={1.5} dot={{ r: 3, fill: "#7C9CBF" }} activeDot={{ r: 5 }} />
           </LineChart>
         </ResponsiveContainer>
       </div>
@@ -361,7 +361,7 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
           <ResponsiveContainer width="100%" height={240}>
             <PieChart>
               <Pie data={sourceData} cx="50%" cy="50%" outerRadius={75} dataKey="value" label>
-                {sourceData.map((_, i) => (<Cell key={i} fill={i === 0 ? "#C8102E" : "#444444"} />))}
+                {sourceData.map((_, i) => (<Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />))}
               </Pie>
               <Tooltip contentStyle={TOOLTIP_STYLE} />
               <Legend verticalAlign="bottom" height={36} />
@@ -482,7 +482,7 @@ export default function App() {
         className="flex-1 overflow-y-auto"
         style={{ backgroundColor: "#0D0D0D" }}
       >
-        <div className="max-w-5xl mx-auto px-8 py-8">
+        <div className="max-w-5xl mx-auto px-10 py-10">
 
           {/* HOME */}
           {activePage === "home" && (
@@ -521,7 +521,7 @@ export default function App() {
                     fontFamily: "'Space Grotesk', sans-serif",
                     fontWeight: 300,
                   }}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = "#C8102E"; }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = "#6b6b6b"; }}
                   onBlur={(e) => { e.currentTarget.style.borderColor = "#2a2a2a"; }}
                 />
                 <button
@@ -529,14 +529,14 @@ export default function App() {
                   disabled={isAnalyzing || !modelLoaded}
                   className="w-full py-3 text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{
-                    backgroundColor: "#C8102E",
-                    color: "#ffffff",
+                    backgroundColor: "#ffffff",
+                    color: "#0D0D0D",
                     textTransform: "uppercase",
                     letterSpacing: "0.08em",
                     fontWeight: 400,
                   }}
-                  onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = "#a00d24"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#C8102E"; }}
+                  onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = "#e5e5e5"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
                 >
                   {isAnalyzing ? "ANALYZING..." : modelLoaded ? "CLASSIFY FEEDBACK" : "MODEL UNAVAILABLE"}
                 </button>

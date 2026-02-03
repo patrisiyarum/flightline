@@ -231,7 +231,7 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
           border: "1px dashed #2a2a2a",
           backgroundColor: "#0D0D0D",
         }}
-        onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#C8102E"; }}
+        onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#6b6b6b"; }}
         onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#2a2a2a"; }}
       >
         <Upload className="w-6 h-6 mx-auto mb-4" style={{ color: "#6b6b6b" }} strokeWidth={1.5} />
@@ -250,8 +250,8 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
           <span
             className="inline-flex items-center gap-2 px-6 py-3 text-sm cursor-pointer transition-colors"
             style={{
-              backgroundColor: "#C8102E",
-              color: "#ffffff",
+              backgroundColor: "#ffffff",
+              color: "#0D0D0D",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
               fontWeight: 400,
@@ -269,7 +269,7 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
             className="mt-4 inline-flex items-center gap-2 px-4 py-2 text-sm"
             style={{ backgroundColor: "#2a2a2a", color: "#ffffff" }}
           >
-            <FileUp className="w-3.5 h-3.5" style={{ color: "#C8102E" }} strokeWidth={1.5} />
+            <FileUp className="w-3.5 h-3.5" style={{ color: "#6b6b6b" }} strokeWidth={1.5} />
             {file.name}
           </div>
         )}
@@ -328,14 +328,14 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
             disabled={processing}
             className="mt-5 w-full py-3 text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             style={{
-              backgroundColor: "#C8102E",
-              color: "#ffffff",
+              backgroundColor: "#ffffff",
+              color: "#0D0D0D",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
               fontWeight: 400,
             }}
-            onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = "#a00d24"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#C8102E"; }}
+            onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = "#e5e5e5"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
           >
             {processing ? "PROCESSING..." : "START PREDICTION"}
           </button>
@@ -354,7 +354,7 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
           <div className="overflow-hidden" style={{ height: 3, backgroundColor: "#2a2a2a" }}>
             <div
               className="transition-all"
-              style={{ width: `${progress}%`, height: "100%", backgroundColor: "#C8102E" }}
+              style={{ width: `${progress}%`, height: "100%", backgroundColor: "#7C9CBF" }}
             />
           </div>
         </div>

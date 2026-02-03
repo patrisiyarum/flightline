@@ -9,7 +9,7 @@ interface HomePageProps {
 
 export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProps) {
   return (
-    <div className="space-y-8 pb-8">
+    <div className="space-y-10 pb-10">
       {/* Hero Section — flat dark, no gradient */}
       <div
         className="px-10 py-16"
@@ -18,7 +18,7 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
           borderBottom: "1px solid #2a2a2a",
         }}
       >
-        <div className="max-w-2xl">
+        <div className="max-w-xl mx-auto lg:mx-0">
           {/* Status pill */}
           {modelLoaded && (
             <div
@@ -68,33 +68,33 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
           <div className="flex items-center gap-3">
             <button
               onClick={() => onNavigate("classify")}
-              className="inline-flex items-center gap-2 px-7 py-3 text-sm transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm transition-colors"
               style={{
-                backgroundColor: "#C8102E",
-                color: "#ffffff",
+                backgroundColor: "#ffffff",
+                color: "#0D0D0D",
                 textTransform: "uppercase",
                 letterSpacing: "0.08em",
                 fontWeight: 400,
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#a00d24"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#C8102E"; }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#e5e5e5"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
             >
               GET STARTED
               <ArrowRight className="w-4 h-4" strokeWidth={1.5} />
             </button>
             <button
               onClick={() => onNavigate("upload")}
-              className="inline-flex items-center gap-2 px-7 py-3 text-sm transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm transition-colors"
               style={{
                 backgroundColor: "transparent",
-                color: "#ffffff",
-                border: "1px solid #ffffff",
+                color: "#6b6b6b",
+                border: "1px solid #2a2a2a",
                 textTransform: "uppercase",
                 letterSpacing: "0.08em",
                 fontWeight: 400,
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; e.currentTarget.style.color = "#0D0D0D"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "#ffffff"; }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#6b6b6b"; e.currentTarget.style.color = "#ffffff"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#2a2a2a"; e.currentTarget.style.color = "#6b6b6b"; }}
             >
               UPLOAD FILE
             </button>
