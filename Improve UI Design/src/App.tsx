@@ -257,7 +257,7 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
 
       {/* Card 1: AI Confidence + Top Airports */}
       <div className="p-3" style={{ backgroundColor: "#161616" }}>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           <div>
             <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 12, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>AI Confidence</h3>
             <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 6, marginTop: 2, fontFamily: "'Space Grotesk', sans-serif" }}>MODEL CERTAINTY ACROSS {filteredResults.length} RECORDS</p>
@@ -288,7 +288,7 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
 
       {/* Card 2: Fleet Breakdown + Report Source */}
       <div className="p-3" style={{ backgroundColor: "#161616" }}>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           <div>
             <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 12, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Fleet Breakdown</h3>
             <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 6, marginTop: 2, fontFamily: "'Space Grotesk', sans-serif" }}>BY AIRCRAFT TYPE</p>
@@ -620,22 +620,24 @@ export default function App() {
               />
 
               {bulkResults.length > 0 && (
-                <button
-                  onClick={() => setActivePage("insights")}
-                  className="w-full py-3 text-sm transition-colors"
-                  style={{
-                    backgroundColor: "#ffffff",
-                    color: "#0D0D0D",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.08em",
-                    fontWeight: 400,
-                    fontFamily: "'Space Grotesk', sans-serif",
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#e5e5e5"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
-                >
-                  VIEW RESULTS
-                </button>
+                <div style={{ marginBottom: 32 }}>
+                  <button
+                    onClick={() => setActivePage("insights")}
+                    className="w-full py-3 text-sm transition-colors"
+                    style={{
+                      backgroundColor: "#ffffff",
+                      color: "#0D0D0D",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.08em",
+                      fontWeight: 400,
+                      fontFamily: "'Space Grotesk', sans-serif",
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#e5e5e5"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
+                  >
+                    VIEW RESULTS
+                  </button>
+                </div>
               )}
 
               <UploadHistory

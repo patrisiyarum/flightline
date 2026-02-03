@@ -286,6 +286,45 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
         </div>
       </div>
 
+      {/* Pipeline Visualization */}
+      <PipelineVisualization />
+
+      {/* What is BERT? */}
+      <div
+        style={{
+          borderTop: "1px solid #2a2a2a",
+          paddingTop: 24,
+        }}
+      >
+        <h3
+          style={{
+            fontSize: 10,
+            fontWeight: 400,
+            color: "#6b6b6b",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            fontFamily: "'JetBrains Mono', monospace",
+            marginBottom: 12,
+          }}
+        >
+          WHAT IS BERT?
+        </h3>
+        <p
+          style={{
+            color: "#6b6b6b",
+            fontSize: 13,
+            lineHeight: 1.8,
+            fontWeight: 300,
+            fontFamily: "'Space Grotesk', sans-serif",
+            maxWidth: 720,
+          }}
+        >
+          <span style={{ color: "#ffffff" }}>BERT</span> (Bidirectional Encoder Representations from Transformers) is a pre-trained language model developed by Google.
+          Unlike traditional models that read text left-to-right, BERT reads in both directions simultaneously, giving it a deeper understanding of context and meaning.
+          Flightline uses a fine-tuned BERT model to classify crew feedback into actionable categories with high accuracy.
+        </p>
+      </div>
+
       {/* Recent Activity — compact inline row */}
       {totalUploads > 0 && (
         <div
