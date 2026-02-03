@@ -7,7 +7,7 @@ interface HomePageProps {
   totalUploads: number;
 }
 
-function PipelineVisualization() {
+export function PipelineVisualization() {
   const stages = [
     { label: "INPUT", sub: "crew feedback", num: "01" },
     { label: "TOKENIZE", sub: "bert tokens", num: "02" },

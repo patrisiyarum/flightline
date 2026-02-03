@@ -61,12 +61,18 @@ export function PredictionCard({ subPredictions }: PredictionCardProps) {
                   }}
                 >
                   <span
-                    className="text-sm flex-shrink-0"
+                    className="text-sm"
                     style={{
                       color: isTop ? "#ffffff" : "#6b6b6b",
                       fontWeight: isTop ? 400 : 300,
                       fontFamily: "'Space Grotesk', sans-serif",
+                      width: 200,
+                      flexShrink: 0,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
                     }}
+                    title={pred.label}
                   >
                     {pred.label}
                   </span>
