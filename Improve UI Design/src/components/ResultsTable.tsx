@@ -15,17 +15,17 @@ function parseConf(raw: string | number): number {
 function confBarColor(val: number): string {
   if (val >= 90) return "#2d8a4e";
   if (val >= 70) return "#b8860b";
-  return "#c0392b";
+  return "#8B6B6B";
 }
 
 function confTextStyle(val: number): CSSProperties {
   if (val >= 90) return { color: "#2d8a4e" };
   if (val >= 70) return { color: "#b8860b" };
-  return { color: "#c0392b" };
+  return { color: "#8B6B6B" };
 }
 
 function lowConfRowStyle(conf: number): CSSProperties | undefined {
-  if (conf > 0 && conf < 70) return { backgroundColor: "rgba(192, 57, 43, 0.04)" };
+  if (conf > 0 && conf < 70) return { backgroundColor: "rgba(139, 107, 107, 0.06)" };
   return undefined;
 }
 

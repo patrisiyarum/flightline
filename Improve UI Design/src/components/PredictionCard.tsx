@@ -12,7 +12,7 @@ interface PredictionCardProps {
 function confColor(val: number): string {
   if (val >= 90) return "#2d8a4e";
   if (val >= 70) return "#b8860b";
-  return "#c0392b";
+  return "#8B6B6B";
 }
 
 export function PredictionCard({ subPredictions }: PredictionCardProps) {

@@ -16,7 +16,7 @@
   --muted-foreground: #6b6b6b;
   --accent: #7C9CBF;
   --accent-foreground: #ffffff;
-  --destructive: #c0392b;
+  --destructive: #8B6B6B;
   --destructive-foreground: #ffffff;
   --border: #2a2a2a;
   --input: #2a2a2a;
@@ -35,7 +35,7 @@
   /* Layout tokens */
   --sidebar-width: 248px;
   --content-max-width: 1152px;
-  --content-padding-x: 40px;
+  --content-padding-x: 48px;
   --content-padding-y: 40px;
 
   /* Spacing scale */
@@ -76,7 +76,7 @@
   --muted-foreground: #6b6b6b;
   --accent: #7C9CBF;
   --accent-foreground: #ffffff;
-  --destructive: #c0392b;
+  --destructive: #8B6B6B;
   --destructive-foreground: #ffffff;
   --border: #2a2a2a;
   --input: #2a2a2a;
@@ -92,7 +92,7 @@
   /* Layout tokens */
   --sidebar-width: 248px;
   --content-max-width: 1152px;
-  --content-padding-x: 40px;
+  --content-padding-x: 48px;
   --content-padding-y: 40px;
 
   /* Spacing scale */

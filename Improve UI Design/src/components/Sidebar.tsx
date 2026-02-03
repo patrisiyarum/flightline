@@ -46,7 +46,7 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
               lineHeight: 1.4,
             }}
           >
-            SORTLINE
+            FLIGHTLINE
           </h1>
           <p
             style={{
@@ -57,7 +57,7 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
               textTransform: "uppercase",
             }}
           >
-            Text Classifier
+            Feedback Classifier
           </p>
         </div>
       </div>
@@ -122,7 +122,7 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
             style={{
               width: 6,
               height: 6,
-              backgroundColor: apiOnline ? "#2d8a4e" : "#c0392b",
+              backgroundColor: apiOnline ? "#2d8a4e" : "#6b6b6b",
               display: "inline-block",
             }}
           />
@@ -132,7 +132,7 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
               fontWeight: 400,
               letterSpacing: "0.1em",
               textTransform: "uppercase",
-              color: apiOnline ? "#2d8a4e" : "#c0392b",
+              color: apiOnline ? "#2d8a4e" : "#6b6b6b",
             }}
           >
             {apiOnline ? "ONLINE" : "OFFLINE"}
@@ -143,7 +143,7 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
             style={{
               width: 6,
               height: 6,
-              backgroundColor: modelLoaded ? "#2d8a4e" : "#c0392b",
+              backgroundColor: modelLoaded ? "#2d8a4e" : "#6b6b6b",
               display: "inline-block",
             }}
           />
@@ -153,7 +153,7 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
               fontWeight: 400,
               letterSpacing: "0.1em",
               textTransform: "uppercase",
-              color: modelLoaded ? "#2d8a4e" : "#c0392b",
+              color: modelLoaded ? "#2d8a4e" : "#6b6b6b",
             }}
           >
             {modelLoaded ? "MODEL READY" : "MODEL N/A"}

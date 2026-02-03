@@ -20,11 +20,11 @@ export function UploadHistory({ uploads, currentUploadId, onSelectUpload, loadin
   if (uploads.length === 0 && !loading) return null;
 
   return (
-    <div className="p-6" style={{ backgroundColor: "#161616", borderTop: "1px solid #2a2a2a" }}>
-      <div className="flex items-center justify-between mb-4">
+    <div className="p-5" style={{ borderTop: "1px solid #1e1e1e" }}>
+      <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <History className="w-4 h-4" style={{ color: "#6b6b6b" }} strokeWidth={1.5} />
-          <h3 style={{ fontSize: 11, fontWeight: 400, color: "#6b6b6b", letterSpacing: "0.1em", textTransform: "uppercase" }}>UPLOAD HISTORY</h3>
+          <History className="w-3.5 h-3.5" style={{ color: "#444" }} strokeWidth={1.5} />
+          <h3 style={{ fontSize: 10, fontWeight: 300, color: "#444", letterSpacing: "0.1em", textTransform: "uppercase" }}>RECENT UPLOADS</h3>
         </div>
         {currentUploadId && (
           <a

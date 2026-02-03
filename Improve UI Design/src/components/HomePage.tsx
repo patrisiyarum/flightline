@@ -9,10 +9,10 @@ interface HomePageProps {
 
 function PipelineVisualization() {
   const stages = [
-    { label: "INPUT", sub: "raw text" },
-    { label: "TOKENIZE", sub: "bert tokens" },
-    { label: "CLASSIFY", sub: "inference" },
-    { label: "OUTPUT", sub: "categories" },
+    { label: "INPUT", sub: "crew feedback", num: "01" },
+    { label: "TOKENIZE", sub: "bert tokens", num: "02" },
+    { label: "CLASSIFY", sub: "model inference", num: "03" },
+    { label: "OUTPUT", sub: "category + confidence", num: "04" },
   ];
 
   return (
@@ -21,8 +21,9 @@ function PipelineVisualization() {
       style={{
         display: "flex",
         alignItems: "center",
+        justifyContent: "center",
         gap: 0,
-        padding: "32px 0",
+        padding: "24px 0 8px",
       }}
     >
       {stages.map((stage, i) => (
@@ -32,11 +33,24 @@ function PipelineVisualization() {
             style={{
               backgroundColor: "#0D0D0D",
               border: "1px solid #2a2a2a",
-              padding: "12px 20px",
+              padding: "14px 22px",
               textAlign: "center",
-              minWidth: 100,
+              minWidth: 110,
+              position: "relative",
             }}
           >
+            <div
+              style={{
+                position: "absolute",
+                top: 6,
+                left: 10,
+                fontSize: 8,
+                color: "#444",
+                fontFamily: "'JetBrains Mono', monospace",
+              }}
+            >
+              {stage.num}
+            </div>
             <div
               style={{
                 fontSize: 11,
@@ -53,7 +67,7 @@ function PipelineVisualization() {
               style={{
                 fontSize: 9,
                 color: "#6b6b6b",
-                letterSpacing: "0.08em",
+                letterSpacing: "0.06em",
                 fontFamily: "'JetBrains Mono', monospace",
                 textTransform: "uppercase",
               }}
@@ -62,7 +76,7 @@ function PipelineVisualization() {
             </div>
           </div>
 
-          {/* Connector line with animated dot */}
+          {/* Connector arrow with animated dot */}
           {i < stages.length - 1 && (
             <div
               className="pipeline-connector"
@@ -71,9 +85,23 @@ function PipelineVisualization() {
                 width: 48,
                 height: 1,
                 backgroundColor: "#2a2a2a",
-                overflow: "hidden",
+                overflow: "visible",
               }}
             >
+              {/* Arrow head */}
+              <div
+                style={{
+                  position: "absolute",
+                  right: -3,
+                  top: -3,
+                  width: 0,
+                  height: 0,
+                  borderTop: "3px solid transparent",
+                  borderBottom: "3px solid transparent",
+                  borderLeft: "5px solid #2a2a2a",
+                }}
+              />
+              {/* Animated dot */}
               <div
                 style={{
                   position: "absolute",
@@ -82,8 +110,8 @@ function PipelineVisualization() {
                   width: 5,
                   height: 5,
                   backgroundColor: "#7C9CBF",
-                  animation: `pipeline-dot 1.5s linear infinite, pipeline-pulse 1.5s ease-in-out infinite`,
-                  animationDelay: `${i * 0.4}s`,
+                  animation: `pipeline-dot 2s ease-in-out infinite, pipeline-pulse 2s ease-in-out infinite`,
+                  animationDelay: `${i * 0.5}s`,
                 }}
               />
             </div>
@@ -96,7 +124,7 @@ function PipelineVisualization() {
 
 export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProps) {
   return (
-    <div className="space-y-8 pb-8">
+    <div className="pb-8" style={{ display: "flex", flexDirection: "column", gap: 40 }}>
       {/* Hero Section — two-column grid */}
       <div
         style={{
@@ -142,7 +170,7 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
                 marginBottom: 8,
               }}
             >
-              Sortline
+              Flightline
             </h1>
 
             <p
@@ -156,11 +184,11 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
                 marginBottom: 16,
               }}
             >
-              NLP CLASSIFICATION ENGINE
+              CREW FEEDBACK CLASSIFIER
             </p>
 
             <p style={{ color: "#6b6b6b", fontSize: 14, lineHeight: 1.7, fontWeight: 300, marginBottom: 32 }}>
-              Turning unstructured text into actionable categories — automatically, powered by fine-tuned BERT.
+              Turning crew feedback into actionable categories — automatically, powered by fine-tuned BERT.
             </p>
 
             <div className="flex items-center gap-6">
@@ -258,28 +286,22 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
         </div>
       </div>
 
-      {/* Pipeline Visualization */}
-      <PipelineVisualization />
-
-      {/* The Problem This Solves — compact flex row */}
+      {/* The Problem This Solves + Pipeline */}
       <div
         style={{
           backgroundColor: "#161616",
           borderTop: "1px solid #2a2a2a",
-          padding: 24,
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "center",
-          gap: 32,
+          padding: "32px 32px",
         }}
       >
-        <div style={{ flex: "1 1 320px" }}>
+        <div style={{ marginBottom: 32 }}>
           <h2 style={{ color: "#ffffff", fontSize: 16, fontWeight: 300, letterSpacing: "-0.02em", marginBottom: 8 }}>The Problem This Solves</h2>
           <p style={{ color: "#6b6b6b", fontSize: 13, lineHeight: 1.7, fontWeight: 300 }}>
             Thousands of crew comments were categorized manually. This tool automates that workflow, reducing hours to seconds.
           </p>
         </div>
-        <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+
+        <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 40 }}>
           {[
             { icon: Zap, value: "Seconds" },
             { icon: Target, value: "14 categories" },
@@ -300,6 +322,17 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
               <span style={{ fontSize: 12, fontWeight: 400, color: "#ffffff", fontFamily: "'JetBrains Mono', monospace" }}>{value}</span>
             </div>
           ))}
+        </div>
+
+        {/* Model Processing Flow sub-section */}
+        <div style={{ borderTop: "1px solid #2a2a2a", paddingTop: 24 }}>
+          <h3 style={{ fontSize: 11, fontWeight: 400, color: "#6b6b6b", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 4 }}>
+            MODEL PROCESSING FLOW
+          </h3>
+          <p style={{ fontSize: 12, color: "#444", fontWeight: 300, marginBottom: 8 }}>
+            Each piece of feedback is actively processed through four stages before results appear.
+          </p>
+          <PipelineVisualization />
         </div>
       </div>
 
