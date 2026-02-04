@@ -201,12 +201,12 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
     return Object.entries(counts).map(([date, count]) => ({ date, count })).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   }, [filteredResults]);
 
-  const fleetData = useMemo(() => {
+  const categoryData = useMemo(() => {
     if (!filteredResults.length) return [];
     const counts: Record<string, number> = {};
     filteredResults.forEach(row => {
-      const acKey = Object.keys(row).find(k => k === "A/C" || k === "Aircraft" || k === "Fleet");
-      counts[row[acKey || "A/C"] || "Unknown"] = (counts[row[acKey || "A/C"] || "Unknown"] || 0) + 1;
+      const category = row["Predicted_Subcategory"] || "Unknown";
+      counts[category] = (counts[category] || 0) + 1;
     });
     return Object.entries(counts).map(([name, value]) => ({ name, value })).sort((a, b) => b.value - a.value);
   }, [filteredResults]);
@@ -359,15 +359,15 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
             </ResponsiveContainer>
           </div>
 
-          {/* Fleet + Source — secondary, side-by-side */}
+          {/* Categories + Source — secondary, side-by-side */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
             <div style={{ backgroundColor: "#161616", padding: 12 }}>
-              <h3 style={{ color: "#999", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Fleet</h3>
-              <p style={{ fontSize: 9, color: "#444", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 4, marginTop: 1, fontFamily: "'Space Grotesk', sans-serif" }}>BY AIRCRAFT</p>
+              <h3 style={{ color: "#999", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Categories</h3>
+              <p style={{ fontSize: 9, color: "#444", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 4, marginTop: 1, fontFamily: "'Space Grotesk', sans-serif" }}>BY PREDICTED CATEGORY</p>
               <ResponsiveContainer width="100%" height={120}>
                 <PieChart>
-                  <Pie data={fleetData} cx="50%" cy="42%" innerRadius={22} outerRadius={38} paddingAngle={0} dataKey="value">
-                    {fleetData.map((_, i) => (<Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />))}
+                  <Pie data={categoryData} cx="50%" cy="42%" innerRadius={22} outerRadius={38} paddingAngle={0} dataKey="value">
+                    {categoryData.map((_, i) => (<Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />))}
                   </Pie>
                   <Tooltip
                     content={({ active, payload }: any) => {
