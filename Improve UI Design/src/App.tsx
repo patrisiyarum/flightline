@@ -261,7 +261,7 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
       {/* Toolbar — processing time + confidence filter */}
       <div className="flex items-center gap-4" style={{ marginBottom: 8 }}>
         {processingTime !== null && (
-          <div className="flex items-center gap-2" style={{ color: "#555", fontSize: 11, fontFamily: "'Space Grotesk', sans-serif" }}>
+          <div className="flex items-center gap-2" style={{ color: "#555", fontSize: 11, fontFamily: "'Space Grotesk', sans-serif", letterSpacing: "0.05em" }}>
             <Timer className="w-3.5 h-3.5" strokeWidth={1.5} />
             <span>Processed in <strong style={{ color: "#ffffff", fontFamily: "'JetBrains Mono', monospace" }}>{processingTime}s</strong></span>
           </div>
