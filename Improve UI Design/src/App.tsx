@@ -851,7 +851,7 @@ export default function App() {
 
               <SampleComments onSelectSample={handleSelectSample} />
 
-              <div className="p-8" style={{ backgroundColor: "#161616" }}>
+              <div style={{ backgroundColor: "#141414", border: "1px solid #222222", padding: "24px 28px" }}>
                 <textarea
                   placeholder="Paste a crew feedback comment here..."
                   value={commentText}
@@ -862,35 +862,38 @@ export default function App() {
                       handleAnalyze();
                     }
                   }}
-                  className="w-full min-h-[120px] mb-6 p-4 text-sm"
+                  className="w-full min-h-[100px] mb-5 p-4"
                   style={{
-                    backgroundColor: "#1a1a1a",
-                    color: "#ffffff",
-                    border: "1px solid #2a2a2a",
+                    backgroundColor: "#0f0f0f",
+                    color: "#cccccc",
+                    border: "1px solid #222222",
                     borderRadius: 0,
                     resize: "vertical",
                     outline: "none",
                     fontFamily: "'Space Grotesk', sans-serif",
                     fontWeight: 300,
+                    fontSize: 14,
+                    lineHeight: 1.6,
                   }}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = "#6b6b6b"; }}
-                  onBlur={(e) => { e.currentTarget.style.borderColor = "#2a2a2a"; }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = "#444444"; }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = "#222222"; }}
                 />
                 <button
                   onClick={handleAnalyze}
                   disabled={isAnalyzing || !modelLoaded}
-                  className="w-full py-3 text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full py-3 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{
                     backgroundColor: "#ffffff",
-                    color: "#0D0D0D",
+                    color: "#0a0a0a",
                     textTransform: "uppercase",
                     letterSpacing: "0.08em",
-                    fontWeight: 400,
+                    fontWeight: 500,
+                    fontSize: 12,
                   }}
-                  onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = "#e5e5e5"; }}
+                  onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = "#eeeeee"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
                 >
-                  {isAnalyzing ? "ANALYZING..." : modelLoaded ? "CLASSIFY FEEDBACK" : "MODEL UNAVAILABLE"}
+                  {isAnalyzing ? "Analyzing..." : modelLoaded ? "Classify Feedback" : "Model Unavailable"}
                 </button>
 
                 {predictions && (

@@ -11,78 +11,67 @@ const samples: { category: string; text: string }[] = [
 
 export function SampleComments({ onSelectSample }: SampleCommentsProps) {
   return (
-    <div style={{ padding: "24px 0" }}>
+    <div style={{ padding: "16px 0" }}>
       <h3
         style={{
-          fontSize: 12,
+          fontSize: 11,
           fontWeight: 400,
-          color: "#999999",
-          letterSpacing: "0.1em",
+          color: "#666666",
+          letterSpacing: "0.12em",
           textTransform: "uppercase",
           fontFamily: "'Space Grotesk', sans-serif",
-          marginBottom: 20,
+          marginBottom: 16,
         }}
       >
-        PILOT QUESTIONS & ANSWERS
+        Sample Comments
       </h3>
 
-      <div className="grid sm:grid-cols-2 gap-4">
+      <div className="grid sm:grid-cols-2 gap-3">
         {samples.map(({ category, text }) => (
-          <div
+          <button
             key={category}
-            className="transition-colors"
+            onClick={() => onSelectSample(text)}
+            className="text-left transition-all"
             style={{
-              padding: "24px 28px",
-              backgroundColor: "#1a1a1a",
-              border: "1px solid #2a2a2a",
+              padding: "20px 24px",
+              backgroundColor: "#141414",
+              border: "1px solid #222222",
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#1e1e1e"; e.currentTarget.style.borderColor = "#3a3a3a"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#1a1a1a"; e.currentTarget.style.borderColor = "#2a2a2a"; }}
+            onMouseEnter={(e) => { 
+              e.currentTarget.style.backgroundColor = "#1a1a1a"; 
+              e.currentTarget.style.borderColor = "#333333"; 
+            }}
+            onMouseLeave={(e) => { 
+              e.currentTarget.style.backgroundColor = "#141414"; 
+              e.currentTarget.style.borderColor = "#222222"; 
+            }}
           >
-            <div className="flex items-start justify-between gap-4 mb-4">
-              <span
-                style={{
-                  fontSize: 13,
-                  fontWeight: 500,
-                  color: "#ffffff",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.06em",
-                  fontFamily: "'Space Grotesk', sans-serif",
-                }}
-              >
-                {category}
-              </span>
-              <button
-                onClick={() => onSelectSample(text)}
-                className="shrink-0 px-4 py-2 text-xs transition-colors"
-                style={{
-                  backgroundColor: "#2a2a2a",
-                  color: "#ffffff",
-                  border: "none",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.08em",
-                  fontWeight: 400,
-                  fontFamily: "'Space Grotesk', sans-serif",
-                  fontSize: 11,
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#3a3a3a"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#2a2a2a"; }}
-              >
-                TRY IT
-              </button>
-            </div>
+            <span
+              style={{
+                fontSize: 11,
+                fontWeight: 500,
+                color: "#888888",
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                fontFamily: "'Space Grotesk', sans-serif",
+                display: "block",
+                marginBottom: 10,
+              }}
+            >
+              {category}
+            </span>
             <p
               style={{
-                color: "#999999",
-                fontSize: 14,
-                lineHeight: 1.8,
+                color: "#cccccc",
+                fontSize: 13,
+                lineHeight: 1.6,
                 fontWeight: 300,
                 fontFamily: "'Space Grotesk', sans-serif",
               }}
             >
               {text}
             </p>
-          </div>
+          </button>
         ))}
       </div>
     </div>

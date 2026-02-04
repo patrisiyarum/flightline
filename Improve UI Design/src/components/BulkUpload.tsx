@@ -247,31 +247,32 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
   };
 
   return (
-    <div style={{ backgroundColor: "#161616", borderTop: "1px solid #2a2a2a", width: "100%" }}>
+    <div style={{ backgroundColor: "#141414", border: "1px solid #222222", width: "100%" }}>
       {/* Drop zone */}
       <div
-        className="text-center transition-colors"
+        className="text-center transition-all"
         style={{
-          border: "2px dashed #2a2a2a",
-          backgroundColor: "#0D0D0D",
+          border: "1px dashed #333333",
+          backgroundColor: "#0f0f0f",
           cursor: "pointer",
-          padding: "60px 40px",
+          padding: "48px 40px",
+          margin: 24,
         }}
         onMouseEnter={(e) => { 
-          e.currentTarget.style.borderColor = "#7C9CBF"; 
-          e.currentTarget.style.backgroundColor = "#111111";
+          e.currentTarget.style.borderColor = "#555555"; 
+          e.currentTarget.style.backgroundColor = "#141414";
         }}
         onMouseLeave={(e) => { 
-          e.currentTarget.style.borderColor = "#2a2a2a"; 
-          e.currentTarget.style.backgroundColor = "#0D0D0D";
+          e.currentTarget.style.borderColor = "#333333"; 
+          e.currentTarget.style.backgroundColor = "#0f0f0f";
         }}
         onClick={() => document.getElementById("file-upload")?.click()}
       >
-        <Upload className="w-10 h-10 mx-auto mb-5" style={{ color: "#6b6b6b" }} strokeWidth={1} />
-        <p style={{ color: "#ffffff", fontWeight: 400, fontSize: 16, marginBottom: 8 }}>
+        <Upload className="w-8 h-8 mx-auto mb-4" style={{ color: "#555555" }} strokeWidth={1.5} />
+        <p style={{ color: "#cccccc", fontWeight: 400, fontSize: 14, marginBottom: 6 }}>
           {file ? file.name : "Click to upload or drag and drop"}
         </p>
-        <p style={{ color: "#6b6b6b", fontSize: 13, fontWeight: 300 }}>
+        <p style={{ color: "#666666", fontSize: 12, fontWeight: 300 }}>
           CSV or Excel (.csv, .xlsx, .xls)
         </p>
         <input
@@ -285,26 +286,26 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
 
       {/* Preview */}
       {previewData && !results && (
-        <div style={{ marginTop: 32, padding: "0 24px 24px" }}>
+        <div style={{ padding: "0 24px 24px" }}>
           <div
-            className="flex items-center gap-3 mb-6"
-            style={{ padding: "16px 20px", backgroundColor: "rgba(45,138,78,0.08)", border: "1px solid rgba(45,138,78,0.2)" }}
+            className="flex items-center gap-3 mb-5"
+            style={{ padding: "14px 18px", backgroundColor: "rgba(74,222,128,0.06)", border: "1px solid rgba(74,222,128,0.15)" }}
           >
-            <CheckCircle2 className="h-5 w-5 flex-shrink-0" style={{ color: "#2d8a4e" }} strokeWidth={1.5} />
-            <span style={{ fontSize: 14, color: "#2d8a4e" }}>
-              File ready! Preview of first 5 rows shown below.
+            <CheckCircle2 className="h-4 w-4 flex-shrink-0" style={{ color: "#4ade80" }} strokeWidth={1.5} />
+            <span style={{ fontSize: 13, color: "#4ade80", fontWeight: 400 }}>
+              File ready — preview of first 5 rows shown below
             </span>
           </div>
 
-          <div className="overflow-x-auto" style={{ border: "1px solid #2a2a2a" }}>
+          <div className="overflow-x-auto" style={{ border: "1px solid #222222" }}>
             <table className="w-full text-sm">
               <thead>
                 <tr style={{ backgroundColor: "#1a1a1a" }}>
                   {Object.keys(previewData[0]).map((header, idx) => (
                     <th
                       key={idx}
-                      className="px-4 py-2.5 text-left whitespace-nowrap"
-                      style={{ color: "#6b6b6b", fontSize: 10, fontWeight: 400, letterSpacing: "0.08em", textTransform: "uppercase" }}
+                      className="px-4 py-3 text-left whitespace-nowrap"
+                      style={{ color: "#666666", fontSize: 11, fontWeight: 500, letterSpacing: "0.06em", textTransform: "uppercase" }}
                     >
                       {header}
                     </th>
@@ -313,12 +314,12 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
               </thead>
               <tbody>
                 {previewData.map((row, idx) => (
-                  <tr key={idx} style={{ borderTop: "1px solid #2a2a2a" }}>
+                  <tr key={idx} style={{ borderTop: "1px solid #1f1f1f" }}>
                     {Object.values(row).map((value: any, cellIdx) => (
                       <td
                         key={cellIdx}
-                        className="px-4 py-2 whitespace-nowrap"
-                        style={{ color: "#ffffff", fontWeight: 300 }}
+                        className="px-4 py-2.5 whitespace-nowrap"
+                        style={{ color: "#cccccc", fontWeight: 300, fontSize: 13 }}
                       >
                         {String(value).length > 50
                           ? String(value).substring(0, 50) + "..."
@@ -335,19 +336,19 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
             <button
               onClick={handleProcess}
               disabled={processing}
-              className="mt-8 w-full py-4 text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="mt-6 w-full py-3 text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               style={{
                 backgroundColor: "#ffffff",
-                color: "#0D0D0D",
+                color: "#0a0a0a",
                 textTransform: "uppercase",
                 letterSpacing: "0.08em",
-                fontWeight: 400,
-                fontSize: 13,
+                fontWeight: 500,
+                fontSize: 12,
               }}
-              onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = "#e5e5e5"; }}
+              onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = "#eeeeee"; }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
             >
-              {processing ? "PROCESSING..." : "START PREDICTION"}
+              {processing ? "Processing..." : "Start Prediction"}
             </button>
           )}
         </div>
@@ -355,14 +356,14 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
 
       {/* Progress bar */}
       {processing && (
-        <div style={{ marginTop: 32, padding: "0 24px 24px" }}>
-          <div className="flex items-center justify-between mb-3">
-            <span style={{ fontSize: 11, color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase" }}>PROCESSING...</span>
-            <span style={{ fontSize: 14, color: "#ffffff", fontFamily: "'JetBrains Mono', monospace" }}>
+        <div style={{ padding: "0 24px 24px" }}>
+          <div className="flex items-center justify-between mb-2">
+            <span style={{ fontSize: 11, color: "#666666", letterSpacing: "0.08em", textTransform: "uppercase" }}>Processing</span>
+            <span style={{ fontSize: 13, color: "#cccccc", fontFamily: "'JetBrains Mono', monospace" }}>
               {Math.round(progress)}%
             </span>
           </div>
-          <div className="overflow-hidden" style={{ height: 4, backgroundColor: "#2a2a2a" }}>
+          <div className="overflow-hidden" style={{ height: 3, backgroundColor: "#1a1a1a" }}>
             <div
               className="transition-all"
               style={{ width: `${progress}%`, height: "100%", backgroundColor: "#7C9CBF" }}
@@ -373,33 +374,33 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
 
       {/* Results */}
       {results && (
-        <div style={{ marginTop: 32, padding: "0 24px 24px" }}>
+        <div style={{ padding: "0 24px 24px" }}>
           <div
-            className="flex items-center gap-3 mb-6"
-            style={{ padding: "16px 20px", backgroundColor: "rgba(45,138,78,0.08)", border: "1px solid rgba(45,138,78,0.2)" }}
+            className="flex items-center gap-3 mb-5"
+            style={{ padding: "14px 18px", backgroundColor: "rgba(74,222,128,0.06)", border: "1px solid rgba(74,222,128,0.15)" }}
           >
-            <CheckCircle2 className="h-5 w-5 flex-shrink-0" style={{ color: "#2d8a4e" }} strokeWidth={1.5} />
-            <span style={{ fontSize: 14, color: "#2d8a4e" }}>
-              Success! {results.length} rows categorized
-              {elapsedTime !== null && ` in ${elapsedTime}s`}.
-              {stitchCount > 0 && ` (Repaired ${stitchCount} broken text rows automatically)`}
+            <CheckCircle2 className="h-4 w-4 flex-shrink-0" style={{ color: "#4ade80" }} strokeWidth={1.5} />
+            <span style={{ fontSize: 13, color: "#4ade80", fontWeight: 400 }}>
+              {results.length} rows categorized
+              {elapsedTime !== null && ` in ${elapsedTime}s`}
+              {stitchCount > 0 && ` — repaired ${stitchCount} broken rows`}
             </span>
           </div>
           <button
             onClick={handleDownload}
-            className="w-full flex items-center justify-center gap-3 py-4 text-sm transition-colors"
+            className="w-full flex items-center justify-center gap-2 py-3 text-sm transition-colors"
             style={{
               backgroundColor: "#ffffff",
-              color: "#0D0D0D",
+              color: "#0a0a0a",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
-              fontWeight: 400,
-              fontSize: 13,
+              fontWeight: 500,
+              fontSize: 12,
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#e5e5e5"; }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#eeeeee"; }}
             onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
           >
-            <Download className="h-5 w-5" strokeWidth={1.5} /> DOWNLOAD RESULTS
+            <Download className="h-4 w-4" strokeWidth={1.5} /> Download Results
           </button>
         </div>
       )}
