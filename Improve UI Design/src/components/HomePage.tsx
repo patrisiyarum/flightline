@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Upload, Brain, BarChart3 } from "lucide-react";
 import type { Page } from "./Sidebar";
 
@@ -7,133 +8,244 @@ interface HomePageProps {
   totalUploads: number;
 }
 
+const pipelineStages = [
+  { 
+    label: "INPUT", 
+    sub: "crew feedback", 
+    num: "01", 
+    isBert: false,
+    explanation: "Raw text comments from crew members are fed into the system. This can be a single comment or thousands of rows from a spreadsheet."
+  },
+  { 
+    label: "TOKENIZE", 
+    sub: "text processing", 
+    num: "02", 
+    isBert: true,
+    explanation: "The text is broken into tokens (words and subwords) that the BERT model understands. Special tokens mark the start and end of each sentence."
+  },
+  { 
+    label: "CLASSIFY", 
+    sub: "model prediction", 
+    num: "03", 
+    isBert: true,
+    explanation: "The BERT model analyzes the tokens to understand context and meaning, then predicts which category the feedback belongs to."
+  },
+  { 
+    label: "OUTPUT", 
+    sub: "category + confidence", 
+    num: "04", 
+    isBert: false,
+    explanation: "The model returns the predicted category along with a confidence score showing how certain it is about the classification."
+  },
+];
+
 export function PipelineVisualization() {
-  const stages = [
-    { label: "INPUT", sub: "crew feedback", num: "01", isBert: false },
-    { label: "TOKENIZE", sub: "text processing", num: "02", isBert: true },
-    { label: "CLASSIFY", sub: "model prediction", num: "03", isBert: true },
-    { label: "OUTPUT", sub: "category + confidence", num: "04", isBert: false },
-  ];
+  const [activeStage, setActiveStage] = useState<number | null>(null);
 
   return (
-    <div
-      className="pipeline-stages"
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: 0,
-        padding: "24px 0 8px",
-      }}
-    >
-      {stages.map((stage, i) => (
-        <div key={stage.label} style={{ display: "flex", alignItems: "center" }}>
-          {/* Stage box */}
-          <div
-            style={{
-              backgroundColor: stage.isBert ? "#1a1a1a" : "#0D0D0D",
-              border: stage.isBert ? "1px solid #7C9CBF" : "1px solid #2a2a2a",
-              padding: "14px 22px",
-              textAlign: "center",
-              minWidth: 110,
-              position: "relative",
-            }}
-          >
+    <div style={{ padding: "24px 0 8px" }}>
+      {/* Pipeline stages */}
+      <div
+        className="pipeline-stages"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 0,
+        }}
+      >
+        {pipelineStages.map((stage, i) => (
+          <div key={stage.label} style={{ display: "flex", alignItems: "center" }}>
+            {/* Stage box */}
             <div
+              onClick={() => setActiveStage(activeStage === i ? null : i)}
               style={{
-                position: "absolute",
-                top: 6,
-                left: 10,
-                fontSize: 8,
-                color: stage.isBert ? "#7C9CBF" : "#444",
-                fontFamily: "'JetBrains Mono', monospace",
+                backgroundColor: activeStage === i ? "#1f1f1f" : (stage.isBert ? "#1a1a1a" : "#0D0D0D"),
+                border: activeStage === i ? "1px solid #7C9CBF" : (stage.isBert ? "1px solid #7C9CBF" : "1px solid #2a2a2a"),
+                padding: "14px 22px",
+                textAlign: "center",
+                minWidth: 110,
+                position: "relative",
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+                transform: activeStage === i ? "scale(1.02)" : "scale(1)",
+              }}
+              onMouseEnter={(e) => {
+                if (activeStage !== i) {
+                  e.currentTarget.style.backgroundColor = "#1f1f1f";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (activeStage !== i) {
+                  e.currentTarget.style.backgroundColor = stage.isBert ? "#1a1a1a" : "#0D0D0D";
+                }
               }}
             >
-              {stage.num}
-            </div>
-            <div
-              style={{
-                fontSize: 11,
-                fontWeight: 400,
-                color: stage.isBert ? "#7C9CBF" : "#ffffff",
-                letterSpacing: "0.1em",
-                fontFamily: "'JetBrains Mono', monospace",
-                marginBottom: 4,
-              }}
-            >
-              {stage.label}
-            </div>
-            <div
-              style={{
-                fontSize: 9,
-                color: "#6b6b6b",
-                letterSpacing: "0.06em",
-                fontFamily: "'JetBrains Mono', monospace",
-                textTransform: "uppercase",
-              }}
-            >
-              {stage.sub}
-            </div>
-            {stage.isBert && (
               <div
                 style={{
                   position: "absolute",
-                  bottom: 4,
-                  right: 6,
-                  fontSize: 7,
-                  color: "#7C9CBF",
+                  top: 6,
+                  left: 10,
+                  fontSize: 8,
+                  color: stage.isBert ? "#7C9CBF" : "#444",
                   fontFamily: "'JetBrains Mono', monospace",
-                  letterSpacing: "0.08em",
+                }}
+              >
+                {stage.num}
+              </div>
+              <div
+                style={{
+                  fontSize: 11,
+                  fontWeight: 400,
+                  color: activeStage === i ? "#ffffff" : (stage.isBert ? "#7C9CBF" : "#ffffff"),
+                  letterSpacing: "0.1em",
+                  fontFamily: "'JetBrains Mono', monospace",
+                  marginBottom: 4,
+                }}
+              >
+                {stage.label}
+              </div>
+              <div
+                style={{
+                  fontSize: 9,
+                  color: "#6b6b6b",
+                  letterSpacing: "0.06em",
+                  fontFamily: "'JetBrains Mono', monospace",
                   textTransform: "uppercase",
                 }}
               >
-                BERT
+                {stage.sub}
+              </div>
+              {stage.isBert && (
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: 4,
+                    right: 6,
+                    fontSize: 7,
+                    color: "#7C9CBF",
+                    fontFamily: "'JetBrains Mono', monospace",
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  BERT
+                </div>
+              )}
+            </div>
+
+            {/* Connector arrow with animated dot */}
+            {i < pipelineStages.length - 1 && (
+              <div
+                className="pipeline-connector"
+                style={{
+                  position: "relative",
+                  width: 48,
+                  height: 1,
+                  backgroundColor: "#2a2a2a",
+                  overflow: "visible",
+                }}
+              >
+                {/* Arrow head */}
+                <div
+                  style={{
+                    position: "absolute",
+                    right: -3,
+                    top: -3,
+                    width: 0,
+                    height: 0,
+                    borderTop: "3px solid transparent",
+                    borderBottom: "3px solid transparent",
+                    borderLeft: "5px solid #2a2a2a",
+                  }}
+                />
+                {/* Animated dot */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: -2,
+                    left: 0,
+                    width: 5,
+                    height: 5,
+                    backgroundColor: "#7C9CBF",
+                    animation: `pipeline-dot 2s ease-in-out infinite, pipeline-pulse 2s ease-in-out infinite`,
+                    animationDelay: `${i * 0.5}s`,
+                  }}
+                />
               </div>
             )}
           </div>
+        ))}
+      </div>
 
-          {/* Connector arrow with animated dot */}
-          {i < stages.length - 1 && (
-            <div
-              className="pipeline-connector"
-              style={{
-                position: "relative",
-                width: 48,
-                height: 1,
-                backgroundColor: "#2a2a2a",
-                overflow: "visible",
+      {/* Explanation panel */}
+      <div
+        style={{
+          marginTop: 24,
+          padding: activeStage !== null ? "20px 24px" : "0 24px",
+          backgroundColor: activeStage !== null ? "#141414" : "transparent",
+          border: activeStage !== null ? "1px solid #222222" : "1px solid transparent",
+          transition: "all 0.3s ease",
+          maxHeight: activeStage !== null ? 200 : 0,
+          opacity: activeStage !== null ? 1 : 0,
+          overflow: "hidden",
+        }}
+      >
+        {activeStage !== null && (
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+              <span 
+                style={{ 
+                  fontSize: 10, 
+                  color: "#7C9CBF", 
+                  fontFamily: "'JetBrains Mono', monospace",
+                  backgroundColor: "rgba(124,156,191,0.1)",
+                  padding: "4px 8px",
+                  letterSpacing: "0.08em",
+                }}
+              >
+                STEP {pipelineStages[activeStage].num}
+              </span>
+              <span 
+                style={{ 
+                  fontSize: 13, 
+                  color: "#ffffff", 
+                  fontWeight: 400,
+                  letterSpacing: "0.04em",
+                }}
+              >
+                {pipelineStages[activeStage].label}
+              </span>
+            </div>
+            <p 
+              style={{ 
+                fontSize: 13, 
+                color: "#888888", 
+                lineHeight: 1.7, 
+                fontWeight: 300,
+                fontFamily: "'Space Grotesk', sans-serif",
               }}
             >
-              {/* Arrow head */}
-              <div
-                style={{
-                  position: "absolute",
-                  right: -3,
-                  top: -3,
-                  width: 0,
-                  height: 0,
-                  borderTop: "3px solid transparent",
-                  borderBottom: "3px solid transparent",
-                  borderLeft: "5px solid #2a2a2a",
-                }}
-              />
-              {/* Animated dot */}
-              <div
-                style={{
-                  position: "absolute",
-                  top: -2,
-                  left: 0,
-                  width: 5,
-                  height: 5,
-                  backgroundColor: "#7C9CBF",
-                  animation: `pipeline-dot 2s ease-in-out infinite, pipeline-pulse 2s ease-in-out infinite`,
-                  animationDelay: `${i * 0.5}s`,
-                }}
-              />
-            </div>
-          )}
-        </div>
-      ))}
+              {pipelineStages[activeStage].explanation}
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Hint text */}
+      {activeStage === null && (
+        <p 
+          style={{ 
+            fontSize: 11, 
+            color: "#555555", 
+            textAlign: "center", 
+            marginTop: 16,
+            fontFamily: "'Space Grotesk', sans-serif",
+          }}
+        >
+          Click any step to learn more
+        </p>
+      )}
     </div>
   );
 }
