@@ -247,7 +247,7 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
   };
 
   return (
-    <div className="p-6" style={{ backgroundColor: "#161616", borderTop: "1px solid #2a2a2a" }}>
+    <div className="p-6" style={{ backgroundColor: "#161616", borderTop: "1px solid #2a2a2a", width: "100%" }}>
       <h3 style={{ fontSize: 11, fontWeight: 400, color: "#6b6b6b", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 20 }}>BULK UPLOAD PREDICTION</h3>
 
       {/* Drop zone */}
