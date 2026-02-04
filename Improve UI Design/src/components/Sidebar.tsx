@@ -111,8 +111,8 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
         <div className="flex items-center gap-3 py-1">
           <span
             style={{
-              width: 8,
-              height: 8,
+              width: 6,
+              height: 6,
               backgroundColor: apiOnline ? "#2d8a4e" : "#c0392b",
               display: "inline-block",
               borderRadius: "50%",
@@ -120,8 +120,8 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
           />
           <span
             style={{
-              fontSize: 12,
-              fontWeight: 600,
+              fontSize: 9,
+              fontWeight: 500,
               letterSpacing: "0.08em",
               textTransform: "uppercase",
               color: apiOnline ? "#2d8a4e" : "#c0392b",
@@ -133,8 +133,8 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
         <div className="flex items-center gap-3 py-1">
           <span
             style={{
-              width: 8,
-              height: 8,
+              width: 6,
+              height: 6,
               backgroundColor: modelLoaded ? "#2d8a4e" : "#c0392b",
               display: "inline-block",
               borderRadius: "50%",
@@ -142,8 +142,8 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
           />
           <span
             style={{
-              fontSize: 12,
-              fontWeight: 600,
+              fontSize: 9,
+              fontWeight: 500,
               letterSpacing: "0.08em",
               textTransform: "uppercase",
               color: modelLoaded ? "#2d8a4e" : "#c0392b",

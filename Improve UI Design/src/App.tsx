@@ -891,7 +891,7 @@ export default function App() {
           {activePage === "upload" && (
             <div className="space-y-8" style={{ width: "100%", maxWidth: "100%" }}>
               <BackButton />
-              <div>
+              <div style={{ marginBottom: 16 }}>
                 <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Bulk Upload</h1>
                 <p style={{ fontSize: 10, color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 6, fontFamily: "'Space Grotesk', sans-serif" }}>
                   UPLOAD A FILE WITH COMMENTS TO CLASSIFY THEM IN BULK
@@ -938,7 +938,7 @@ export default function App() {
             <div className="space-y-8" style={{ width: "100%", maxWidth: "100%" }}>
               <BackButton />
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                <div>
+                <div style={{ marginBottom: 16 }}>
                   <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Insights</h1>
                   <p style={{ fontSize: 10, color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 6, fontFamily: "'Space Grotesk', sans-serif" }}>
                     ANALYTICS DASHBOARD FOR YOUR CLASSIFIED FEEDBACK DATA
@@ -1006,7 +1006,7 @@ export default function App() {
           {activePage === "about" && (
             <div className="space-y-8">
               <BackButton />
-              <div>
+              <div style={{ marginBottom: 16 }}>
                 <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>About</h1>
                 <p style={{ fontSize: 10, color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 6, fontFamily: "'Space Grotesk', sans-serif" }}>
                   HOW THE CLASSIFICATION MODEL WORKS
