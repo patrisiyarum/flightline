@@ -804,9 +804,9 @@ export default function App() {
         <div
           className="flex-1"
           style={{
-            maxWidth: (activePage === "upload" || activePage === "insights") ? "none" : "var(--content-max-width, 1152px)",
-            marginLeft: (activePage === "upload" || activePage === "insights") ? 0 : "auto",
-            marginRight: (activePage === "upload" || activePage === "insights") ? 0 : "auto",
+            maxWidth: "var(--content-max-width, 1152px)",
+            marginLeft: "auto",
+            marginRight: "auto",
             paddingLeft: "var(--content-padding-x, 40px)",
             paddingRight: "var(--content-padding-x, 40px)",
             paddingTop: "var(--content-padding-y, 40px)",
@@ -889,7 +889,7 @@ export default function App() {
 
           {/* UPLOAD */}
           {activePage === "upload" && (
-            <div className="space-y-8" style={{ width: "100%", maxWidth: "100%" }}>
+            <div className="space-y-8">
               <BackButton />
               <div style={{ marginBottom: 16 }}>
                 <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Bulk Upload</h1>
@@ -935,7 +935,7 @@ export default function App() {
 
           {/* INSIGHTS */}
           {activePage === "insights" && (
-            <div className="space-y-8" style={{ width: "100%", maxWidth: "100%" }}>
+            <div className="space-y-8">
               <BackButton />
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                 <div style={{ marginBottom: 16 }}>
