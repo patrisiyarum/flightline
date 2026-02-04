@@ -23,8 +23,17 @@ import {
 
 const API_URL = "https://feedback-webapp-5zc2.onrender.com";
 
-// Password for accessing real data (in production, use proper auth)
-const DATA_PASSWORD = "delta2026";
+// Hashed password for accessing real data (SHA-256)
+const DATA_PASSWORD_HASH = "6a1cf639aef5ec43c46e152839e76859319a8847b86fc00e5e592b973b3829e0";
+
+// Hash function using Web Crypto API
+async function hashPassword(password: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
 
 // --- Demo Data ---
 const DEMO_RESULTS: any[] = [
@@ -474,8 +483,9 @@ export default function App() {
     }
   };
 
-  const handlePasswordSubmit = () => {
-    if (passwordInput === DATA_PASSWORD) {
+  const handlePasswordSubmit = async () => {
+    const inputHash = await hashPassword(passwordInput);
+    if (inputHash === DATA_PASSWORD_HASH) {
       setIsDemoMode(false);
       setShowPasswordModal(false);
       setPasswordInput("");
