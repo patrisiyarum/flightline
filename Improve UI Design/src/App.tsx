@@ -363,10 +363,10 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
             <div style={{ backgroundColor: "#161616", padding: 12 }}>
               <h3 style={{ color: "#999", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Categories</h3>
-              <p style={{ fontSize: 9, color: "#444", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 4, marginTop: 1, fontFamily: "'Space Grotesk', sans-serif" }}>BY PREDICTED CATEGORY</p>
-              <ResponsiveContainer width="100%" height={120}>
+              <p style={{ fontSize: 9, color: "#444", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 1, fontFamily: "'Space Grotesk', sans-serif" }}>BY PREDICTED CATEGORY</p>
+              <ResponsiveContainer width="100%" height={160}>
                 <PieChart>
-                  <Pie data={categoryData} cx="50%" cy="42%" innerRadius={22} outerRadius={38} paddingAngle={0} dataKey="value">
+                  <Pie data={categoryData} cx="30%" cy="50%" innerRadius={20} outerRadius={35} paddingAngle={0} dataKey="value">
                     {categoryData.map((_, i) => (<Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />))}
                   </Pie>
                   <Tooltip
@@ -379,7 +379,12 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
                       );
                     }}
                   />
-                  <Legend verticalAlign="bottom" height={20} wrapperStyle={{ fontSize: 9, color: "#555", fontFamily: "'Space Grotesk', sans-serif" }} />
+                  <Legend 
+                    layout="vertical" 
+                    verticalAlign="middle" 
+                    align="right"
+                    wrapperStyle={{ fontSize: 10, color: "#555", fontFamily: "'Space Grotesk', sans-serif", paddingLeft: 10 }} 
+                  />
                 </PieChart>
               </ResponsiveContainer>
             </div>
