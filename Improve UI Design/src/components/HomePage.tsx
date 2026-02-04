@@ -1,4 +1,4 @@
-import { Upload, Brain, BarChart3, Zap, Target, Layers } from "lucide-react";
+import { Upload, Brain, BarChart3 } from "lucide-react";
 import type { Page } from "./Sidebar";
 
 interface HomePageProps {
@@ -154,12 +154,13 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
           <div>
             <h1
               style={{
-                fontSize: 40,
+                fontSize: 24,
                 fontWeight: 300,
                 lineHeight: 1.1,
                 letterSpacing: "-0.03em",
                 color: "#ffffff",
                 marginBottom: 16,
+                fontFamily: "'Space Grotesk', sans-serif",
               }}
             >
               Flightline
@@ -260,48 +261,6 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
                 <p style={{ color: "#6b6b6b", fontSize: 12, lineHeight: 1.6, fontWeight: 300 }}>{desc}</p>
               </button>
             ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Pipeline Visualization */}
-      <PipelineVisualization />
-
-      {/* About Section */}
-      <div
-        style={{
-          borderTop: "1px solid #2a2a2a",
-          paddingTop: 24,
-        }}
-      >
-        <h3
-          style={{
-            fontSize: 10,
-            fontWeight: 400,
-            color: "#6b6b6b",
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            fontFamily: "'JetBrains Mono', monospace",
-            marginBottom: 12,
-          }}
-        >
-          ABOUT
-        </h3>
-        <div style={{ display: "flex", alignItems: "flex-start", gap: 40 }}>
-          <p style={{ fontSize: 13, color: "#6b6b6b", lineHeight: 1.8, fontWeight: 300, maxWidth: 480, margin: 0 }}>
-            Powered by a fine-tuned{" "}
-            <a 
-              href="https://www.nvidia.com/en-us/glossary/bert/" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              style={{ color: "#7C9CBF", textDecoration: "none" }}
-              onMouseEnter={(e) => { e.currentTarget.style.textDecoration = "underline"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.textDecoration = "none"; }}
-            >BERT</a> model. Transforms hours of manual categorization into seconds of automated processing. What took 83+ hours now takes under 60 seconds.
-          </p>
-          <div style={{ textAlign: "center", flexShrink: 0 }}>
-            <span style={{ fontSize: 28, color: "#ffffff", fontFamily: "'JetBrains Mono', monospace", fontWeight: 300 }}>1000+</span>
-            <span style={{ fontSize: 9, color: "#6b6b6b", display: "block", letterSpacing: "0.08em", marginTop: 4 }}>COMMENTS/MIN</span>
           </div>
         </div>
       </div>

@@ -15,7 +15,7 @@ import { BulkUpload } from "./components/BulkUpload";
 import { UploadHistory, UploadSummary } from "./components/UploadHistory";
 
 import { Sidebar, Page } from "./components/Sidebar";
-import { HomePage } from "./components/HomePage";
+import { HomePage, PipelineVisualization } from "./components/HomePage";
 import {
   BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
@@ -374,12 +374,20 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            <div style={{ backgroundColor: "#161616", padding: 12 }}>
+            <div style={{ backgroundColor: "#161616", padding: 16 }}>
               <h3 style={{ color: "#999", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Source</h3>
-              <p style={{ fontSize: 9, color: "#444", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 4, marginTop: 1, fontFamily: "'Space Grotesk', sans-serif" }}>CREW VS. PASSENGER</p>
-              <ResponsiveContainer width="100%" height={120}>
+              <p style={{ fontSize: 9, color: "#444", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 1, fontFamily: "'Space Grotesk', sans-serif" }}>CREW VS. PASSENGER</p>
+              <ResponsiveContainer width="100%" height={140}>
                 <PieChart>
-                  <Pie data={sourceData} cx="50%" cy="42%" outerRadius={38} dataKey="value" label={({ percent }: any) => `${(percent * 100).toFixed(0)}%`}>
+                  <Pie 
+                    data={sourceData} 
+                    cx="50%" 
+                    cy="45%" 
+                    outerRadius={36} 
+                    dataKey="value" 
+                    label={({ percent }: any) => `${(percent * 100).toFixed(0)}%`}
+                    labelLine={false}
+                  >
                     {sourceData.map((_, i) => (<Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />))}
                   </Pie>
                   <Tooltip
@@ -392,7 +400,7 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
                       );
                     }}
                   />
-                  <Legend verticalAlign="bottom" height={20} wrapperStyle={{ fontSize: 9, color: "#555", fontFamily: "'Space Grotesk', sans-serif" }} />
+                  <Legend verticalAlign="bottom" height={28} wrapperStyle={{ fontSize: 10, color: "#555", fontFamily: "'Space Grotesk', sans-serif" }} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -597,6 +605,8 @@ export default function App() {
             onChange={(e) => { setPasswordInput(e.target.value); setPasswordError(false); }}
             onKeyDown={(e) => { if (e.key === "Enter") handlePasswordSubmit(); }}
             placeholder="Enter password"
+            autoFocus
+            autoComplete="off"
             style={{
               width: "100%",
               padding: "12px 40px 12px 12px",
@@ -881,10 +891,10 @@ export default function App() {
           {activePage === "upload" && (
             <div className="space-y-8">
               <BackButton />
-              <div style={{ marginBottom: 32 }}>
+              <div>
                 <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Bulk Upload</h1>
-                <p style={{ fontSize: 13, color: "#6b6b6b", lineHeight: 1.7, fontWeight: 300, marginTop: 10, fontFamily: "'Space Grotesk', sans-serif" }}>
-                  Upload a file with comments to classify them, view insights in the Insights tab, or try the Feedback Demo to see how the model categorizes any text.
+                <p style={{ fontSize: 10, color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 6, fontFamily: "'Space Grotesk', sans-serif" }}>
+                  UPLOAD A FILE WITH COMMENTS TO CLASSIFY THEM IN BULK
                 </p>
               </div>
 
@@ -925,12 +935,12 @@ export default function App() {
 
           {/* INSIGHTS — wider layout for charts */}
           {activePage === "insights" && (
-            <div className="space-y-4" style={{ maxWidth: 1400, marginLeft: "auto", marginRight: "auto" }}>
+            <div className="space-y-8" style={{ maxWidth: 1400, marginLeft: "auto", marginRight: "auto" }}>
               <BackButton />
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between" style={{ marginBottom: 16 }}>
                 <div>
-                  <h1 style={{ fontSize: 20, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Insights</h1>
-                  <p style={{ fontSize: 10, color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 4, fontFamily: "'Space Grotesk', sans-serif" }}>
+                  <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Insights</h1>
+                  <p style={{ fontSize: 10, color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 6, fontFamily: "'Space Grotesk', sans-serif" }}>
                     ANALYTICS DASHBOARD FOR YOUR CLASSIFIED FEEDBACK DATA
                   </p>
                 </div>
@@ -939,7 +949,31 @@ export default function App() {
                     onClick={() => {
                       try {
                         const workbook = XLSX.utils.book_new();
-                        const worksheet = XLSX.utils.json_to_sheet(bulkResults);
+                        
+                        // Get all columns, separate prediction columns to put them last
+                        const allCols = Object.keys(bulkResults[0] || {});
+                        const originalCols = allCols.filter(c => c !== "Predicted_Subcategory" && c !== "Subcategory_Confidence");
+                        
+                        // Rename and reorder columns
+                        const reorderedResults = bulkResults.map(row => {
+                          const newRow: any = {};
+                          originalCols.forEach(col => { newRow[col] = row[col]; });
+                          newRow["★ Predicted Subcategory"] = row["Predicted_Subcategory"];
+                          newRow["★ Confidence"] = row["Subcategory_Confidence"];
+                          return newRow;
+                        });
+                        
+                        const orderedCols = [...originalCols, "★ Predicted Subcategory", "★ Confidence"];
+                        const worksheet = XLSX.utils.json_to_sheet(reorderedResults, { header: orderedCols });
+                        
+                        // Set column widths
+                        const colWidths = orderedCols.map(col => {
+                          if (col.includes("Subcategory") || col.includes("Questions") || col.includes("Answers")) return { wch: 30 };
+                          if (col.includes("Confidence")) return { wch: 15 };
+                          return { wch: 12 };
+                        });
+                        worksheet["!cols"] = colWidths;
+                        
                         XLSX.utils.book_append_sheet(workbook, worksheet, "Classified Results");
                         XLSX.writeFile(workbook, "classified_results.xlsx");
                       } catch (err) {
@@ -965,6 +999,50 @@ export default function App() {
               </div>
 
               <AnalyticsDashboard results={bulkResults} processingTime={processingTime} />
+            </div>
+          )}
+
+          {/* ABOUT */}
+          {activePage === "about" && (
+            <div className="space-y-8">
+              <BackButton />
+              <div>
+                <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>About</h1>
+                <p style={{ fontSize: 10, color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 6, fontFamily: "'Space Grotesk', sans-serif" }}>
+                  HOW THE CLASSIFICATION MODEL WORKS
+                </p>
+              </div>
+
+              {/* Pipeline Visualization */}
+              <div style={{ backgroundColor: "#161616", padding: "32px 24px", borderTop: "1px solid #2a2a2a" }}>
+                <h3 style={{ fontSize: 10, fontWeight: 400, color: "#6b6b6b", letterSpacing: "0.1em", textTransform: "uppercase", fontFamily: "'JetBrains Mono', monospace", marginBottom: 24, textAlign: "center" }}>
+                  PROCESSING PIPELINE
+                </h3>
+                <PipelineVisualization />
+              </div>
+
+              {/* About Content */}
+              <div style={{ backgroundColor: "#161616", padding: "32px 24px", borderTop: "1px solid #2a2a2a" }}>
+                <div style={{ display: "flex", alignItems: "flex-start", gap: 48 }}>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ fontSize: 14, color: "#999", lineHeight: 1.9, fontWeight: 300 }}>
+                      Powered by a fine-tuned{" "}
+                      <a 
+                        href="https://www.nvidia.com/en-us/glossary/bert/" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        style={{ color: "#7C9CBF", textDecoration: "none" }}
+                        onMouseEnter={(e) => { e.currentTarget.style.textDecoration = "underline"; }}
+                        onMouseLeave={(e) => { e.currentTarget.style.textDecoration = "none"; }}
+                      >BERT</a> model. Transforms hours of manual categorization into seconds of automated processing. What took 83+ hours now takes under 60 seconds.
+                    </p>
+                  </div>
+                  <div style={{ textAlign: "center", flexShrink: 0, padding: "8px 24px", backgroundColor: "#1a1a1a", border: "1px solid #2a2a2a" }}>
+                    <span style={{ fontSize: 32, color: "#ffffff", fontFamily: "'JetBrains Mono', monospace", fontWeight: 300 }}>1000+</span>
+                    <span style={{ fontSize: 10, color: "#6b6b6b", display: "block", letterSpacing: "0.08em", marginTop: 6 }}>COMMENTS/MIN</span>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 

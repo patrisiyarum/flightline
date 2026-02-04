@@ -1,6 +1,6 @@
-import { Home, Brain, Upload, BarChart3 } from "lucide-react";
+import { Home, Brain, Upload, BarChart3, Info } from "lucide-react";
 
-export type Page = "home" | "classify" | "upload" | "insights";
+export type Page = "home" | "classify" | "upload" | "insights" | "about";
 
 interface SidebarProps {
   activePage: Page;
@@ -14,6 +14,7 @@ const NAV_ITEMS: { page: Page; label: string; icon: typeof Home }[] = [
   { page: "classify", label: "FEEDBACK DEMO", icon: Brain },
   { page: "upload", label: "BULK UPLOAD", icon: Upload },
   { page: "insights", label: "INSIGHTS", icon: BarChart3 },
+  { page: "about", label: "ABOUT", icon: Info },
 ];
 
 export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: SidebarProps) {
