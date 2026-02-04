@@ -385,14 +385,14 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
             </div>
             <div style={{ backgroundColor: "#161616", padding: 16 }}>
               <h3 style={{ color: "#999", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Source</h3>
-              <p style={{ fontSize: 9, color: "#444", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 1, fontFamily: "'Space Grotesk', sans-serif" }}>CREW VS. PASSENGER</p>
-              <ResponsiveContainer width="100%" height={140}>
+              <p style={{ fontSize: 9, color: "#444", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 16, marginTop: 1, fontFamily: "'Space Grotesk', sans-serif" }}>CREW VS. PASSENGER</p>
+              <ResponsiveContainer width="100%" height={130}>
                 <PieChart>
                   <Pie 
                     data={sourceData} 
                     cx="50%" 
-                    cy="45%" 
-                    outerRadius={36} 
+                    cy="50%" 
+                    outerRadius={32} 
                     dataKey="value" 
                     label={({ percent }: any) => `${(percent * 100).toFixed(0)}%`}
                     labelLine={false}
