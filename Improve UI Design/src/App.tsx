@@ -4,6 +4,9 @@ import {
   CheckCircle2,
   Timer,
   Download,
+  Lock,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import * as XLSX from "xlsx";
 import { PredictionCard } from "./components/PredictionCard";
@@ -19,6 +22,34 @@ import {
 } from "recharts";
 
 const API_URL = "https://feedback-webapp-5zc2.onrender.com";
+
+// Password for accessing real data (in production, use proper auth)
+const DATA_PASSWORD = "delta2026";
+
+// --- Demo Data ---
+const DEMO_RESULTS: any[] = [
+  { "Flt Date": "01/15/2026", "Flt#": "DL1234", "Dpt A/P": "ATL", "A/C": "B737", "Meal Type": "Lunch", "Pilot's Questions/Answers": "The pasta was cold when served. Sauce had separated and looked unappetizing.", "Predicted_Subcategory": "Food Quality/Portion", "Subcategory_Confidence": "94.2%" },
+  { "Flt Date": "01/15/2026", "Flt#": "DL2456", "Dpt A/P": "JFK", "A/C": "A320", "Meal Type": "Dinner", "Pilot's Questions/Answers": "Missing crew meals entirely. Had to share with cabin crew.", "Predicted_Subcategory": "Catering Error", "Subcategory_Confidence": "97.8%" },
+  { "Flt Date": "01/16/2026", "Flt#": "DL3789", "Dpt A/P": "LAX", "A/C": "B757", "Meal Type": "Breakfast", "Pilot's Questions/Answers": "Eggs were rubbery and bacon was burnt. Orange juice container was leaking.", "Predicted_Subcategory": "Food Quality/Portion", "Subcategory_Confidence": "91.5%" },
+  { "Flt Date": "01/16/2026", "Flt#": "DL4521", "Dpt A/P": "ORD", "A/C": "A321", "Meal Type": "Lunch", "Pilot's Questions/Answers": "Chicken smelled off. Did not feel safe to eat. Discarded the meal.", "Predicted_Subcategory": "Food Safety", "Subcategory_Confidence": "96.3%" },
+  { "Flt Date": "01/17/2026", "Flt#": "DL5678", "Dpt A/P": "ATL", "A/C": "B737", "Meal Type": "Dinner", "Pilot's Questions/Answers": "Portion size too small for a 6-hour flight. Still hungry after eating.", "Predicted_Subcategory": "Food Quality/Portion", "Subcategory_Confidence": "88.7%" },
+  { "Flt Date": "01/17/2026", "Flt#": "DL6234", "Dpt A/P": "DFW", "A/C": "B777", "Meal Type": "Lunch", "Pilot's Questions/Answers": "Wrong meal loaded. Ordered vegetarian but received beef.", "Predicted_Subcategory": "Catering Error", "Subcategory_Confidence": "95.1%" },
+  { "Flt Date": "01/18/2026", "Flt#": "DL7891", "Dpt A/P": "SFO", "A/C": "A350", "Meal Type": "Breakfast", "Pilot's Questions/Answers": "Coffee was lukewarm. Pastry was stale and hard.", "Predicted_Subcategory": "Food Quality/Portion", "Subcategory_Confidence": "89.4%" },
+  { "Flt Date": "01/18/2026", "Flt#": "DL8123", "Dpt A/P": "SEA", "A/C": "B737", "Meal Type": "Dinner", "Pilot's Questions/Answers": "Salad had brown lettuce and wilted vegetables. Not fresh at all.", "Predicted_Subcategory": "Food Quality/Portion", "Subcategory_Confidence": "92.8%" },
+  { "Flt Date": "01/19/2026", "Flt#": "DL9456", "Dpt A/P": "BOS", "A/C": "A220", "Meal Type": "Lunch", "Pilot's Questions/Answers": "Packaging was damaged. Food spilled inside the bag.", "Predicted_Subcategory": "Packaging/Presentation", "Subcategory_Confidence": "93.6%" },
+  { "Flt Date": "01/19/2026", "Flt#": "DL1098", "Dpt A/P": "MIA", "A/C": "B767", "Meal Type": "Dinner", "Pilot's Questions/Answers": "Great meal today! Steak was cooked perfectly and vegetables were fresh.", "Predicted_Subcategory": "Positive Feedback", "Subcategory_Confidence": "98.2%" },
+  { "Flt Date": "01/20/2026", "Flt#": "DL2345", "Dpt A/P": "ATL", "A/C": "B737", "Meal Type": "Breakfast", "Pilot's Questions/Answers": "Yogurt was expired by 2 days. Did not eat it.", "Predicted_Subcategory": "Food Safety", "Subcategory_Confidence": "97.1%" },
+  { "Flt Date": "01/20/2026", "Flt#": "DL3456", "Dpt A/P": "JFK", "A/C": "A321", "Meal Type": "Lunch", "Pilot's Questions/Answers": "Utensils were missing from the meal kit.", "Predicted_Subcategory": "Catering Error", "Subcategory_Confidence": "91.9%" },
+  { "Flt Date": "01/21/2026", "Flt#": "DL4567", "Dpt A/P": "LAX", "A/C": "B787", "Meal Type": "Dinner", "Pilot's Questions/Answers": "Fish was overcooked and dry. Rice was clumpy.", "Predicted_Subcategory": "Food Quality/Portion", "Subcategory_Confidence": "90.3%" },
+  { "Flt Date": "01/21/2026", "Flt#": "DL5678", "Dpt A/P": "ORD", "A/C": "A319", "Meal Type": "Lunch", "Pilot's Questions/Answers": "Soup was excellent. Best meal I've had this month.", "Predicted_Subcategory": "Positive Feedback", "Subcategory_Confidence": "96.7%" },
+  { "Flt Date": "01/22/2026", "Flt#": "DL6789", "Dpt A/P": "DEN", "A/C": "B737", "Meal Type": "Breakfast", "Pilot's Questions/Answers": "Only received 1 meal for 2 pilots. Had to split it.", "Predicted_Subcategory": "Catering Error", "Subcategory_Confidence": "98.4%" },
+];
+
+const DEMO_UPLOADS: UploadSummary[] = [
+  { id: 1, file_name: "january_feedback_week3.xlsx", created_at: "2026-01-22T14:30:00Z", row_count: 15 },
+  { id: 2, file_name: "pilot_reports_jan2026.csv", created_at: "2026-01-20T09:15:00Z", row_count: 42 },
+  { id: 3, file_name: "crew_feedback_batch.xlsx", created_at: "2026-01-18T16:45:00Z", row_count: 28 },
+];
 
 // --- API helpers ---
 async function checkHealth() {
@@ -386,11 +417,25 @@ export default function App() {
   const [currentUploadId, setCurrentUploadId] = useState<number | null>(null);
   const [loadingUpload, setLoadingUpload] = useState(false);
   const [processingTime, setProcessingTime] = useState<number | null>(null);
+  
+  // Demo mode state
+  const [isDemoMode, setIsDemoMode] = useState(true);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [passwordInput, setPasswordInput] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     checkApiHealth();
-    loadUploadHistory();
-  }, []);
+    if (isDemoMode) {
+      // Load demo data
+      setUploads(DEMO_UPLOADS);
+      setBulkResults(DEMO_RESULTS);
+      setProcessingTime(12.4);
+    } else {
+      loadUploadHistory();
+    }
+  }, [isDemoMode]);
 
   const checkApiHealth = async () => {
     setChecking(true);
@@ -412,12 +457,34 @@ export default function App() {
   };
 
   const loadUploadHistory = async () => {
+    if (isDemoMode) return;
     try {
       const uploadList = await listUploads();
       setUploads(uploadList);
     } catch (err) {
       console.error("Failed to load upload history:", err);
     }
+  };
+
+  const handlePasswordSubmit = () => {
+    if (passwordInput === DATA_PASSWORD) {
+      setIsDemoMode(false);
+      setShowPasswordModal(false);
+      setPasswordInput("");
+      setPasswordError(false);
+      setBulkResults([]);
+      setUploads([]);
+      loadUploadHistory();
+    } else {
+      setPasswordError(true);
+    }
+  };
+
+  const handleSwitchToDemo = () => {
+    setIsDemoMode(true);
+    setBulkResults(DEMO_RESULTS);
+    setUploads(DEMO_UPLOADS);
+    setProcessingTime(12.4);
   };
 
   const loadUploadResults = async (uploadId: number) => {
@@ -489,7 +556,224 @@ export default function App() {
     </button>
   );
 
+  // Password Modal Component
+  const PasswordModal = () => (
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: "rgba(0,0,0,0.8)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 1000,
+      }}
+      onClick={() => setShowPasswordModal(false)}
+    >
+      <div
+        style={{
+          backgroundColor: "#161616",
+          border: "1px solid #2a2a2a",
+          padding: 32,
+          maxWidth: 400,
+          width: "90%",
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center gap-3 mb-4">
+          <Lock className="w-5 h-5" style={{ color: "#7C9CBF" }} strokeWidth={1.5} />
+          <h2 style={{ fontSize: 16, color: "#ffffff", fontWeight: 400 }}>Access Real Data</h2>
+        </div>
+        <p style={{ fontSize: 12, color: "#6b6b6b", marginBottom: 20, lineHeight: 1.6 }}>
+          Enter the password to access classified flight crew feedback data.
+        </p>
+        <div style={{ position: "relative", marginBottom: 16 }}>
+          <input
+            type={showPassword ? "text" : "password"}
+            value={passwordInput}
+            onChange={(e) => { setPasswordInput(e.target.value); setPasswordError(false); }}
+            onKeyDown={(e) => { if (e.key === "Enter") handlePasswordSubmit(); }}
+            placeholder="Enter password"
+            style={{
+              width: "100%",
+              padding: "12px 40px 12px 12px",
+              backgroundColor: "#1a1a1a",
+              border: passwordError ? "1px solid #c0392b" : "1px solid #2a2a2a",
+              color: "#ffffff",
+              fontSize: 14,
+              outline: "none",
+            }}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            style={{
+              position: "absolute",
+              right: 12,
+              top: "50%",
+              transform: "translateY(-50%)",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: 0,
+            }}
+          >
+            {showPassword ? (
+              <EyeOff className="w-4 h-4" style={{ color: "#6b6b6b" }} strokeWidth={1.5} />
+            ) : (
+              <Eye className="w-4 h-4" style={{ color: "#6b6b6b" }} strokeWidth={1.5} />
+            )}
+          </button>
+        </div>
+        {passwordError && (
+          <p style={{ fontSize: 11, color: "#c0392b", marginBottom: 12 }}>Incorrect password. Please try again.</p>
+        )}
+        <div className="flex gap-3">
+          <button
+            onClick={() => setShowPasswordModal(false)}
+            style={{
+              flex: 1,
+              padding: "10px 16px",
+              backgroundColor: "transparent",
+              border: "1px solid #2a2a2a",
+              color: "#6b6b6b",
+              fontSize: 11,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              cursor: "pointer",
+            }}
+          >
+            CANCEL
+          </button>
+          <button
+            onClick={handlePasswordSubmit}
+            style={{
+              flex: 1,
+              padding: "10px 16px",
+              backgroundColor: "#ffffff",
+              border: "none",
+              color: "#0D0D0D",
+              fontSize: 11,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase",
+              cursor: "pointer",
+            }}
+          >
+            UNLOCK
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Demo Mode Banner
+  const DemoModeBanner = () => (
+    <div
+      style={{
+        backgroundColor: "#1a1a1a",
+        borderBottom: "1px solid #2a2a2a",
+        padding: "8px 24px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}
+    >
+      <div className="flex items-center gap-2">
+        <span
+          style={{
+            fontSize: 9,
+            color: "#7C9CBF",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            fontWeight: 500,
+            padding: "2px 8px",
+            backgroundColor: "rgba(124, 156, 191, 0.15)",
+          }}
+        >
+          DEMO MODE
+        </span>
+        <span style={{ fontSize: 11, color: "#6b6b6b" }}>
+          Viewing sample data
+        </span>
+      </div>
+      <button
+        onClick={() => setShowPasswordModal(true)}
+        className="flex items-center gap-2"
+        style={{
+          background: "none",
+          border: "none",
+          color: "#6b6b6b",
+          fontSize: 10,
+          letterSpacing: "0.08em",
+          textTransform: "uppercase",
+          cursor: "pointer",
+          padding: "4px 8px",
+        }}
+        onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff"; }}
+        onMouseLeave={(e) => { e.currentTarget.style.color = "#6b6b6b"; }}
+      >
+        <Lock className="w-3 h-3" strokeWidth={1.5} />
+        ACCESS REAL DATA
+      </button>
+    </div>
+  );
+
+  // Real Data Banner
+  const RealDataBanner = () => (
+    <div
+      style={{
+        backgroundColor: "rgba(45, 138, 78, 0.1)",
+        borderBottom: "1px solid rgba(45, 138, 78, 0.3)",
+        padding: "8px 24px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}
+    >
+      <div className="flex items-center gap-2">
+        <span
+          style={{
+            fontSize: 9,
+            color: "#2d8a4e",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            fontWeight: 500,
+            padding: "2px 8px",
+            backgroundColor: "rgba(45, 138, 78, 0.15)",
+          }}
+        >
+          AUTHENTICATED
+        </span>
+        <span style={{ fontSize: 11, color: "#6b6b6b" }}>
+          Viewing classified data
+        </span>
+      </div>
+      <button
+        onClick={handleSwitchToDemo}
+        style={{
+          background: "none",
+          border: "none",
+          color: "#6b6b6b",
+          fontSize: 10,
+          letterSpacing: "0.08em",
+          textTransform: "uppercase",
+          cursor: "pointer",
+          padding: "4px 8px",
+        }}
+        onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff"; }}
+        onMouseLeave={(e) => { e.currentTarget.style.color = "#6b6b6b"; }}
+      >
+        SWITCH TO DEMO
+      </button>
+    </div>
+  );
+
   return (
+    <>
+      {showPasswordModal && <PasswordModal />}
     <div className="flex min-h-screen" style={{ backgroundColor: "#000000" }}>
       {/* Sidebar */}
       <Sidebar
@@ -501,10 +785,14 @@ export default function App() {
 
       {/* Main Content */}
       <main
-        className="flex-1 overflow-y-auto"
+        className="flex-1 overflow-y-auto flex flex-col"
         style={{ backgroundColor: "#0D0D0D" }}
       >
+        {/* Mode Banner */}
+        {isDemoMode ? <DemoModeBanner /> : <RealDataBanner />}
+
         <div
+          className="flex-1"
           style={{
             maxWidth: activePage === "insights" ? 1400 : "var(--content-max-width, 1152px)",
             marginLeft: "auto",
@@ -683,5 +971,6 @@ export default function App() {
         </div>
       </main>
     </div>
+    </>
   );
 }
