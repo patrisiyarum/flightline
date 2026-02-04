@@ -178,57 +178,31 @@ export function PipelineVisualization() {
         ))}
       </div>
 
-      {/* Explanation panel */}
+      {/* Explanation text */}
       <div
         style={{
-          marginTop: 24,
-          padding: activeStage !== null ? "20px 24px" : "0 24px",
-          backgroundColor: activeStage !== null ? "#141414" : "transparent",
-          border: activeStage !== null ? "1px solid #222222" : "1px solid transparent",
+          marginTop: 20,
+          textAlign: "center",
           transition: "all 0.3s ease",
-          maxHeight: activeStage !== null ? 200 : 0,
+          maxHeight: activeStage !== null ? 100 : 0,
           opacity: activeStage !== null ? 1 : 0,
           overflow: "hidden",
         }}
       >
         {activeStage !== null && (
-          <div>
-            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
-              <span 
-                style={{ 
-                  fontSize: 10, 
-                  color: "#7C9CBF", 
-                  fontFamily: "'JetBrains Mono', monospace",
-                  backgroundColor: "rgba(124,156,191,0.1)",
-                  padding: "4px 8px",
-                  letterSpacing: "0.08em",
-                }}
-              >
-                STEP {pipelineStages[activeStage].num}
-              </span>
-              <span 
-                style={{ 
-                  fontSize: 13, 
-                  color: "#ffffff", 
-                  fontWeight: 400,
-                  letterSpacing: "0.04em",
-                }}
-              >
-                {pipelineStages[activeStage].label}
-              </span>
-            </div>
-            <p 
-              style={{ 
-                fontSize: 13, 
-                color: "#888888", 
-                lineHeight: 1.7, 
-                fontWeight: 300,
-                fontFamily: "'Space Grotesk', sans-serif",
-              }}
-            >
-              {pipelineStages[activeStage].explanation}
-            </p>
-          </div>
+          <p 
+            style={{ 
+              fontSize: 13, 
+              color: "#777777", 
+              lineHeight: 1.7, 
+              fontWeight: 300,
+              fontFamily: "'Space Grotesk', sans-serif",
+              maxWidth: 500,
+              margin: "0 auto",
+            }}
+          >
+            {pipelineStages[activeStage].explanation}
+          </p>
         )}
       </div>
 
