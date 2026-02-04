@@ -804,9 +804,9 @@ export default function App() {
         <div
           className="flex-1"
           style={{
-            maxWidth: "var(--content-max-width, 1400px)",
-            marginLeft: "auto",
-            marginRight: "auto",
+            maxWidth: activePage === "home" ? "var(--content-max-width, 1400px)" : "none",
+            marginLeft: activePage === "home" ? "auto" : 0,
+            marginRight: activePage === "home" ? "auto" : 0,
             paddingLeft: "var(--content-padding-x, 40px)",
             paddingRight: "var(--content-padding-x, 40px)",
             paddingTop: "var(--content-padding-y, 40px)",
