@@ -1036,7 +1036,7 @@ export default function App() {
                       >BERT</a> model. Transforms hours of manual categorization into seconds of automated processing. What took 83+ hours now takes under 60 seconds.
                     </p>
                   </div>
-                  <div style={{ textAlign: "center", flexShrink: 0, padding: "8px 24px", backgroundColor: "#1a1a1a", border: "1px solid #2a2a2a" }}>
+                  <div style={{ textAlign: "center", flexShrink: 0 }}>
                     <span style={{ fontSize: 32, color: "#ffffff", fontFamily: "'JetBrains Mono', monospace", fontWeight: 300 }}>1000+</span>
                     <span style={{ fontSize: 10, color: "#6b6b6b", display: "block", letterSpacing: "0.08em", marginTop: 6 }}>COMMENTS/MIN</span>
                   </div>
