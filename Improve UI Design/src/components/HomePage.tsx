@@ -149,7 +149,7 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
           padding: "40px 32px",
         }}
       >
-        <div className="grid gap-12 md:grid-cols-2">
+        <div className="grid gap-20 md:grid-cols-2">
           {/* Left column: headline + CTA */}
           <div>
             <h1

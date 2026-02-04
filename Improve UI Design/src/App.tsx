@@ -904,23 +904,25 @@ export default function App() {
               />
 
               {bulkResults.length > 0 && (
-                <div style={{ marginTop: 16, display: "flex", justifyContent: "flex-end" }}>
+                <div style={{ marginTop: 24, display: "flex", justifyContent: "flex-end" }}>
                   <button
                     onClick={() => setActivePage("insights")}
-                    className="flex items-center gap-2 text-sm transition-colors"
+                    className="flex items-center gap-3 px-5 py-3 text-sm transition-colors"
                     style={{
-                      background: "none",
+                      backgroundColor: "#ffffff",
+                      color: "#0D0D0D",
                       border: "none",
-                      color: "#6b6b6b",
                       cursor: "pointer",
-                      padding: 0,
                       fontFamily: "'Space Grotesk', sans-serif",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.08em",
+                      fontWeight: 400,
                     }}
-                    onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.color = "#6b6b6b"; }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#e5e5e5"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
                   >
-                    <span style={{ fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase" }}>View Results</span>
-                    <span style={{ fontSize: 16 }}>→</span>
+                    VIEW RESULTS
+                    <span style={{ fontSize: 18 }}>→</span>
                   </button>
                 </div>
               )}
@@ -984,20 +986,22 @@ export default function App() {
                         alert("Failed to generate Excel file.");
                       }
                     }}
-                    className="flex items-center gap-2 text-sm transition-colors"
+                    className="flex items-center gap-3 px-5 py-3 text-sm transition-colors"
                     style={{
-                      background: "none",
+                      backgroundColor: "#ffffff",
+                      color: "#0D0D0D",
                       border: "none",
-                      color: "#6b6b6b",
                       cursor: "pointer",
-                      padding: 0,
                       fontFamily: "'Space Grotesk', sans-serif",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.08em",
+                      fontWeight: 400,
                     }}
-                    onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.color = "#6b6b6b"; }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#e5e5e5"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
                   >
-                    <Download className="w-4 h-4" strokeWidth={1.5} />
-                    <span style={{ fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase" }}>Download Results</span>
+                    <Download className="w-5 h-5" strokeWidth={1.5} />
+                    DOWNLOAD RESULTS
                   </button>
                 </div>
               )}

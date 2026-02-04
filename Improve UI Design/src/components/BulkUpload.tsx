@@ -247,26 +247,31 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
   };
 
   return (
-    <div className="p-6" style={{ backgroundColor: "#161616", borderTop: "1px solid #2a2a2a", width: "100%" }}>
-      <h3 style={{ fontSize: 11, fontWeight: 400, color: "#6b6b6b", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 20 }}>BULK UPLOAD PREDICTION</h3>
-
+    <div style={{ backgroundColor: "#161616", borderTop: "1px solid #2a2a2a", width: "100%" }}>
       {/* Drop zone */}
       <div
-        className="p-10 text-center transition-colors"
+        className="text-center transition-colors"
         style={{
-          border: "1px dashed #2a2a2a",
+          border: "2px dashed #2a2a2a",
           backgroundColor: "#0D0D0D",
           cursor: "pointer",
+          padding: "60px 40px",
         }}
-        onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#6b6b6b"; }}
-        onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#2a2a2a"; }}
+        onMouseEnter={(e) => { 
+          e.currentTarget.style.borderColor = "#7C9CBF"; 
+          e.currentTarget.style.backgroundColor = "#111111";
+        }}
+        onMouseLeave={(e) => { 
+          e.currentTarget.style.borderColor = "#2a2a2a"; 
+          e.currentTarget.style.backgroundColor = "#0D0D0D";
+        }}
         onClick={() => document.getElementById("file-upload")?.click()}
       >
-        <Upload className="w-6 h-6 mx-auto mb-4" style={{ color: "#6b6b6b" }} strokeWidth={1.5} />
-        <p style={{ color: "#ffffff", fontWeight: 400, fontSize: 14, marginBottom: 4 }}>
+        <Upload className="w-10 h-10 mx-auto mb-5" style={{ color: "#6b6b6b" }} strokeWidth={1} />
+        <p style={{ color: "#ffffff", fontWeight: 400, fontSize: 16, marginBottom: 8 }}>
           {file ? file.name : "Click to upload or drag and drop"}
         </p>
-        <p style={{ color: "#6b6b6b", fontSize: 12, fontWeight: 300 }}>
+        <p style={{ color: "#6b6b6b", fontSize: 13, fontWeight: 300 }}>
           CSV or Excel (.csv, .xlsx, .xls)
         </p>
         <input
@@ -280,13 +285,13 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
 
       {/* Preview */}
       {previewData && !results && (
-        <div className="mt-6">
+        <div style={{ marginTop: 32, padding: "0 24px 24px" }}>
           <div
-            className="flex items-center gap-2 p-3 mb-4"
-            style={{ backgroundColor: "rgba(45,138,78,0.08)", border: "1px solid rgba(45,138,78,0.2)" }}
+            className="flex items-center gap-3 mb-6"
+            style={{ padding: "16px 20px", backgroundColor: "rgba(45,138,78,0.08)", border: "1px solid rgba(45,138,78,0.2)" }}
           >
-            <CheckCircle2 className="h-4 w-4 flex-shrink-0" style={{ color: "#2d8a4e" }} strokeWidth={1.5} />
-            <span style={{ fontSize: 13, color: "#2d8a4e" }}>
+            <CheckCircle2 className="h-5 w-5 flex-shrink-0" style={{ color: "#2d8a4e" }} strokeWidth={1.5} />
+            <span style={{ fontSize: 14, color: "#2d8a4e" }}>
               File ready! Preview of first 5 rows shown below.
             </span>
           </div>
@@ -330,13 +335,14 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
             <button
               onClick={handleProcess}
               disabled={processing}
-              className="mt-5 w-full py-3 text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="mt-8 w-full py-4 text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               style={{
                 backgroundColor: "#ffffff",
                 color: "#0D0D0D",
                 textTransform: "uppercase",
                 letterSpacing: "0.08em",
                 fontWeight: 400,
+                fontSize: 13,
               }}
               onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = "#e5e5e5"; }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
@@ -349,14 +355,14 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
 
       {/* Progress bar */}
       {processing && (
-        <div className="mt-6">
-          <div className="flex items-center justify-between mb-2">
-            <span style={{ fontSize: 10, color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase" }}>PROCESSING...</span>
-            <span style={{ fontSize: 12, color: "#ffffff", fontFamily: "'JetBrains Mono', monospace" }}>
+        <div style={{ marginTop: 32, padding: "0 24px 24px" }}>
+          <div className="flex items-center justify-between mb-3">
+            <span style={{ fontSize: 11, color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase" }}>PROCESSING...</span>
+            <span style={{ fontSize: 14, color: "#ffffff", fontFamily: "'JetBrains Mono', monospace" }}>
               {Math.round(progress)}%
             </span>
           </div>
-          <div className="overflow-hidden" style={{ height: 3, backgroundColor: "#2a2a2a" }}>
+          <div className="overflow-hidden" style={{ height: 4, backgroundColor: "#2a2a2a" }}>
             <div
               className="transition-all"
               style={{ width: `${progress}%`, height: "100%", backgroundColor: "#7C9CBF" }}
@@ -367,13 +373,13 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
 
       {/* Results */}
       {results && (
-        <div className="mt-6">
+        <div style={{ marginTop: 32, padding: "0 24px 24px" }}>
           <div
-            className="flex items-center gap-2 p-3 mb-4"
-            style={{ backgroundColor: "rgba(45,138,78,0.08)", border: "1px solid rgba(45,138,78,0.2)" }}
+            className="flex items-center gap-3 mb-6"
+            style={{ padding: "16px 20px", backgroundColor: "rgba(45,138,78,0.08)", border: "1px solid rgba(45,138,78,0.2)" }}
           >
-            <CheckCircle2 className="h-4 w-4 flex-shrink-0" style={{ color: "#2d8a4e" }} strokeWidth={1.5} />
-            <span style={{ fontSize: 13, color: "#2d8a4e" }}>
+            <CheckCircle2 className="h-5 w-5 flex-shrink-0" style={{ color: "#2d8a4e" }} strokeWidth={1.5} />
+            <span style={{ fontSize: 14, color: "#2d8a4e" }}>
               Success! {results.length} rows categorized
               {elapsedTime !== null && ` in ${elapsedTime}s`}.
               {stitchCount > 0 && ` (Repaired ${stitchCount} broken text rows automatically)`}
@@ -381,18 +387,19 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
           </div>
           <button
             onClick={handleDownload}
-            className="w-full flex items-center justify-center gap-2 py-3 text-sm transition-colors"
+            className="w-full flex items-center justify-center gap-3 py-4 text-sm transition-colors"
             style={{
-              backgroundColor: "#2a2a2a",
-              color: "#ffffff",
+              backgroundColor: "#ffffff",
+              color: "#0D0D0D",
               textTransform: "uppercase",
               letterSpacing: "0.08em",
               fontWeight: 400,
+              fontSize: 13,
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#383838"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#2a2a2a"; }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#e5e5e5"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
           >
-            <Download className="h-4 w-4" strokeWidth={1.5} /> DOWNLOAD UPDATED EXCEL (.XLSX)
+            <Download className="h-5 w-5" strokeWidth={1.5} /> DOWNLOAD RESULTS
           </button>
         </div>
       )}
