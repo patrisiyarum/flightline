@@ -843,9 +843,9 @@ export default function App() {
             <div className="space-y-8" style={{ width: "100%" }}>
               <BackButton />
               <div style={{ marginBottom: 24 }}>
-                <h1 style={{ fontSize: 28, fontWeight: 400, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Feedback Demo</h1>
-                <p style={{ fontSize: 13, color: "#888888", letterSpacing: "0.06em", textTransform: "uppercase", marginTop: 10, fontFamily: "'Space Grotesk', sans-serif" }}>
-                  ENTER A SINGLE COMMENT TO SEE ITS PREDICTED SUBCATEGORY
+                <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Feedback Demo</h1>
+                <p style={{ fontSize: 14, color: "#6b6b6b", lineHeight: 1.7, fontWeight: 300, marginTop: 8, fontFamily: "'Space Grotesk', sans-serif" }}>
+                  Enter a single comment to see its predicted subcategory.
                 </p>
               </div>
 
@@ -907,9 +907,9 @@ export default function App() {
             <div className="space-y-8" style={{ width: "100%" }}>
               <BackButton />
               <div style={{ marginBottom: 24 }}>
-                <h1 style={{ fontSize: 28, fontWeight: 400, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Bulk Upload</h1>
-                <p style={{ fontSize: 13, color: "#888888", letterSpacing: "0.06em", textTransform: "uppercase", marginTop: 10, fontFamily: "'Space Grotesk', sans-serif" }}>
-                  UPLOAD A FILE WITH COMMENTS TO CLASSIFY THEM IN BULK
+                <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Bulk Upload</h1>
+                <p style={{ fontSize: 14, color: "#6b6b6b", lineHeight: 1.7, fontWeight: 300, marginTop: 8, fontFamily: "'Space Grotesk', sans-serif" }}>
+                  Upload a file with comments to classify them in bulk.
                 </p>
               </div>
 
@@ -954,9 +954,9 @@ export default function App() {
             <div className="space-y-8" style={{ width: "100%" }}>
               <BackButton />
               <div style={{ marginBottom: 24 }}>
-                <h1 style={{ fontSize: 28, fontWeight: 400, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Insights</h1>
-                <p style={{ fontSize: 13, color: "#888888", letterSpacing: "0.06em", textTransform: "uppercase", marginTop: 10, fontFamily: "'Space Grotesk', sans-serif" }}>
-                  ANALYTICS DASHBOARD FOR YOUR CLASSIFIED FEEDBACK DATA
+                <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Insights</h1>
+                <p style={{ fontSize: 14, color: "#6b6b6b", lineHeight: 1.7, fontWeight: 300, marginTop: 8, fontFamily: "'Space Grotesk', sans-serif" }}>
+                  Analytics dashboard for your classified feedback data.
                 </p>
               </div>
 
@@ -1024,9 +1024,9 @@ export default function App() {
             <div className="space-y-8" style={{ width: "100%" }}>
               <BackButton />
               <div style={{ marginBottom: 24 }}>
-                <h1 style={{ fontSize: 28, fontWeight: 400, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>About</h1>
-                <p style={{ fontSize: 13, color: "#888888", letterSpacing: "0.06em", textTransform: "uppercase", marginTop: 10, fontFamily: "'Space Grotesk', sans-serif" }}>
-                  HOW THE CLASSIFICATION MODEL WORKS
+                <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>About</h1>
+                <p style={{ fontSize: 14, color: "#6b6b6b", lineHeight: 1.7, fontWeight: 300, marginTop: 8, fontFamily: "'Space Grotesk', sans-serif" }}>
+                  How the classification model works.
                 </p>
               </div>
 
