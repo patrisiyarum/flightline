@@ -204,7 +204,7 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
             </p>
 
             <p style={{ color: "#6b6b6b", fontSize: 14, lineHeight: 1.7, fontWeight: 300, marginBottom: 32 }}>
-              Upload a file with comments, and the model will read it and classify it. Then you can see the insights of your bulk upload in the Insights tab. The Feedback Demo lets you see how the model categorizes any line of text — try it with something funny!
+              Upload crew feedback to classify it, then explore insights or test single comments in the demo.
             </p>
 
             <div className="flex items-center gap-6">
@@ -261,21 +261,21 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
                 icon: Upload,
                 step: "01",
                 title: "UPLOAD",
-                desc: "Upload a file with comments — the model will read and classify each row automatically.",
+                desc: "Drop a CSV or Excel file to classify all rows at once.",
                 action: () => onNavigate("upload"),
               },
               {
                 icon: BarChart3,
                 step: "02",
                 title: "INSIGHTS",
-                desc: "View analytics and insights from your classified bulk upload data.",
+                desc: "See charts and breakdowns of your classified data.",
                 action: () => onNavigate("insights"),
               },
               {
                 icon: Brain,
                 step: "03",
                 title: "FEEDBACK DEMO",
-                desc: "Test the model with a single line of text to see how it categorizes — try something funny!",
+                desc: "Test how the model classifies any text you type.",
                 action: () => onNavigate("classify"),
               },
             ].map(({ icon: Icon, step, title, desc, action }) => (
@@ -309,43 +309,29 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
       <div
         style={{
           borderTop: "1px solid #2a2a2a",
-          paddingTop: 24,
+          paddingTop: 20,
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
         }}
       >
-        <h3
+        <span
           style={{
-            fontSize: 10,
-            fontWeight: 400,
+            fontSize: 11,
             color: "#6b6b6b",
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            fontFamily: "'JetBrains Mono', monospace",
-            marginBottom: 12,
-          }}
-        >
-          WHAT IS BERT?
-        </h3>
-        <p
-          style={{
-            color: "#6b6b6b",
-            fontSize: 13,
-            lineHeight: 1.8,
-            fontWeight: 300,
             fontFamily: "'Space Grotesk', sans-serif",
-            maxWidth: 720,
           }}
         >
+          Powered by{" "}
           <a 
             href="https://www.nvidia.com/en-us/glossary/bert/" 
             target="_blank" 
             rel="noopener noreferrer"
-            style={{ color: "#ffffff", textDecoration: "none", borderBottom: "1px solid #6b6b6b" }}
-            onMouseEnter={(e) => { e.currentTarget.style.borderBottomColor = "#ffffff"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.borderBottomColor = "#6b6b6b"; }}
-          >BERT</a> (Bidirectional Encoder Representations from Transformers) is a pre-trained language model developed by Google.
-          Unlike traditional models that read text left-to-right, BERT reads in both directions simultaneously, giving it a deeper understanding of context and meaning.
-          Flightline uses a fine-tuned BERT model to classify crew feedback into actionable categories with high accuracy.
-        </p>
+            style={{ color: "#7C9CBF", textDecoration: "none" }}
+            onMouseEnter={(e) => { e.currentTarget.style.textDecoration = "underline"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.textDecoration = "none"; }}
+          >BERT</a>, a language model that reads text bidirectionally to understand context.
+        </span>
       </div>
 
       {/* Recent Activity — compact inline row */}
