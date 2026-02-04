@@ -230,14 +230,18 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
         style={{
           border: "1px dashed #2a2a2a",
           backgroundColor: "#0D0D0D",
+          cursor: "pointer",
         }}
         onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#6b6b6b"; }}
         onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#2a2a2a"; }}
+        onClick={() => document.getElementById("file-upload")?.click()}
       >
         <Upload className="w-6 h-6 mx-auto mb-4" style={{ color: "#6b6b6b" }} strokeWidth={1.5} />
-        <p style={{ color: "#ffffff", fontWeight: 400, fontSize: 14, marginBottom: 4 }}>Drag and drop your file here</p>
-        <p style={{ color: "#6b6b6b", fontSize: 13, fontWeight: 300, marginBottom: 20 }}>
-          CSV or Excel with a Pilot's Questions/Answers column
+        <p style={{ color: "#ffffff", fontWeight: 400, fontSize: 14, marginBottom: 4 }}>
+          {file ? file.name : "Click to upload or drag and drop"}
+        </p>
+        <p style={{ color: "#6b6b6b", fontSize: 12, fontWeight: 300 }}>
+          CSV or Excel (.csv, .xlsx, .xls)
         </p>
         <input
           type="file"
@@ -246,33 +250,6 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
           className="hidden"
           id="file-upload"
         />
-        <label htmlFor="file-upload">
-          <span
-            className="inline-flex items-center gap-2 px-6 py-3 text-sm cursor-pointer transition-colors"
-            style={{
-              backgroundColor: "#ffffff",
-              color: "#0D0D0D",
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-              fontWeight: 400,
-            }}
-          >
-            <FileUp className="w-4 h-4" strokeWidth={1.5} />
-            BROWSE FILES
-          </span>
-        </label>
-        <p style={{ marginTop: 8, fontSize: 11, color: "#444444" }}>
-          Supports .csv, .xlsx, .xls
-        </p>
-        {file && (
-          <div
-            className="mt-4 inline-flex items-center gap-2 px-4 py-2 text-sm"
-            style={{ backgroundColor: "#2a2a2a", color: "#ffffff" }}
-          >
-            <FileUp className="w-3.5 h-3.5" style={{ color: "#6b6b6b" }} strokeWidth={1.5} />
-            {file.name}
-          </div>
-        )}
       </div>
 
       {/* Preview */}
@@ -323,22 +300,24 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
             </table>
           </div>
 
-          <button
-            onClick={handleProcess}
-            disabled={processing}
-            className="mt-5 w-full py-3 text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{
-              backgroundColor: "#ffffff",
-              color: "#0D0D0D",
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-              fontWeight: 400,
-            }}
-            onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = "#e5e5e5"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
-          >
-            {processing ? "PROCESSING..." : "START PREDICTION"}
-          </button>
+          {!results && (
+            <button
+              onClick={handleProcess}
+              disabled={processing}
+              className="mt-5 w-full py-3 text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{
+                backgroundColor: "#ffffff",
+                color: "#0D0D0D",
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                fontWeight: 400,
+              }}
+              onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = "#e5e5e5"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
+            >
+              {processing ? "PROCESSING..." : "START PREDICTION"}
+            </button>
+          )}
         </div>
       )}
 

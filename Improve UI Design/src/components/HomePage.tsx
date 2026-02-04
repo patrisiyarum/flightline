@@ -9,10 +9,10 @@ interface HomePageProps {
 
 export function PipelineVisualization() {
   const stages = [
-    { label: "INPUT", sub: "crew feedback", num: "01" },
-    { label: "TOKENIZE", sub: "bert tokens", num: "02" },
-    { label: "CLASSIFY", sub: "model inference", num: "03" },
-    { label: "OUTPUT", sub: "category + confidence", num: "04" },
+    { label: "INPUT", sub: "crew feedback", num: "01", isBert: false },
+    { label: "TOKENIZE", sub: "bert tokens", num: "02", isBert: true },
+    { label: "CLASSIFY", sub: "bert inference", num: "03", isBert: true },
+    { label: "OUTPUT", sub: "category + confidence", num: "04", isBert: false },
   ];
 
   return (
@@ -31,8 +31,8 @@ export function PipelineVisualization() {
           {/* Stage box */}
           <div
             style={{
-              backgroundColor: "#0D0D0D",
-              border: "1px solid #2a2a2a",
+              backgroundColor: stage.isBert ? "#1a1a1a" : "#0D0D0D",
+              border: stage.isBert ? "1px solid #7C9CBF" : "1px solid #2a2a2a",
               padding: "14px 22px",
               textAlign: "center",
               minWidth: 110,
@@ -45,7 +45,7 @@ export function PipelineVisualization() {
                 top: 6,
                 left: 10,
                 fontSize: 8,
-                color: "#444",
+                color: stage.isBert ? "#7C9CBF" : "#444",
                 fontFamily: "'JetBrains Mono', monospace",
               }}
             >
@@ -55,7 +55,7 @@ export function PipelineVisualization() {
               style={{
                 fontSize: 11,
                 fontWeight: 400,
-                color: "#ffffff",
+                color: stage.isBert ? "#7C9CBF" : "#ffffff",
                 letterSpacing: "0.1em",
                 fontFamily: "'JetBrains Mono', monospace",
                 marginBottom: 4,
@@ -74,6 +74,22 @@ export function PipelineVisualization() {
             >
               {stage.sub}
             </div>
+            {stage.isBert && (
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 4,
+                  right: 6,
+                  fontSize: 7,
+                  color: "#7C9CBF",
+                  fontFamily: "'JetBrains Mono', monospace",
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                }}
+              >
+                BERT
+              </div>
+            )}
           </div>
 
           {/* Connector arrow with animated dot */}
@@ -188,7 +204,7 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
             </p>
 
             <p style={{ color: "#6b6b6b", fontSize: 14, lineHeight: 1.7, fontWeight: 300, marginBottom: 32 }}>
-              Turning crew feedback into actionable categories.
+              Upload a file with comments, and the model will read it and classify it. Then you can see the insights of your bulk upload in the Insights tab. The Feedback Demo lets you see how the model categorizes any line of text — try it with something funny!
             </p>
 
             <div className="flex items-center gap-6">
@@ -245,22 +261,22 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
                 icon: Upload,
                 step: "01",
                 title: "UPLOAD",
-                desc: "Upload CSV or Excel with crew feedback. Auto-detects text column.",
+                desc: "Upload a file with comments — the model will read and classify each row automatically.",
                 action: () => onNavigate("upload"),
               },
               {
-                icon: Brain,
+                icon: BarChart3,
                 step: "02",
-                title: "CLASSIFY",
-                desc: "BERT model predicts subcategory with confidence score.",
-                action: () => onNavigate("classify"),
+                title: "INSIGHTS",
+                desc: "View analytics and insights from your classified bulk upload data.",
+                action: () => onNavigate("insights"),
               },
               {
-                icon: BarChart3,
+                icon: Brain,
                 step: "03",
-                title: "ANALYZE",
-                desc: "Interactive charts and filters for your classified data.",
-                action: () => onNavigate("insights"),
+                title: "FEEDBACK DEMO",
+                desc: "Test the model with a single line of text to see how it categorizes — try something funny!",
+                action: () => onNavigate("classify"),
               },
             ].map(({ icon: Icon, step, title, desc, action }) => (
               <button
@@ -319,9 +335,16 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
             maxWidth: 720,
           }}
         >
-          <span style={{ color: "#ffffff" }}>BERT</span> (Bidirectional Encoder Representations from Transformers) is a pre-trained language model developed by Google.
-          Unlike traditional models that read text left-to-right, BERT reads in both directions simultaneously, giving it a deeper understanding of context and meaning.
-          Flightline uses a fine-tuned BERT model to classify crew feedback into actionable categories with high accuracy.
+          <span style={{ color: "#ffffff" }}>BERT</span> is an AI model that reads text in both directions to understand context.
+          Flightline uses BERT (highlighted in the TOKENIZE and CLASSIFY steps above) to automatically categorize crew feedback.{" "}
+          <a
+            href="https://en.wikipedia.org/wiki/BERT_(language_model)"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "#7C9CBF", textDecoration: "underline" }}
+          >
+            Learn more about BERT
+          </a>
         </p>
       </div>
 
