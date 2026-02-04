@@ -17,33 +17,30 @@ function confColor(val: number): string {
 
 export function PredictionCard({ subPredictions }: PredictionCardProps) {
   return (
-    <div className="mt-6 max-w-2xl mx-auto">
-      <div className="overflow-hidden" style={{ backgroundColor: "#161616" }}>
-        {/* Thin 1px line instead of gradient bar */}
-        <div style={{ height: 1, backgroundColor: "#2a2a2a" }} />
-
-        <div className="p-6">
-          <div className="flex items-center gap-2 mb-6">
+    <div className="mt-6">
+      <div className="overflow-hidden" style={{ backgroundColor: "#1a1a1a", border: "1px solid #2a2a2a" }}>
+        <div className="p-8">
+          <div className="flex items-center gap-3 mb-8">
             <span
               style={{
-                width: 6,
-                height: 6,
+                width: 8,
+                height: 8,
                 backgroundColor: "#7C9CBF",
                 display: "inline-block",
               }}
             />
-            <h3 style={{ fontSize: 12, fontWeight: 400, color: "#ffffff", letterSpacing: "0.08em", textTransform: "uppercase" }}>PREDICTED SUBCATEGORY</h3>
+            <h3 style={{ fontSize: 14, fontWeight: 500, color: "#ffffff", letterSpacing: "0.08em", textTransform: "uppercase" }}>PREDICTED SUBCATEGORY</h3>
           </div>
 
           <div className="space-y-0">
             {subPredictions.slice(0, 5).map((pred, idx) => {
               const isTop = idx === 0;
               const barWidth = `${Math.min(pred.probability, 100)}%`;
-              const barColor = isTop ? "#7C9CBF" : "#2a2a2a";
+              const barColor = isTop ? "#7C9CBF" : "#3a3a3a";
 
               const rowStyle: CSSProperties = {
-                backgroundColor: isTop ? "rgba(124,156,191,0.06)" : "transparent",
-                padding: "10px 12px",
+                backgroundColor: isTop ? "rgba(124,156,191,0.08)" : "transparent",
+                padding: "14px 16px",
                 transition: "background-color 0.15s",
                 borderBottom: "1px solid #2a2a2a",
               };
@@ -54,19 +51,19 @@ export function PredictionCard({ subPredictions }: PredictionCardProps) {
                   className="flex items-center justify-between gap-4"
                   style={rowStyle}
                   onMouseEnter={(e) => {
-                    if (!isTop) e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.02)";
+                    if (!isTop) e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.03)";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = isTop ? "rgba(124,156,191,0.06)" : "transparent";
+                    e.currentTarget.style.backgroundColor = isTop ? "rgba(124,156,191,0.08)" : "transparent";
                   }}
                 >
                   <span
-                    className="text-sm"
                     style={{
-                      color: isTop ? "#ffffff" : "#6b6b6b",
-                      fontWeight: isTop ? 400 : 300,
+                      color: isTop ? "#ffffff" : "#999999",
+                      fontWeight: isTop ? 500 : 300,
                       fontFamily: "'Space Grotesk', sans-serif",
-                      width: 200,
+                      fontSize: 15,
+                      width: 240,
                       flexShrink: 0,
                       overflow: "hidden",
                       textOverflow: "ellipsis",
@@ -77,10 +74,10 @@ export function PredictionCard({ subPredictions }: PredictionCardProps) {
                     {pred.label}
                   </span>
 
-                  <div className="flex items-center gap-3 flex-1 justify-end">
+                  <div className="flex items-center gap-4 flex-1 justify-end">
                     <div
                       className="overflow-hidden"
-                      style={{ width: 80, height: 3, backgroundColor: "rgba(255,255,255,0.06)" }}
+                      style={{ width: 100, height: 4, backgroundColor: "rgba(255,255,255,0.08)" }}
                     >
                       <div
                         style={{ width: barWidth, height: "100%", backgroundColor: barColor }}
@@ -89,11 +86,11 @@ export function PredictionCard({ subPredictions }: PredictionCardProps) {
 
                     <span
                       style={{
-                        color: isTop ? confColor(pred.probability) : "#6b6b6b",
+                        color: isTop ? confColor(pred.probability) : "#999999",
                         fontFamily: "'JetBrains Mono', monospace",
-                        fontSize: 12,
+                        fontSize: 14,
                         fontWeight: 400,
-                        minWidth: 48,
+                        minWidth: 56,
                         textAlign: "right",
                       }}
                     >

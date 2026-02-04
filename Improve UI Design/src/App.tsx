@@ -842,16 +842,16 @@ export default function App() {
           {activePage === "classify" && (
             <div className="space-y-8" style={{ width: "100%" }}>
               <BackButton />
-              <div style={{ marginBottom: 16 }}>
-                <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Feedback Demo</h1>
-                <p style={{ fontSize: 10, color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 6, fontFamily: "'Space Grotesk', sans-serif" }}>
+              <div style={{ marginBottom: 24 }}>
+                <h1 style={{ fontSize: 28, fontWeight: 400, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Feedback Demo</h1>
+                <p style={{ fontSize: 12, color: "#999999", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 8, fontFamily: "'Space Grotesk', sans-serif" }}>
                   ENTER A SINGLE COMMENT TO SEE ITS PREDICTED SUBCATEGORY
                 </p>
               </div>
 
               <SampleComments onSelectSample={handleSelectSample} />
 
-              <div className="p-8" style={{ backgroundColor: "#161616" }}>
+              <div className="p-8" style={{ backgroundColor: "#1a1a1a", border: "1px solid #2a2a2a" }}>
                 <textarea
                   placeholder="Paste a crew feedback comment here..."
                   value={commentText}
@@ -862,9 +862,9 @@ export default function App() {
                       handleAnalyze();
                     }
                   }}
-                  className="w-full min-h-[120px] mb-6 p-4 text-sm"
+                  className="w-full min-h-[140px] mb-6 p-5"
                   style={{
-                    backgroundColor: "#1a1a1a",
+                    backgroundColor: "#111111",
                     color: "#ffffff",
                     border: "1px solid #2a2a2a",
                     borderRadius: 0,
@@ -872,6 +872,8 @@ export default function App() {
                     outline: "none",
                     fontFamily: "'Space Grotesk', sans-serif",
                     fontWeight: 300,
+                    fontSize: 15,
+                    lineHeight: 1.7,
                   }}
                   onFocus={(e) => { e.currentTarget.style.borderColor = "#6b6b6b"; }}
                   onBlur={(e) => { e.currentTarget.style.borderColor = "#2a2a2a"; }}
@@ -879,13 +881,14 @@ export default function App() {
                 <button
                   onClick={handleAnalyze}
                   disabled={isAnalyzing || !modelLoaded}
-                  className="w-full py-3 text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full py-4 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{
                     backgroundColor: "#ffffff",
                     color: "#0D0D0D",
                     textTransform: "uppercase",
                     letterSpacing: "0.08em",
-                    fontWeight: 400,
+                    fontWeight: 500,
+                    fontSize: 14,
                   }}
                   onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = "#e5e5e5"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}

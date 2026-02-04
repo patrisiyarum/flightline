@@ -14,13 +14,13 @@ export function SampleComments({ onSelectSample }: SampleCommentsProps) {
     <div style={{ padding: "24px 0" }}>
       <h3
         style={{
-          fontSize: 10,
+          fontSize: 12,
           fontWeight: 400,
-          color: "#6b6b6b",
+          color: "#999999",
           letterSpacing: "0.1em",
           textTransform: "uppercase",
           fontFamily: "'Space Grotesk', sans-serif",
-          marginBottom: 16,
+          marginBottom: 20,
         }}
       >
         PILOT QUESTIONS & ANSWERS
@@ -32,20 +32,21 @@ export function SampleComments({ onSelectSample }: SampleCommentsProps) {
             key={category}
             className="transition-colors"
             style={{
-              padding: "20px 24px",
-              backgroundColor: "#161616",
+              padding: "24px 28px",
+              backgroundColor: "#1a1a1a",
+              border: "1px solid #2a2a2a",
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#1a1a1a"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#161616"; }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#1e1e1e"; e.currentTarget.style.borderColor = "#3a3a3a"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#1a1a1a"; e.currentTarget.style.borderColor = "#2a2a2a"; }}
           >
-            <div className="flex items-start justify-between gap-4 mb-3">
+            <div className="flex items-start justify-between gap-4 mb-4">
               <span
                 style={{
-                  fontSize: 10,
-                  fontWeight: 400,
+                  fontSize: 13,
+                  fontWeight: 500,
                   color: "#ffffff",
                   textTransform: "uppercase",
-                  letterSpacing: "0.08em",
+                  letterSpacing: "0.06em",
                   fontFamily: "'Space Grotesk', sans-serif",
                 }}
               >
@@ -53,28 +54,28 @@ export function SampleComments({ onSelectSample }: SampleCommentsProps) {
               </span>
               <button
                 onClick={() => onSelectSample(text)}
-                className="shrink-0 px-3 py-1 text-xs transition-colors"
+                className="shrink-0 px-4 py-2 text-xs transition-colors"
                 style={{
-                  backgroundColor: "transparent",
-                  color: "#6b6b6b",
+                  backgroundColor: "#2a2a2a",
+                  color: "#ffffff",
                   border: "none",
                   textTransform: "uppercase",
                   letterSpacing: "0.08em",
                   fontWeight: 400,
                   fontFamily: "'Space Grotesk', sans-serif",
-                  fontSize: 10,
+                  fontSize: 11,
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.color = "#6b6b6b"; }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#3a3a3a"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#2a2a2a"; }}
               >
                 TRY IT
               </button>
             </div>
             <p
               style={{
-                color: "#6b6b6b",
-                fontSize: 12,
-                lineHeight: 1.7,
+                color: "#999999",
+                fontSize: 14,
+                lineHeight: 1.8,
                 fontWeight: 300,
                 fontFamily: "'Space Grotesk', sans-serif",
               }}
