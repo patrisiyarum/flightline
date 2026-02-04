@@ -543,6 +543,12 @@ export default function App() {
                   placeholder="Paste a crew feedback comment here..."
                   value={commentText}
                   onChange={(e) => setCommentText(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey && commentText.trim() && modelLoaded && !isAnalyzing) {
+                      e.preventDefault();
+                      handleAnalyze();
+                    }
+                  }}
                   className="w-full min-h-[120px] mb-6 p-4 text-sm"
                   style={{
                     backgroundColor: "#1a1a1a",

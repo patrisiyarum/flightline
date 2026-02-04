@@ -4,7 +4,7 @@ interface SampleCommentsProps {
 
 const samples: { category: string; text: string }[] = [
   { category: "Catering Error", text: "Required meals not catered. Flight departed with zero crew meals loaded." },
-  { category: "Equipment", text: "Oven in galley 4 is inoperable — unable to heat any entrees for business class." },
+  { category: "Try Something Funny", text: "The chicken was so rubbery it bounced off the tray and hit a passenger in 12B. He thought it was turbulence." },
   { category: "Food Quality/Portion", text: "The soup lacked flavor and the chicken was overcooked. Portion sizes were too small for a transcon." },
   { category: "Food Safety", text: "The meal smelled funny and looked discolored. Several crew members refused to eat it." },
 ];

@@ -335,16 +335,16 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
             maxWidth: 720,
           }}
         >
-          <span style={{ color: "#ffffff" }}>BERT</span> is an AI model that reads text in both directions to understand context.
-          Flightline uses BERT (highlighted in the TOKENIZE and CLASSIFY steps above) to automatically categorize crew feedback.{" "}
-          <a
-            href="https://en.wikipedia.org/wiki/BERT_(language_model)"
-            target="_blank"
+          <a 
+            href="https://www.nvidia.com/en-us/glossary/bert/" 
+            target="_blank" 
             rel="noopener noreferrer"
-            style={{ color: "#7C9CBF", textDecoration: "underline" }}
-          >
-            Learn more about BERT
-          </a>
+            style={{ color: "#ffffff", textDecoration: "none", borderBottom: "1px solid #6b6b6b" }}
+            onMouseEnter={(e) => { e.currentTarget.style.borderBottomColor = "#ffffff"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.borderBottomColor = "#6b6b6b"; }}
+          >BERT</a> (Bidirectional Encoder Representations from Transformers) is a pre-trained language model developed by Google.
+          Unlike traditional models that read text left-to-right, BERT reads in both directions simultaneously, giving it a deeper understanding of context and meaning.
+          Flightline uses a fine-tuned BERT model to classify crew feedback into actionable categories with high accuracy.
         </p>
       </div>
 
