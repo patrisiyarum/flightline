@@ -3,7 +3,9 @@ import {
   BarChart3,
   CheckCircle2,
   Timer,
+  Download,
 } from "lucide-react";
+import * as XLSX from "xlsx";
 import { PredictionCard } from "./components/PredictionCard";
 import { SampleComments } from "./components/SampleComments";
 import { BulkUpload } from "./components/BulkUpload";
@@ -181,14 +183,22 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
 
   const confidenceData = useMemo(() => {
     if (!filteredResults.length) return [];
-    const buckets = { "Low (<70%)": 0, "Medium (70-90%)": 0, "High (>90%)": 0 };
+    const buckets = {
+      "V.Low\n(<50%)": 0,
+      "Low\n(50-70%)": 0,
+      "Med\n(70-80%)": 0,
+      "High\n(80-90%)": 0,
+      "V.High\n(>90%)": 0
+    };
     filteredResults.forEach(row => {
       const confStr = row["Subcategory_Confidence"];
       if (confStr && typeof confStr === "string") {
         const val = parseFloat(confStr.replace("%", ""));
-        if (val < 70) buckets["Low (<70%)"]++;
-        else if (val < 90) buckets["Medium (70-90%)"]++;
-        else buckets["High (>90%)"]++;
+        if (val < 50) buckets["V.Low\n(<50%)"]++;
+        else if (val < 70) buckets["Low\n(50-70%)"]++;
+        else if (val < 80) buckets["Med\n(70-80%)"]++;
+        else if (val < 90) buckets["High\n(80-90%)"]++;
+        else buckets["V.High\n(>90%)"]++;
       }
     });
     return Object.entries(buckets).map(([name, count]) => ({ name, count }));
@@ -252,9 +262,9 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
                   { label: "TOP CATEGORY", value: kpis.topCategory, sub: `${kpis.topCategoryPct}% of rows` },
                 ].map(({ label, value, sub }) => (
                   <div key={label}>
-                    <span style={{ fontSize: 9, color: "#555", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 400, display: "block", marginBottom: 3, fontFamily: "'Space Grotesk', sans-serif" }}>{label}</span>
-                    <p style={{ fontSize: 18, fontWeight: 300, color: "#ffffff", fontFamily: "'JetBrains Mono', monospace", lineHeight: 1.2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</p>
-                    {sub && <span style={{ fontSize: 9, color: "#555", fontFamily: "'JetBrains Mono', monospace", marginTop: 1, display: "block" }}>{sub}</span>}
+                    <span style={{ fontSize: 10, color: "#555", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 400, display: "block", marginBottom: 4, fontFamily: "'Space Grotesk', sans-serif" }}>{label}</span>
+                    <p style={{ fontSize: 20, fontWeight: 300, color: "#ffffff", fontFamily: "'Space Grotesk', sans-serif", lineHeight: 1.2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</p>
+                    {sub && <span style={{ fontSize: 10, color: "#555", fontFamily: "'Space Grotesk', sans-serif", marginTop: 2, display: "block" }}>{sub}</span>}
                   </div>
                 ))}
               </div>
@@ -263,12 +273,12 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
 
           {/* Top 5 Airports */}
           <div style={{ backgroundColor: "#161616", padding: 16, flex: 1 }}>
-            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 12, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Top Airports</h3>
-            <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2, fontFamily: "'Space Grotesk', sans-serif" }}>REPORTS BY DEPARTURE STATION</p>
+            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 14, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Top Airports</h3>
+            <p style={{ fontSize: 10, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2, fontFamily: "'Space Grotesk', sans-serif" }}>REPORTS BY DEPARTURE STATION</p>
             <ResponsiveContainer width="100%" height={140}>
               <BarChart data={airportData} layout="vertical" margin={{ left: 0, right: 16 }}>
                 <XAxis type="number" hide />
-                <YAxis dataKey="name" type="category" width={48} tick={{ fill: "#555", fontSize: 9 }} />
+                <YAxis dataKey="name" type="category" width={48} tick={{ fill: "#555", fontSize: 10, fontFamily: "'Space Grotesk', sans-serif" }} />
                 <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
                 <Bar dataKey="count" fill="#8BAF8B" radius={[0, 0, 0, 0]} name="Reports" barSize={12} />
               </BarChart>
@@ -277,15 +287,15 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
 
           {/* AI Confidence Breakdown */}
           <div style={{ backgroundColor: "#161616", padding: 16 }}>
-            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 12, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Confidence Breakdown</h3>
-            <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2, fontFamily: "'Space Grotesk', sans-serif" }}>MODEL CERTAINTY ACROSS {filteredResults.length} RECORDS</p>
-            <ResponsiveContainer width="100%" height={100}>
-              <BarChart data={confidenceData} margin={{ left: 0, right: 8 }}>
+            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 14, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Confidence Breakdown</h3>
+            <p style={{ fontSize: 10, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2, fontFamily: "'Space Grotesk', sans-serif" }}>MODEL CERTAINTY ACROSS {filteredResults.length} RECORDS</p>
+            <ResponsiveContainer width="100%" height={120}>
+              <BarChart data={confidenceData} margin={{ left: 0, right: 8, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e1e1e" vertical={false} />
-                <XAxis dataKey="name" tick={{ fill: "#555", fontSize: 8 }} />
-                <YAxis tick={{ fill: "#555", fontSize: 8 }} />
+                <XAxis dataKey="name" tick={{ fill: "#555", fontSize: 9, fontFamily: "'Space Grotesk', sans-serif" }} />
+                <YAxis tick={{ fill: "#555", fontSize: 9, fontFamily: "'Space Grotesk', sans-serif" }} />
                 <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
-                <Bar dataKey="count" fill="#7C9CBF" radius={[0, 0, 0, 0]} name="Records" barSize={24} />
+                <Bar dataKey="count" fill="#7C9CBF" radius={[0, 0, 0, 0]} name="Records" barSize={18} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -296,13 +306,13 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
 
           {/* Volume Over Time — primary trend */}
           <div style={{ backgroundColor: "#161616", padding: 16, flex: 1 }}>
-            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 12, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Volume Over Time</h3>
-            <p style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2, fontFamily: "'Space Grotesk', sans-serif" }}>DAILY TREND</p>
+            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 14, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Volume Over Time</h3>
+            <p style={{ fontSize: 10, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2, fontFamily: "'Space Grotesk', sans-serif" }}>DAILY TREND</p>
             <ResponsiveContainer width="100%" height={180}>
               <LineChart data={trendData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1e1e1e" />
-                <XAxis dataKey="date" tick={{ fill: "#555", fontSize: 7 }} />
-                <YAxis tick={{ fill: "#555", fontSize: 8 }} />
+                <XAxis dataKey="date" tick={{ fill: "#555", fontSize: 9, fontFamily: "'Space Grotesk', sans-serif" }} />
+                <YAxis tick={{ fill: "#555", fontSize: 10, fontFamily: "'Space Grotesk', sans-serif" }} />
                 <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ stroke: "#2a2a2a" }} />
                 <Line type="monotone" dataKey="count" stroke="#7C9CBF" strokeWidth={1.5} dot={{ r: 1.5, fill: "#7C9CBF" }} activeDot={{ r: 3 }} />
               </LineChart>
@@ -312,8 +322,8 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
           {/* Fleet + Source — secondary, side-by-side */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
             <div style={{ backgroundColor: "#161616", padding: 12 }}>
-              <h3 style={{ color: "#999", fontWeight: 300, fontSize: 11, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Fleet</h3>
-              <p style={{ fontSize: 8, color: "#444", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 4, marginTop: 1, fontFamily: "'Space Grotesk', sans-serif" }}>BY AIRCRAFT</p>
+              <h3 style={{ color: "#999", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Fleet</h3>
+              <p style={{ fontSize: 9, color: "#444", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 4, marginTop: 1, fontFamily: "'Space Grotesk', sans-serif" }}>BY AIRCRAFT</p>
               <ResponsiveContainer width="100%" height={120}>
                 <PieChart>
                   <Pie data={fleetData} cx="50%" cy="42%" innerRadius={22} outerRadius={38} paddingAngle={0} dataKey="value">
@@ -329,13 +339,13 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
                       );
                     }}
                   />
-                  <Legend verticalAlign="bottom" height={20} wrapperStyle={{ fontSize: 7, color: "#555" }} />
+                  <Legend verticalAlign="bottom" height={20} wrapperStyle={{ fontSize: 9, color: "#555", fontFamily: "'Space Grotesk', sans-serif" }} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
             <div style={{ backgroundColor: "#161616", padding: 12 }}>
-              <h3 style={{ color: "#999", fontWeight: 300, fontSize: 11, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Source</h3>
-              <p style={{ fontSize: 8, color: "#444", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 4, marginTop: 1, fontFamily: "'Space Grotesk', sans-serif" }}>CREW VS. PASSENGER</p>
+              <h3 style={{ color: "#999", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Source</h3>
+              <p style={{ fontSize: 9, color: "#444", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 4, marginTop: 1, fontFamily: "'Space Grotesk', sans-serif" }}>CREW VS. PASSENGER</p>
               <ResponsiveContainer width="100%" height={120}>
                 <PieChart>
                   <Pie data={sourceData} cx="50%" cy="42%" outerRadius={38} dataKey="value" label={({ percent }: any) => `${(percent * 100).toFixed(0)}%`}>
@@ -351,7 +361,7 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
                       );
                     }}
                   />
-                  <Legend verticalAlign="bottom" height={20} wrapperStyle={{ fontSize: 7, color: "#555" }} />
+                  <Legend verticalAlign="bottom" height={20} wrapperStyle={{ fontSize: 9, color: "#555", fontFamily: "'Space Grotesk', sans-serif" }} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -566,44 +576,6 @@ export default function App() {
 
                 {predictions && (
                   <div className="mt-8">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-2 text-sm" style={{ color: "#2d8a4e" }}>
-                        <CheckCircle2 className="w-4 h-4" strokeWidth={1.5} />
-                        <span style={{ fontSize: 10, letterSpacing: "0.08em", textTransform: "uppercase", fontFamily: "'Space Grotesk', sans-serif" }}>PREDICTION COMPLETE</span>
-                      </div>
-                      <button
-                        onClick={() => {
-                          if (!predictions?.subPredictions) return;
-                          const header = "Category,Confidence\n";
-                          const rows = predictions.subPredictions.map((p: any) =>
-                            `"${p.label}","${p.probability.toFixed(2)}%"`
-                          ).join("\n");
-                          const blob = new Blob([header + rows], { type: "text/csv;charset=utf-8;" });
-                          const url = URL.createObjectURL(blob);
-                          const link = document.createElement("a");
-                          link.href = url;
-                          link.download = "classification_result.csv";
-                          link.click();
-                          URL.revokeObjectURL(url);
-                        }}
-                        className="text-xs transition-colors"
-                        style={{
-                          background: "none",
-                          border: "none",
-                          color: "#6b6b6b",
-                          textTransform: "uppercase",
-                          letterSpacing: "0.08em",
-                          fontWeight: 400,
-                          fontFamily: "'Space Grotesk', sans-serif",
-                          fontSize: 10,
-                          cursor: "pointer",
-                        }}
-                        onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff"; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.color = "#6b6b6b"; }}
-                      >
-                        DOWNLOAD REPORT
-                      </button>
-                    </div>
                     <PredictionCard subPredictions={predictions.subPredictions} />
                   </div>
                 )}
@@ -615,7 +587,7 @@ export default function App() {
           {activePage === "upload" && (
             <div className="space-y-8">
               <BackButton />
-              <div>
+              <div style={{ marginBottom: 32 }}>
                 <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Bulk Upload</h1>
                 <p style={{ fontSize: 10, color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 6, fontFamily: "'Space Grotesk', sans-serif" }}>
                   UPLOAD A CSV OR EXCEL FILE TO CLASSIFY ALL ROWS AT ONCE
@@ -661,11 +633,41 @@ export default function App() {
           {activePage === "insights" && (
             <div className="space-y-4" style={{ maxWidth: 1400, marginLeft: "auto", marginRight: "auto" }}>
               <BackButton />
-              <div>
-                <h1 style={{ fontSize: 20, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Insights</h1>
-                <p style={{ fontSize: 10, color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 4, fontFamily: "'Space Grotesk', sans-serif" }}>
-                  ANALYTICS DASHBOARD FOR YOUR CLASSIFIED FEEDBACK DATA
-                </p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h1 style={{ fontSize: 20, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Insights</h1>
+                  <p style={{ fontSize: 10, color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 4, fontFamily: "'Space Grotesk', sans-serif" }}>
+                    ANALYTICS DASHBOARD FOR YOUR CLASSIFIED FEEDBACK DATA
+                  </p>
+                </div>
+                {bulkResults.length > 0 && (
+                  <button
+                    onClick={() => {
+                      try {
+                        const workbook = XLSX.utils.book_new();
+                        const worksheet = XLSX.utils.json_to_sheet(bulkResults);
+                        XLSX.utils.book_append_sheet(workbook, worksheet, "Classified Results");
+                        XLSX.writeFile(workbook, "classified_results.xlsx");
+                      } catch (err) {
+                        alert("Failed to generate Excel file.");
+                      }
+                    }}
+                    className="flex items-center gap-2 px-4 py-2 text-sm transition-colors"
+                    style={{
+                      backgroundColor: "#ffffff",
+                      color: "#0D0D0D",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.08em",
+                      fontWeight: 400,
+                      fontFamily: "'Space Grotesk', sans-serif",
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#e5e5e5"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
+                  >
+                    <Download className="w-4 h-4" strokeWidth={1.5} />
+                    DOWNLOAD RESULTS
+                  </button>
+                )}
               </div>
 
               <AnalyticsDashboard results={bulkResults} processingTime={processingTime} />
