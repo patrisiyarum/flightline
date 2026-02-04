@@ -287,18 +287,23 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
         >
           ABOUT
         </h3>
-        <p style={{ fontSize: 13, color: "#6b6b6b", lineHeight: 1.8, fontWeight: 300, maxWidth: 640 }}>
-          Powered by a fine-tuned{" "}
-          <a 
-            href="https://www.nvidia.com/en-us/glossary/bert/" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            style={{ color: "#7C9CBF", textDecoration: "none" }}
-            onMouseEnter={(e) => { e.currentTarget.style.textDecoration = "underline"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.textDecoration = "none"; }}
-          >BERT</a> model that combines deep learning with keyword features. 
-          Processes thousands of comments in seconds, transforming hours of manual work into instant automated categorization.
-        </p>
+        <div style={{ display: "flex", alignItems: "flex-start", gap: 40 }}>
+          <p style={{ fontSize: 13, color: "#6b6b6b", lineHeight: 1.8, fontWeight: 300, maxWidth: 480, margin: 0 }}>
+            Powered by a fine-tuned{" "}
+            <a 
+              href="https://www.nvidia.com/en-us/glossary/bert/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{ color: "#7C9CBF", textDecoration: "none" }}
+              onMouseEnter={(e) => { e.currentTarget.style.textDecoration = "underline"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.textDecoration = "none"; }}
+            >BERT</a> model. Transforms hours of manual categorization into seconds of automated processing. What took 83+ hours now takes under 60 seconds.
+          </p>
+          <div style={{ textAlign: "center", flexShrink: 0 }}>
+            <span style={{ fontSize: 28, color: "#ffffff", fontFamily: "'JetBrains Mono', monospace", fontWeight: 300 }}>1000+</span>
+            <span style={{ fontSize: 9, color: "#6b6b6b", display: "block", letterSpacing: "0.08em", marginTop: 4 }}>COMMENTS/MIN</span>
+          </div>
+        </div>
       </div>
 
       {/* Recent Activity — compact inline row */}
