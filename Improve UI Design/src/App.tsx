@@ -937,65 +937,66 @@ export default function App() {
           {activePage === "insights" && (
             <div className="space-y-8" style={{ maxWidth: 1400, marginLeft: "auto", marginRight: "auto" }}>
               <BackButton />
-              <div>
-                <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Insights</h1>
-                <p style={{ fontSize: 10, color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 6, fontFamily: "'Space Grotesk', sans-serif" }}>
-                  ANALYTICS DASHBOARD FOR YOUR CLASSIFIED FEEDBACK DATA
-                </p>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                <div>
+                  <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Insights</h1>
+                  <p style={{ fontSize: 10, color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 6, fontFamily: "'Space Grotesk', sans-serif" }}>
+                    ANALYTICS DASHBOARD FOR YOUR CLASSIFIED FEEDBACK DATA
+                  </p>
+                </div>
+                {bulkResults.length > 0 && (
+                  <button
+                    onClick={() => {
+                      try {
+                        const workbook = XLSX.utils.book_new();
+                        
+                        // Get all columns, separate prediction columns to put them last
+                        const allCols = Object.keys(bulkResults[0] || {});
+                        const originalCols = allCols.filter(c => c !== "Predicted_Subcategory" && c !== "Subcategory_Confidence");
+                        
+                        // Rename and reorder columns
+                        const reorderedResults = bulkResults.map(row => {
+                          const newRow: any = {};
+                          originalCols.forEach(col => { newRow[col] = row[col]; });
+                          newRow["★ Predicted Subcategory"] = row["Predicted_Subcategory"];
+                          newRow["★ Confidence"] = row["Subcategory_Confidence"];
+                          return newRow;
+                        });
+                        
+                        const orderedCols = [...originalCols, "★ Predicted Subcategory", "★ Confidence"];
+                        const worksheet = XLSX.utils.json_to_sheet(reorderedResults, { header: orderedCols });
+                        
+                        // Set column widths
+                        const colWidths = orderedCols.map(col => {
+                          if (col.includes("Subcategory") || col.includes("Questions") || col.includes("Answers")) return { wch: 30 };
+                          if (col.includes("Confidence")) return { wch: 15 };
+                          return { wch: 12 };
+                        });
+                        worksheet["!cols"] = colWidths;
+                        
+                        XLSX.utils.book_append_sheet(workbook, worksheet, "Classified Results");
+                        XLSX.writeFile(workbook, "classified_results.xlsx");
+                      } catch (err) {
+                        alert("Failed to generate Excel file.");
+                      }
+                    }}
+                    className="flex items-center gap-2 px-4 py-2 text-sm transition-colors"
+                    style={{
+                      backgroundColor: "#ffffff",
+                      color: "#0D0D0D",
+                      textTransform: "uppercase",
+                      letterSpacing: "0.08em",
+                      fontWeight: 400,
+                      fontFamily: "'Space Grotesk', sans-serif",
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#e5e5e5"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
+                  >
+                    <Download className="w-4 h-4" strokeWidth={1.5} />
+                    DOWNLOAD RESULTS
+                  </button>
+                )}
               </div>
-
-              {bulkResults.length > 0 && (
-                <button
-                  onClick={() => {
-                    try {
-                      const workbook = XLSX.utils.book_new();
-                      
-                      // Get all columns, separate prediction columns to put them last
-                      const allCols = Object.keys(bulkResults[0] || {});
-                      const originalCols = allCols.filter(c => c !== "Predicted_Subcategory" && c !== "Subcategory_Confidence");
-                      
-                      // Rename and reorder columns
-                      const reorderedResults = bulkResults.map(row => {
-                        const newRow: any = {};
-                        originalCols.forEach(col => { newRow[col] = row[col]; });
-                        newRow["★ Predicted Subcategory"] = row["Predicted_Subcategory"];
-                        newRow["★ Confidence"] = row["Subcategory_Confidence"];
-                        return newRow;
-                      });
-                      
-                      const orderedCols = [...originalCols, "★ Predicted Subcategory", "★ Confidence"];
-                      const worksheet = XLSX.utils.json_to_sheet(reorderedResults, { header: orderedCols });
-                      
-                      // Set column widths
-                      const colWidths = orderedCols.map(col => {
-                        if (col.includes("Subcategory") || col.includes("Questions") || col.includes("Answers")) return { wch: 30 };
-                        if (col.includes("Confidence")) return { wch: 15 };
-                        return { wch: 12 };
-                      });
-                      worksheet["!cols"] = colWidths;
-                      
-                      XLSX.utils.book_append_sheet(workbook, worksheet, "Classified Results");
-                      XLSX.writeFile(workbook, "classified_results.xlsx");
-                    } catch (err) {
-                      alert("Failed to generate Excel file.");
-                    }
-                  }}
-                  className="flex items-center gap-2 px-4 py-2 text-sm transition-colors"
-                  style={{
-                    backgroundColor: "#ffffff",
-                    color: "#0D0D0D",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.08em",
-                    fontWeight: 400,
-                    fontFamily: "'Space Grotesk', sans-serif",
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#e5e5e5"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
-                >
-                  <Download className="w-4 h-4" strokeWidth={1.5} />
-                  DOWNLOAD RESULTS
-                </button>
-              )}
 
               <AnalyticsDashboard results={bulkResults} processingTime={processingTime} />
             </div>
