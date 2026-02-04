@@ -889,7 +889,7 @@ export default function App() {
 
           {/* UPLOAD */}
           {activePage === "upload" && (
-            <div className="space-y-8">
+            <div className="space-y-8" style={{ width: "100%", maxWidth: "100%" }}>
               <BackButton />
               <div>
                 <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Bulk Upload</h1>
@@ -935,7 +935,7 @@ export default function App() {
 
           {/* INSIGHTS */}
           {activePage === "insights" && (
-            <div className="space-y-8">
+            <div className="space-y-8" style={{ width: "100%", maxWidth: "100%" }}>
               <BackButton />
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                 <div>
