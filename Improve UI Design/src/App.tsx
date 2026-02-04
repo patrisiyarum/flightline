@@ -606,7 +606,7 @@ export default function App() {
               />
 
               {bulkResults.length > 0 && (
-                <div style={{ marginBottom: 32 }}>
+                <div style={{ marginTop: 24, marginBottom: 48 }}>
                   <button
                     onClick={() => setActivePage("insights")}
                     className="w-full py-3 text-sm transition-colors"

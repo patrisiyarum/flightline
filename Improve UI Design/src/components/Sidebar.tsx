@@ -38,27 +38,15 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
         <div>
           <h1
             style={{
-              fontSize: 11,
-              fontWeight: 500,
+              fontSize: 18,
+              fontWeight: 600,
               color: "#0f0e12",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
+              letterSpacing: "0.02em",
               lineHeight: 1.4,
             }}
           >
-            FLIGHTLINE
-          </h1>
-          <p
-            style={{
-              fontSize: 10,
-              fontWeight: 400,
-              color: "#6b6b6b",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-            }}
-          >
             Delta Airlines
-          </p>
+          </h1>
         </div>
       </div>
 
@@ -112,48 +100,51 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
 
       {/* Status */}
       <div
-        className="space-y-2"
+        className="space-y-3"
         style={{
-          padding: "0 var(--sidebar-padding-x, 24px) 24px",
+          padding: "16px var(--sidebar-padding-x, 24px) 24px",
+          borderTop: "1px solid #c0c0c0",
         }}
       >
-        <div className="flex items-center gap-2 py-1">
+        <div className="flex items-center gap-3 py-1">
           <span
             style={{
-              width: 6,
-              height: 6,
-              backgroundColor: apiOnline ? "#2d8a4e" : "#6b6b6b",
+              width: 8,
+              height: 8,
+              backgroundColor: apiOnline ? "#2d8a4e" : "#c0392b",
               display: "inline-block",
+              borderRadius: "50%",
             }}
           />
           <span
             style={{
-              fontSize: 10,
-              fontWeight: 400,
-              letterSpacing: "0.1em",
+              fontSize: 12,
+              fontWeight: 600,
+              letterSpacing: "0.08em",
               textTransform: "uppercase",
-              color: apiOnline ? "#2d8a4e" : "#6b6b6b",
+              color: apiOnline ? "#2d8a4e" : "#c0392b",
             }}
           >
             {apiOnline ? "ONLINE" : "OFFLINE"}
           </span>
         </div>
-        <div className="flex items-center gap-2 py-1">
+        <div className="flex items-center gap-3 py-1">
           <span
             style={{
-              width: 6,
-              height: 6,
-              backgroundColor: modelLoaded ? "#2d8a4e" : "#6b6b6b",
+              width: 8,
+              height: 8,
+              backgroundColor: modelLoaded ? "#2d8a4e" : "#c0392b",
               display: "inline-block",
+              borderRadius: "50%",
             }}
           />
           <span
             style={{
-              fontSize: 10,
-              fontWeight: 400,
-              letterSpacing: "0.1em",
+              fontSize: 12,
+              fontWeight: 600,
+              letterSpacing: "0.08em",
               textTransform: "uppercase",
-              color: modelLoaded ? "#2d8a4e" : "#6b6b6b",
+              color: modelLoaded ? "#2d8a4e" : "#c0392b",
             }}
           >
             {modelLoaded ? "MODEL READY" : "MODEL N/A"}
