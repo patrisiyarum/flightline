@@ -166,11 +166,11 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
               Flightline
             </h1>
 
-            <p style={{ color: "#6b6b6b", fontSize: 14, lineHeight: 1.7, fontWeight: 300, marginBottom: 32 }}>
+            <p style={{ color: "#6b6b6b", fontSize: 14, lineHeight: 1.7, fontWeight: 300, marginBottom: 48 }}>
               Upload crew feedback to classify it, then explore insights or test single comments in the demo.
             </p>
 
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-6" style={{ marginTop: 16 }}>
               <button
                 onClick={() => onNavigate("classify")}
                 className="inline-flex items-center gap-2 text-sm transition-colors"
