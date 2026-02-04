@@ -398,18 +398,18 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
                     cx="50%" 
                     cy="50%" 
                     outerRadius={32} 
-                    dataKey="value" 
-                    label={({ percent }: any) => `${(percent * 100).toFixed(0)}%`}
-                    labelLine={false}
+                    dataKey="value"
                   >
                     {sourceData.map((_, i) => (<Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />))}
                   </Pie>
                   <Tooltip
                     content={({ active, payload }: any) => {
                       if (!active || !payload?.length) return null;
+                      const total = sourceData.reduce((sum, item) => sum + item.value, 0);
+                      const percent = ((payload[0].value / total) * 100).toFixed(0);
                       return (
                         <div style={{ ...TOOLTIP_STYLE, padding: "4px 8px", fontSize: 11 }}>
-                          {payload[0].name}: {payload[0].value}
+                          {payload[0].name}: {payload[0].value} ({percent}%)
                         </div>
                       );
                     }}
