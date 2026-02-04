@@ -10,8 +10,8 @@ interface HomePageProps {
 export function PipelineVisualization() {
   const stages = [
     { label: "INPUT", sub: "crew feedback", num: "01", isBert: false },
-    { label: "TOKENIZE", sub: "bert tokens", num: "02", isBert: true },
-    { label: "CLASSIFY", sub: "bert inference", num: "03", isBert: true },
+    { label: "TOKENIZE", sub: "text processing", num: "02", isBert: true },
+    { label: "CLASSIFY", sub: "model prediction", num: "03", isBert: true },
     { label: "OUTPUT", sub: "category + confidence", num: "04", isBert: false },
   ];
 
@@ -159,25 +159,11 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
                 lineHeight: 1.1,
                 letterSpacing: "-0.03em",
                 color: "#ffffff",
-                marginBottom: 8,
+                marginBottom: 16,
               }}
             >
               Flightline
             </h1>
-
-            <p
-              style={{
-                fontSize: 11,
-                fontWeight: 400,
-                color: "#6b6b6b",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                fontFamily: "'JetBrains Mono', monospace",
-                marginBottom: 16,
-              }}
-            >
-              CREW FEEDBACK CLASSIFIER
-            </p>
 
             <p style={{ color: "#6b6b6b", fontSize: 14, lineHeight: 1.7, fontWeight: 300, marginBottom: 32 }}>
               Upload crew feedback to classify it, then explore insights or test single comments in the demo.
@@ -296,64 +282,23 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
             letterSpacing: "0.1em",
             textTransform: "uppercase",
             fontFamily: "'JetBrains Mono', monospace",
-            marginBottom: 16,
+            marginBottom: 12,
           }}
         >
-          ABOUT THIS PROJECT
+          ABOUT
         </h3>
-
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
-          {/* Left: The Model */}
-          <div>
-            <h4 style={{ fontSize: 12, color: "#ffffff", fontWeight: 400, marginBottom: 8 }}>The Model</h4>
-            <p style={{ fontSize: 12, color: "#6b6b6b", lineHeight: 1.7, fontWeight: 300, marginBottom: 12 }}>
-              A fine-tuned{" "}
-              <a 
-                href="https://www.nvidia.com/en-us/glossary/bert/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                style={{ color: "#7C9CBF", textDecoration: "none" }}
-                onMouseEnter={(e) => { e.currentTarget.style.textDecoration = "underline"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.textDecoration = "none"; }}
-              >BERT</a> model built in TensorFlow/Keras that combines deep learning with keyword features for improved accuracy.
-            </p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-              {["TensorFlow", "Keras", "BERT Encoder", "FastAPI"].map((tag) => (
-                <span
-                  key={tag}
-                  style={{
-                    fontSize: 9,
-                    color: "#6b6b6b",
-                    border: "1px solid #2a2a2a",
-                    padding: "4px 8px",
-                    letterSpacing: "0.05em",
-                    fontFamily: "'JetBrains Mono', monospace",
-                  }}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Right: The Impact */}
-          <div>
-            <h4 style={{ fontSize: 12, color: "#ffffff", fontWeight: 400, marginBottom: 8 }}>The Impact</h4>
-            <p style={{ fontSize: 12, color: "#6b6b6b", lineHeight: 1.7, fontWeight: 300, marginBottom: 12 }}>
-              Transforms hours of manual categorization into seconds of automated processing. What took 83+ hours now takes under 60 seconds.
-            </p>
-            <div style={{ display: "flex", gap: 16 }}>
-              <div>
-                <span style={{ fontSize: 20, color: "#ffffff", fontFamily: "'JetBrains Mono', monospace", fontWeight: 300 }}>99.7%</span>
-                <span style={{ fontSize: 9, color: "#6b6b6b", display: "block", letterSpacing: "0.05em", marginTop: 2 }}>TIME SAVED</span>
-              </div>
-              <div>
-                <span style={{ fontSize: 20, color: "#ffffff", fontFamily: "'JetBrains Mono', monospace", fontWeight: 300 }}>1000+</span>
-                <span style={{ fontSize: 9, color: "#6b6b6b", display: "block", letterSpacing: "0.05em", marginTop: 2 }}>COMMENTS/MIN</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <p style={{ fontSize: 13, color: "#6b6b6b", lineHeight: 1.8, fontWeight: 300, maxWidth: 640 }}>
+          Powered by a fine-tuned{" "}
+          <a 
+            href="https://www.nvidia.com/en-us/glossary/bert/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            style={{ color: "#7C9CBF", textDecoration: "none" }}
+            onMouseEnter={(e) => { e.currentTarget.style.textDecoration = "underline"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.textDecoration = "none"; }}
+          >BERT</a> model that combines deep learning with keyword features. 
+          Processes thousands of comments in seconds, transforming hours of manual work into instant automated categorization.
+        </p>
       </div>
 
       {/* Recent Activity — compact inline row */}

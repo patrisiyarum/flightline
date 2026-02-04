@@ -38,10 +38,11 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
         <div>
           <h1
             style={{
-              fontSize: 18,
-              fontWeight: 600,
+              fontSize: 11,
+              fontWeight: 500,
               color: "#0f0e12",
-              letterSpacing: "0.02em",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
               lineHeight: 1.4,
             }}
           >
