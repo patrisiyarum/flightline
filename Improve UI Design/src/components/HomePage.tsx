@@ -152,30 +152,6 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
         <div className="grid gap-12 md:grid-cols-2">
           {/* Left column: headline + CTA */}
           <div>
-            {/* Status pill — bare inline indicator */}
-            {modelLoaded && (
-              <div
-                className="inline-flex items-center gap-2 text-xs mb-6"
-                style={{
-                  color: "#6b6b6b",
-                  fontWeight: 400,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  fontSize: 10,
-                }}
-              >
-                <span
-                  style={{
-                    width: 6,
-                    height: 6,
-                    backgroundColor: "#2d8a4e",
-                    display: "inline-block",
-                  }}
-                />
-                MODEL ONLINE &middot; 14 CATEGORIES
-              </div>
-            )}
-
             <h1
               style={{
                 fontSize: 40,
@@ -305,33 +281,79 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
       {/* Pipeline Visualization */}
       <PipelineVisualization />
 
-      {/* What is BERT? */}
+      {/* About Section */}
       <div
         style={{
           borderTop: "1px solid #2a2a2a",
-          paddingTop: 20,
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
+          paddingTop: 24,
         }}
       >
-        <span
+        <h3
           style={{
-            fontSize: 11,
+            fontSize: 10,
+            fontWeight: 400,
             color: "#6b6b6b",
-            fontFamily: "'Space Grotesk', sans-serif",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            fontFamily: "'JetBrains Mono', monospace",
+            marginBottom: 16,
           }}
         >
-          Powered by{" "}
-          <a 
-            href="https://www.nvidia.com/en-us/glossary/bert/" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            style={{ color: "#7C9CBF", textDecoration: "none" }}
-            onMouseEnter={(e) => { e.currentTarget.style.textDecoration = "underline"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.textDecoration = "none"; }}
-          >BERT</a>, a language model that reads text bidirectionally to understand context.
-        </span>
+          ABOUT THIS PROJECT
+        </h3>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+          {/* Left: The Model */}
+          <div>
+            <h4 style={{ fontSize: 12, color: "#ffffff", fontWeight: 400, marginBottom: 8 }}>The Model</h4>
+            <p style={{ fontSize: 12, color: "#6b6b6b", lineHeight: 1.7, fontWeight: 300, marginBottom: 12 }}>
+              A fine-tuned{" "}
+              <a 
+                href="https://www.nvidia.com/en-us/glossary/bert/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                style={{ color: "#7C9CBF", textDecoration: "none" }}
+                onMouseEnter={(e) => { e.currentTarget.style.textDecoration = "underline"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.textDecoration = "none"; }}
+              >BERT</a> model built in TensorFlow/Keras that combines deep learning with keyword features for improved accuracy.
+            </p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+              {["TensorFlow", "Keras", "BERT Encoder", "FastAPI"].map((tag) => (
+                <span
+                  key={tag}
+                  style={{
+                    fontSize: 9,
+                    color: "#6b6b6b",
+                    border: "1px solid #2a2a2a",
+                    padding: "4px 8px",
+                    letterSpacing: "0.05em",
+                    fontFamily: "'JetBrains Mono', monospace",
+                  }}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Right: The Impact */}
+          <div>
+            <h4 style={{ fontSize: 12, color: "#ffffff", fontWeight: 400, marginBottom: 8 }}>The Impact</h4>
+            <p style={{ fontSize: 12, color: "#6b6b6b", lineHeight: 1.7, fontWeight: 300, marginBottom: 12 }}>
+              Transforms hours of manual categorization into seconds of automated processing. What took 83+ hours now takes under 60 seconds.
+            </p>
+            <div style={{ display: "flex", gap: 16 }}>
+              <div>
+                <span style={{ fontSize: 20, color: "#ffffff", fontFamily: "'JetBrains Mono', monospace", fontWeight: 300 }}>99.7%</span>
+                <span style={{ fontSize: 9, color: "#6b6b6b", display: "block", letterSpacing: "0.05em", marginTop: 2 }}>TIME SAVED</span>
+              </div>
+              <div>
+                <span style={{ fontSize: 20, color: "#ffffff", fontFamily: "'JetBrains Mono', monospace", fontWeight: 300 }}>1000+</span>
+                <span style={{ fontSize: 9, color: "#6b6b6b", display: "block", letterSpacing: "0.05em", marginTop: 2 }}>COMMENTS/MIN</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Recent Activity — compact inline row */}
