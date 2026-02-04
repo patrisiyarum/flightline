@@ -589,8 +589,8 @@ export default function App() {
               <BackButton />
               <div style={{ marginBottom: 32 }}>
                 <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Bulk Upload</h1>
-                <p style={{ fontSize: 10, color: "#6b6b6b", letterSpacing: "0.08em", textTransform: "uppercase", marginTop: 6, fontFamily: "'Space Grotesk', sans-serif" }}>
-                  UPLOAD A CSV OR EXCEL FILE TO CLASSIFY ALL ROWS AT ONCE
+                <p style={{ fontSize: 13, color: "#6b6b6b", lineHeight: 1.7, fontWeight: 300, marginTop: 10, fontFamily: "'Space Grotesk', sans-serif" }}>
+                  Upload a file with comments to classify them, view insights in the Insights tab, or try the Feedback Demo to see how the model categorizes any text.
                 </p>
               </div>
 

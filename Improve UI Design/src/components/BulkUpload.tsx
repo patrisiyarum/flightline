@@ -212,7 +212,33 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
     if (!results || results.length === 0) return;
     try {
       const workbook = XLSX.utils.book_new();
-      const worksheet = XLSX.utils.json_to_sheet(results, { header: columns });
+      
+      // Get original columns (excluding our added prediction columns)
+      const allCols = Object.keys(results[0]);
+      const originalCols = allCols.filter(c => c !== "Predicted_Subcategory" && c !== "Subcategory_Confidence");
+      
+      // Rename prediction columns with markers for visibility
+      const renamedResults = results.map(row => {
+        const newRow: any = {};
+        originalCols.forEach(col => { newRow[col] = row[col]; });
+        newRow["★ Predicted Subcategory"] = row["Predicted_Subcategory"];
+        newRow["★ Confidence"] = row["Subcategory_Confidence"];
+        return newRow;
+      });
+      
+      const orderedCols = [...originalCols, "★ Predicted Subcategory", "★ Confidence"];
+      
+      // Create worksheet with proper column order
+      const worksheet = XLSX.utils.json_to_sheet(renamedResults, { header: orderedCols });
+      
+      // Set column widths - wider for prediction columns and text columns
+      const colWidths = orderedCols.map((col) => {
+        if (col.startsWith("★")) return { wch: 28 };
+        if (col.toLowerCase().includes("question") || col.toLowerCase().includes("comment") || col.toLowerCase().includes("text") || col.toLowerCase().includes("feedback")) return { wch: 60 };
+        return { wch: 15 };
+      });
+      worksheet["!cols"] = colWidths;
+      
       XLSX.utils.book_append_sheet(workbook, worksheet, "Categorized Feedback");
       XLSX.writeFile(workbook, "categorized_feedback.xlsx");
     } catch (err) {
@@ -253,7 +279,7 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
       </div>
 
       {/* Preview */}
-      {previewData && (
+      {previewData && !results && (
         <div className="mt-6">
           <div
             className="flex items-center gap-2 p-3 mb-4"
