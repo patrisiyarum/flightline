@@ -1024,42 +1024,77 @@ export default function App() {
 
           {/* ABOUT */}
           {activePage === "about" && (
-            <div className="space-y-8" style={{ width: "100%" }}>
+            <div className="space-y-0" style={{ width: "100%" }}>
               <BackButton />
-              <div style={{ marginBottom: 24 }}>
+              
+              {/* Header */}
+              <div style={{ marginBottom: 32 }}>
                 <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>About</h1>
                 <p style={{ fontSize: 14, color: "#6b6b6b", lineHeight: 1.7, fontWeight: 300, marginTop: 8, fontFamily: "'Space Grotesk', sans-serif" }}>
                   How the classification model works.
                 </p>
               </div>
 
-              {/* Pipeline Visualization */}
-              <div style={{ backgroundColor: "#161616", padding: "32px 24px", borderTop: "1px solid #2a2a2a" }}>
-                <h3 style={{ fontSize: 10, fontWeight: 400, color: "#6b6b6b", letterSpacing: "0.1em", textTransform: "uppercase", fontFamily: "'JetBrains Mono', monospace", marginBottom: 24, textAlign: "center" }}>
-                  PROCESSING PIPELINE
-                </h3>
-                <PipelineVisualization />
-              </div>
-
-              {/* About Content */}
-              <div style={{ backgroundColor: "#161616", padding: "32px 24px", borderTop: "1px solid #2a2a2a" }}>
-                <div style={{ display: "flex", alignItems: "flex-start", gap: 48 }}>
-                  <div style={{ flex: 1 }}>
-                    <p style={{ fontSize: 14, color: "#999", lineHeight: 1.9, fontWeight: 300 }}>
-                      Powered by a fine-tuned{" "}
-                      <a 
-                        href="https://www.nvidia.com/en-us/glossary/bert/" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        style={{ color: "#7C9CBF", textDecoration: "none" }}
-                        onMouseEnter={(e) => { e.currentTarget.style.textDecoration = "underline"; }}
-                        onMouseLeave={(e) => { e.currentTarget.style.textDecoration = "none"; }}
-                      >BERT</a> model. Transforms hours of manual categorization into seconds of automated processing. What took 83+ hours now takes under 60 seconds.
-                    </p>
+              {/* Main content card */}
+              <div style={{ backgroundColor: "#141414", border: "1px solid #222222" }}>
+                
+                {/* Pipeline Section */}
+                <div style={{ padding: "40px 32px 32px" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 32 }}>
+                    <div style={{ width: 24, height: 1, backgroundColor: "#333333" }} />
+                    <span style={{ fontSize: 10, fontWeight: 400, color: "#555555", letterSpacing: "0.15em", textTransform: "uppercase", fontFamily: "'JetBrains Mono', monospace" }}>
+                      Processing Pipeline
+                    </span>
+                    <div style={{ width: 24, height: 1, backgroundColor: "#333333" }} />
                   </div>
-                  <div style={{ textAlign: "center", flexShrink: 0 }}>
-                    <span style={{ fontSize: 22, color: "#ffffff", fontFamily: "'JetBrains Mono', monospace", fontWeight: 300 }}>1000+</span>
-                    <span style={{ fontSize: 9, color: "#6b6b6b", display: "block", letterSpacing: "0.08em", marginTop: 4 }}>COMMENTS/MIN</span>
+                  <PipelineVisualization />
+                </div>
+
+                {/* Divider */}
+                <div style={{ height: 1, backgroundColor: "#1f1f1f", margin: "0 32px" }} />
+
+                {/* Stats and Description */}
+                <div style={{ padding: "32px" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 48, alignItems: "center" }}>
+                    
+                    {/* Description */}
+                    <div>
+                      <p style={{ fontSize: 14, color: "#888888", lineHeight: 1.8, fontWeight: 300, fontFamily: "'Space Grotesk', sans-serif" }}>
+                        Powered by a fine-tuned{" "}
+                        <a 
+                          href="https://www.nvidia.com/en-us/glossary/bert/" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          style={{ color: "#7C9CBF", textDecoration: "none", fontWeight: 400 }}
+                          onMouseEnter={(e) => { e.currentTarget.style.textDecoration = "underline"; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.textDecoration = "none"; }}
+                        >BERT</a> model that transforms hours of manual categorization into seconds of automated processing.
+                      </p>
+                    </div>
+
+                    {/* Stat */}
+                    <div style={{ 
+                      textAlign: "center", 
+                      padding: "16px 24px",
+                      backgroundColor: "#0f0f0f",
+                      border: "1px solid #1f1f1f",
+                    }}>
+                      <span style={{ 
+                        fontSize: 20, 
+                        color: "#7C9CBF", 
+                        fontFamily: "'JetBrains Mono', monospace", 
+                        fontWeight: 400,
+                        display: "block",
+                      }}>1000+</span>
+                      <span style={{ 
+                        fontSize: 9, 
+                        color: "#555555", 
+                        display: "block", 
+                        letterSpacing: "0.1em", 
+                        marginTop: 4,
+                        fontFamily: "'JetBrains Mono', monospace",
+                      }}>COMMENTS/MIN</span>
+                    </div>
                   </div>
                 </div>
               </div>
