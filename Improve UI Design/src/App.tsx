@@ -1073,12 +1073,7 @@ export default function App() {
                     </div>
 
                     {/* Stat */}
-                    <div style={{ 
-                      textAlign: "center", 
-                      padding: "16px 24px",
-                      backgroundColor: "#0f0f0f",
-                      border: "1px solid #1f1f1f",
-                    }}>
+                    <div style={{ textAlign: "center" }}>
                       <span style={{ 
                         fontSize: 20, 
                         color: "#7C9CBF", 
