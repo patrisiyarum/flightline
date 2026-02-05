@@ -247,7 +247,7 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
   };
 
   return (
-    <div style={{ backgroundColor: "#141414", border: "1px solid #222222", width: "100%", borderRadius: 12 }}>
+    <div style={{ width: "100%" }}>
       {/* Drop zone */}
       <div
         className="text-center transition-all"
@@ -256,7 +256,6 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
           backgroundColor: "#0f0f0f",
           cursor: "pointer",
           padding: "48px 40px",
-          margin: 24,
           borderRadius: 10,
         }}
         onMouseEnter={(e) => { 
@@ -287,7 +286,7 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
 
       {/* Preview */}
       {previewData && !results && (
-        <div style={{ padding: "0 24px 24px" }}>
+        <div style={{ marginTop: 24 }}>
           <div
             className="flex items-center gap-3 mb-5"
             style={{ padding: "14px 18px", backgroundColor: "rgba(74,222,128,0.06)", border: "1px solid rgba(74,222,128,0.15)", borderRadius: 8 }}
@@ -367,7 +366,7 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
 
       {/* Progress bar */}
       {processing && (
-        <div style={{ padding: "0 24px 24px" }}>
+        <div style={{ marginTop: 24 }}>
           <div className="flex items-center justify-between mb-2">
             <span style={{ fontSize: 11, color: "#666666", letterSpacing: "0.08em", textTransform: "uppercase" }}>Processing</span>
             <span style={{ fontSize: 13, color: "#cccccc", fontFamily: "'JetBrains Mono', monospace" }}>
@@ -385,7 +384,7 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
 
       {/* Results */}
       {results && (
-        <div style={{ padding: "0 24px 24px" }}>
+        <div style={{ marginTop: 24 }}>
           <div
             className="flex items-center gap-3 mb-5"
             style={{ padding: "14px 18px", backgroundColor: "rgba(74,222,128,0.06)", border: "1px solid rgba(74,222,128,0.15)", borderRadius: 8 }}

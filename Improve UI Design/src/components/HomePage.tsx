@@ -251,7 +251,7 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
               Upload crew feedback to classify it, then explore insights or test single comments in the demo.
             </p>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
+            <div>
               <button
                 onClick={() => onNavigate("classify")}
                 className="inline-flex items-center gap-3 transition-all"
@@ -271,31 +271,6 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
               >
                 GET STARTED
                 <ArrowRight className="w-4 h-4" strokeWidth={2} />
-              </button>
-              <button
-                onClick={() => onNavigate("upload")}
-                className="transition-colors"
-                style={{
-                  background: "none",
-                  border: "1px solid #333333",
-                  padding: "14px 28px",
-                  color: "#888888",
-                  fontSize: 12,
-                  fontWeight: 400,
-                  letterSpacing: "0.06em",
-                  cursor: "pointer",
-                  borderRadius: 8,
-                }}
-                onMouseEnter={(e) => { 
-                  e.currentTarget.style.borderColor = "#555555"; 
-                  e.currentTarget.style.color = "#ffffff"; 
-                }}
-                onMouseLeave={(e) => { 
-                  e.currentTarget.style.borderColor = "#333333"; 
-                  e.currentTarget.style.color = "#888888"; 
-                }}
-              >
-                UPLOAD FILE
               </button>
             </div>
           </div>
