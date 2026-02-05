@@ -194,7 +194,7 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
       </div>
 
       {/* Get started button */}
-      <div style={{ textAlign: "center", marginBottom: 80 }}>
+      <div style={{ textAlign: "center", marginBottom: 120 }}>
         <button
           onClick={() => onNavigate("classify")}
           style={{
@@ -216,7 +216,7 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
       </div>
 
       {/* Scroll to About arrow */}
-      <div style={{ textAlign: "center", marginBottom: 60 }}>
+      <div style={{ textAlign: "center", marginBottom: 200 }}>
         <button
           onClick={scrollToAbout}
           style={{
