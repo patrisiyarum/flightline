@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Upload, Brain, BarChart3, ArrowRight } from "lucide-react";
+import { useState, useRef } from "react";
+import { Upload, Brain, BarChart3, ArrowRight, ChevronDown } from "lucide-react";
 import type { Page } from "./Sidebar";
 
 interface HomePageProps {
@@ -48,6 +48,7 @@ export function PipelineVisualization() {
         style={{
           display: "flex",
           alignItems: "center",
+          justifyContent: "center",
           gap: 8,
           flexWrap: "wrap",
         }}
@@ -101,10 +102,11 @@ export function PipelineVisualization() {
         style={{
           marginTop: 20,
           minHeight: 40,
+          textAlign: "center",
         }}
       >
         {activeStage !== null ? (
-          <p style={{ fontSize: 14, color: "#9b9b9b", lineHeight: 1.6, maxWidth: 500 }}>
+          <p style={{ fontSize: 14, color: "#9b9b9b", lineHeight: 1.6, maxWidth: 500, margin: "0 auto" }}>
             {pipelineStages[activeStage].explanation}
           </p>
         ) : (
@@ -118,10 +120,16 @@ export function PipelineVisualization() {
 }
 
 export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProps) {
+  const aboutRef = useRef<HTMLDivElement>(null);
+
+  const scrollToAbout = () => {
+    aboutRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
-    <div style={{ maxWidth: 900, padding: "60px 40px" }}>
+    <div style={{ maxWidth: 800, margin: "0 auto", padding: "60px 24px" }}>
       {/* Hero */}
-      <div style={{ marginBottom: 48 }}>
+      <div style={{ textAlign: "center", marginBottom: 48 }}>
         <h1
           style={{
             fontSize: 36,
@@ -133,13 +141,13 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
         >
           Flightline
         </h1>
-        <p style={{ fontSize: 16, color: "#8e8e8e", lineHeight: 1.6, maxWidth: 500 }}>
+        <p style={{ fontSize: 16, color: "#8e8e8e", lineHeight: 1.6, maxWidth: 480, margin: "0 auto" }}>
           Upload crew feedback to classify it, explore insights, or test single comments in the demo.
         </p>
       </div>
 
       {/* Action cards */}
-      <div style={{ display: "flex", gap: 32, marginBottom: 48 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24, marginBottom: 48 }}>
         {[
           {
             icon: Upload,
@@ -166,9 +174,9 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
             style={{
               backgroundColor: "transparent",
               border: "none",
-              padding: "0",
+              padding: "16px 8px",
               cursor: "pointer",
-              textAlign: "left",
+              textAlign: "center",
               transition: "all 0.15s ease",
             }}
             onMouseEnter={(e) => {
@@ -178,7 +186,7 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
               e.currentTarget.style.opacity = "1";
             }}
           >
-            <Icon className="w-5 h-5 mb-2" style={{ color: "#8e8e8e" }} strokeWidth={1.5} />
+            <Icon className="w-6 h-6 mb-3 mx-auto" style={{ color: "#8e8e8e" }} strokeWidth={1.5} />
             <div style={{ fontSize: 15, fontWeight: 500, color: "#ececec", marginBottom: 4 }}>{title}</div>
             <div style={{ fontSize: 13, color: "#6e6e6e" }}>{desc}</div>
           </button>
@@ -186,7 +194,7 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
       </div>
 
       {/* Get started button */}
-      <div style={{ marginBottom: 60 }}>
+      <div style={{ textAlign: "center", marginBottom: 80 }}>
         <button
           onClick={() => onNavigate("classify")}
           style={{
@@ -207,8 +215,35 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
         </button>
       </div>
 
+      {/* Scroll to About arrow */}
+      <div style={{ textAlign: "center", marginBottom: 60 }}>
+        <button
+          onClick={scrollToAbout}
+          style={{
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            padding: 8,
+            animation: "bounce 2s infinite",
+          }}
+        >
+          <ChevronDown 
+            className="w-6 h-6" 
+            style={{ color: "#6e6e6e" }} 
+            strokeWidth={1.5} 
+          />
+        </button>
+        <style>{`
+          @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-8px); }
+            60% { transform: translateY(-4px); }
+          }
+        `}</style>
+      </div>
+
       {/* About Section */}
-      <div style={{ borderTop: "1px solid #2f2f2f", paddingTop: 48 }}>
+      <div ref={aboutRef} style={{ borderTop: "1px solid #2f2f2f", paddingTop: 48, textAlign: "center" }}>
         <p style={{ fontSize: 12, color: "#6e6e6e", marginBottom: 24, fontFamily: "system-ui, -apple-system, sans-serif" }}>
           How it works
         </p>
@@ -221,6 +256,7 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
             color: "#8e8e8e", 
             lineHeight: 1.7, 
             maxWidth: 520, 
+            margin: "0 auto",
             fontFamily: "system-ui, -apple-system, sans-serif",
           }}>
             Powered by a fine-tuned{" "}
@@ -243,7 +279,7 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
 
       {/* Stats */}
       {totalUploads > 0 && (
-        <div style={{ marginTop: 40 }}>
+        <div style={{ textAlign: "center", marginTop: 40 }}>
           <span style={{ fontSize: 13, color: "#6e6e6e" }}>
             {totalUploads} file{totalUploads !== 1 ? "s" : ""} processed
           </span>
