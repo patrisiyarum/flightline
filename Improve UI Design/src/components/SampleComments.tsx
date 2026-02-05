@@ -11,86 +11,34 @@ const samples: { category: string; text: string }[] = [
 
 export function SampleComments({ onSelectSample }: SampleCommentsProps) {
   return (
-    <div style={{ marginBottom: 8 }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-        <div style={{ width: 20, height: 1, backgroundColor: "#2a2a2a" }} />
-        <span
-          style={{
-            fontSize: 10,
-            fontWeight: 500,
-            color: "#555555",
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            fontFamily: "'Space Grotesk', sans-serif",
-          }}
-        >
-          Try a sample
-        </span>
-        <div style={{ flex: 1, height: 1, backgroundColor: "#2a2a2a" }} />
-      </div>
+    <div style={{ marginBottom: 16 }}>
+      <p style={{ fontSize: 13, color: "#8e8e8e", marginBottom: 12 }}>
+        Try a sample
+      </p>
 
-      <div className="grid sm:grid-cols-2 gap-4">
-        {samples.map(({ category, text }, index) => (
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+        {samples.map(({ category, text }) => (
           <button
             key={category}
             onClick={() => onSelectSample(text)}
-            className="text-left transition-all group"
             style={{
-              padding: "20px 24px",
-              backgroundColor: "#0f0f0f",
-              border: "1px solid #1a1a1a",
-              position: "relative",
-              overflow: "hidden",
-              borderRadius: 10,
+              backgroundColor: "#2f2f2f",
+              border: "1px solid #3e3e3e",
+              padding: "8px 14px",
+              borderRadius: 16,
+              cursor: "pointer",
+              transition: "all 0.15s ease",
+              fontSize: 13,
+              color: "#ececec",
             }}
-            onMouseEnter={(e) => { 
-              e.currentTarget.style.backgroundColor = "#141414"; 
-              e.currentTarget.style.borderColor = "#2a2a2a"; 
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "#3e3e3e";
             }}
-            onMouseLeave={(e) => { 
-              e.currentTarget.style.backgroundColor = "#0f0f0f"; 
-              e.currentTarget.style.borderColor = "#1a1a1a"; 
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "#2f2f2f";
             }}
           >
-            {/* Number indicator */}
-            <span
-              style={{
-                position: "absolute",
-                top: 12,
-                right: 16,
-                fontSize: 10,
-                color: "#333333",
-                fontFamily: "'JetBrains Mono', monospace",
-              }}
-            >
-              {String(index + 1).padStart(2, '0')}
-            </span>
-
-            <span
-              style={{
-                fontSize: 11,
-                fontWeight: 500,
-                color: "#ffffff",
-                textTransform: "uppercase",
-                letterSpacing: "0.06em",
-                fontFamily: "'Space Grotesk', sans-serif",
-                display: "block",
-                marginBottom: 12,
-              }}
-            >
-              {category}
-            </span>
-            <p
-              style={{
-                color: "#999999",
-                fontSize: 13,
-                lineHeight: 1.6,
-                fontWeight: 300,
-                fontFamily: "'Space Grotesk', sans-serif",
-              }}
-            >
-              {text}
-            </p>
+            {category}
           </button>
         ))}
       </div>

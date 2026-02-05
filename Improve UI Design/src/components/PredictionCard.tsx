@@ -1,5 +1,3 @@
-import type { CSSProperties } from "react";
-
 interface Prediction {
   label: string;
   probability: number;
@@ -10,84 +8,56 @@ interface PredictionCardProps {
 }
 
 function confColor(val: number): string {
-  if (val >= 90) return "#22c55e";
-  if (val >= 70) return "#eab308";
-  return "#64748b";
+  if (val >= 90) return "#10a37f";
+  if (val >= 70) return "#f59e0b";
+  return "#8e8e8e";
 }
 
 export function PredictionCard({ subPredictions }: PredictionCardProps) {
   const topPrediction = subPredictions[0];
-  
+
   return (
     <div style={{ marginTop: 24 }}>
-      {/* Top prediction highlight */}
-      <div 
-        style={{ 
-          backgroundColor: "#111111", 
-          border: "1px solid #1a1a1a",
-          padding: "24px 28px",
+      {/* Top result */}
+      <div
+        style={{
+          backgroundColor: "#212121",
+          border: "1px solid #3e3e3e",
+          borderRadius: 12,
+          padding: "20px 24px",
           marginBottom: 12,
-          borderRadius: 10,
         }}
       >
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div>
-            <span 
-              style={{ 
-                fontSize: 10, 
-                color: "#555555", 
-                letterSpacing: "0.1em", 
-                textTransform: "uppercase",
-                display: "block",
-                marginBottom: 8,
-                fontFamily: "'Space Grotesk', sans-serif",
-              }}
-            >
-              Top Prediction
-            </span>
-            <span 
-              style={{ 
-                fontSize: 18, 
-                color: "#ffffff", 
-                fontWeight: 400,
-                fontFamily: "'Space Grotesk', sans-serif",
-                letterSpacing: "-0.01em",
-              }}
-            >
+            <div style={{ fontSize: 12, color: "#8e8e8e", marginBottom: 6 }}>
+              Top prediction
+            </div>
+            <div style={{ fontSize: 18, fontWeight: 500, color: "#ececec" }}>
               {topPrediction.label}
-            </span>
+            </div>
           </div>
-          <div style={{ textAlign: "right" }}>
-            <span 
-              style={{ 
-                fontSize: 28, 
-                color: confColor(topPrediction.probability), 
-                fontFamily: "'JetBrains Mono', monospace",
-                fontWeight: 400,
-              }}
-            >
-              {topPrediction.probability.toFixed(1)}%
-            </span>
+          <div
+            style={{
+              fontSize: 24,
+              fontWeight: 600,
+              color: confColor(topPrediction.probability),
+              fontFamily: "system-ui, -apple-system, sans-serif",
+            }}
+          >
+            {topPrediction.probability.toFixed(1)}%
           </div>
         </div>
-        
+
         {/* Progress bar */}
-        <div 
-          style={{ 
-            marginTop: 20, 
-            height: 4, 
-            backgroundColor: "#1a1a1a",
-            overflow: "hidden",
-            borderRadius: 2,
-          }}
-        >
+        <div style={{ marginTop: 16, height: 4, backgroundColor: "#2f2f2f", borderRadius: 2 }}>
           <div
-            style={{ 
-              width: `${Math.min(topPrediction.probability, 100)}%`, 
-              height: "100%", 
-              backgroundColor: "#ffffff",
-              transition: "width 0.5s ease",
+            style={{
+              width: `${Math.min(topPrediction.probability, 100)}%`,
+              height: "100%",
+              backgroundColor: confColor(topPrediction.probability),
               borderRadius: 2,
+              transition: "width 0.3s ease",
             }}
           />
         </div>
@@ -95,94 +65,36 @@ export function PredictionCard({ subPredictions }: PredictionCardProps) {
 
       {/* Other predictions */}
       {subPredictions.length > 1 && (
-        <div 
-          style={{ 
-            backgroundColor: "#0a0a0a", 
-            border: "1px solid #1a1a1a",
-            padding: "16px 24px",
-            borderRadius: 10,
+        <div
+          style={{
+            backgroundColor: "#212121",
+            border: "1px solid #3e3e3e",
+            borderRadius: 12,
+            padding: "16px 20px",
           }}
         >
-          <span 
-            style={{ 
-              fontSize: 10, 
-              color: "#444444", 
-              letterSpacing: "0.08em", 
-              textTransform: "uppercase",
-              display: "block",
-              marginBottom: 16,
-              fontFamily: "'Space Grotesk', sans-serif",
-            }}
-          >
+          <div style={{ fontSize: 12, color: "#6e6e6e", marginBottom: 12 }}>
             Other possibilities
-          </span>
+          </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {subPredictions.slice(1, 5).map((pred, idx) => {
-              const barWidth = `${Math.min(pred.probability, 100)}%`;
-
-              return (
-                <div
-                  key={idx}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    gap: 16,
-                  }}
-                >
-                  <span
-                    style={{
-                      color: "#777777",
-                      fontWeight: 300,
-                      fontFamily: "'Space Grotesk', sans-serif",
-                      fontSize: 13,
-                      flex: 1,
-                      minWidth: 0,
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {pred.label}
-                  </span>
-
-                  <div style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }}>
-                    <div
-                      style={{ 
-                        width: 60, 
-                        height: 2, 
-                        backgroundColor: "#1a1a1a",
-                        overflow: "hidden",
-                        borderRadius: 1,
-                      }}
-                    >
-                      <div
-                        style={{ 
-                          width: barWidth, 
-                          height: "100%", 
-                          backgroundColor: "#333333",
-                          transition: "width 0.3s ease",
-                          borderRadius: 1,
-                        }}
-                      />
-                    </div>
-
-                    <span
-                      style={{
-                        color: "#555555",
-                        fontFamily: "'JetBrains Mono', monospace",
-                        fontSize: 12,
-                        minWidth: 48,
-                        textAlign: "right",
-                      }}
-                    >
-                      {pred.probability.toFixed(1)}%
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {subPredictions.slice(1, 5).map((pred, idx) => (
+              <div
+                key={idx}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <span style={{ fontSize: 14, color: "#9b9b9b" }}>
+                  {pred.label}
+                </span>
+                <span style={{ fontSize: 13, color: "#6e6e6e", fontFamily: "system-ui" }}>
+                  {pred.probability.toFixed(1)}%
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       )}

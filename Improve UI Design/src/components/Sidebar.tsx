@@ -10,11 +10,11 @@ interface SidebarProps {
 }
 
 const NAV_ITEMS: { page: Page; label: string; icon: typeof Home }[] = [
-  { page: "home", label: "HOME", icon: Home },
-  { page: "classify", label: "FEEDBACK DEMO", icon: Brain },
-  { page: "upload", label: "BULK UPLOAD", icon: Upload },
-  { page: "insights", label: "INSIGHTS", icon: BarChart3 },
-  { page: "about", label: "ABOUT", icon: Info },
+  { page: "home", label: "Home", icon: Home },
+  { page: "classify", label: "Feedback Demo", icon: Brain },
+  { page: "upload", label: "Bulk Upload", icon: Upload },
+  { page: "insights", label: "Insights", icon: BarChart3 },
+  { page: "about", label: "About", icon: Info },
 ];
 
 export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: SidebarProps) {
@@ -22,35 +22,31 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
     <aside
       className="flex flex-col h-screen sticky top-0"
       style={{
-        width: "var(--sidebar-width, 240px)",
-        minWidth: "var(--sidebar-width, 240px)",
-        backgroundColor: "#f5f5f5",
-        borderRight: "1px solid #e0e0e0",
+        width: 260,
+        minWidth: 260,
+        backgroundColor: "#171717",
+        borderRight: "1px solid rgba(255,255,255,0.08)",
       }}
     >
       {/* Logo */}
-      <div
-        style={{
-          padding: "28px 24px 20px",
-          borderBottom: "1px solid #e0e0e0",
-        }}
-      >
+      <div style={{ padding: "20px 16px 12px" }}>
         <h1
           style={{
-            fontSize: 13,
+            fontSize: 15,
             fontWeight: 600,
-            color: "#1a1a1a",
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            fontFamily: "'Space Grotesk', sans-serif",
+            color: "#ececec",
+            fontFamily: "system-ui, -apple-system, sans-serif",
           }}
         >
-          Delta Airlines
+          Flightline
         </h1>
+        <p style={{ fontSize: 12, color: "#8e8e8e", marginTop: 2 }}>
+          Delta Airlines
+        </p>
       </div>
 
       {/* Navigation */}
-      <nav style={{ flex: 1, padding: "16px 0" }}>
+      <nav style={{ flex: 1, padding: "8px 8px" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
           {NAV_ITEMS.map(({ page, label, icon: Icon }) => {
             const isActive = activePage === page;
@@ -60,30 +56,30 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
                 onClick={() => onNavigate(page)}
                 className="w-full flex items-center gap-3 text-left transition-all"
                 style={{
-                  padding: "12px 24px",
-                  backgroundColor: isActive ? "#ffffff" : "transparent",
-                  color: isActive ? "#1a1a1a" : "#666666",
-                  borderLeft: isActive ? "3px solid #1a1a1a" : "3px solid transparent",
-                  fontSize: 11,
-                  fontWeight: isActive ? 600 : 400,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  fontFamily: "'Space Grotesk', sans-serif",
+                  padding: "10px 12px",
+                  backgroundColor: isActive ? "#212121" : "transparent",
+                  color: isActive ? "#ececec" : "#9b9b9b",
+                  borderRadius: 8,
+                  fontSize: 14,
+                  fontWeight: isActive ? 500 : 400,
+                  fontFamily: "system-ui, -apple-system, sans-serif",
+                  border: "none",
+                  cursor: "pointer",
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive) {
-                    e.currentTarget.style.backgroundColor = "#ebebeb";
-                    e.currentTarget.style.color = "#1a1a1a";
+                    e.currentTarget.style.backgroundColor = "#212121";
+                    e.currentTarget.style.color = "#ececec";
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isActive) {
                     e.currentTarget.style.backgroundColor = "transparent";
-                    e.currentTarget.style.color = "#666666";
+                    e.currentTarget.style.color = "#9b9b9b";
                   }
                 }}
               >
-                <Icon className="w-4 h-4" strokeWidth={1.5} />
+                <Icon className="w-4 h-4" strokeWidth={2} />
                 {label}
               </button>
             );
@@ -94,55 +90,34 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
       {/* Status */}
       <div
         style={{
-          padding: "20px 24px",
-          borderTop: "1px solid #e0e0e0",
-          backgroundColor: "#fafafa",
+          padding: "16px",
+          borderTop: "1px solid rgba(255,255,255,0.08)",
         }}
       >
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <div className="flex items-center gap-3">
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          <div className="flex items-center gap-2">
             <span
               style={{
                 width: 8,
                 height: 8,
-                backgroundColor: apiOnline ? "#22c55e" : "#ef4444",
-                display: "inline-block",
+                backgroundColor: apiOnline ? "#10a37f" : "#ef4444",
                 borderRadius: "50%",
               }}
             />
-            <span
-              style={{
-                fontSize: 10,
-                fontWeight: 500,
-                letterSpacing: "0.06em",
-                textTransform: "uppercase",
-                color: apiOnline ? "#16a34a" : "#dc2626",
-                fontFamily: "'Space Grotesk', sans-serif",
-              }}
-            >
+            <span style={{ fontSize: 12, color: "#9b9b9b" }}>
               {apiOnline ? "Online" : "Offline"}
             </span>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <span
               style={{
                 width: 8,
                 height: 8,
-                backgroundColor: modelLoaded ? "#22c55e" : "#ef4444",
-                display: "inline-block",
+                backgroundColor: modelLoaded ? "#10a37f" : "#ef4444",
                 borderRadius: "50%",
               }}
             />
-            <span
-              style={{
-                fontSize: 10,
-                fontWeight: 500,
-                letterSpacing: "0.06em",
-                textTransform: "uppercase",
-                color: modelLoaded ? "#16a34a" : "#dc2626",
-                fontFamily: "'Space Grotesk', sans-serif",
-              }}
-            >
+            <span style={{ fontSize: 12, color: "#9b9b9b" }}>
               {modelLoaded ? "Model Ready" : "Model N/A"}
             </span>
           </div>

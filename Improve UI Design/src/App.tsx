@@ -123,14 +123,14 @@ interface BulkResultRow {
   [key: string]: any;
 }
 
-// --- Chart Colors (monochrome + one accent) ---
-const CHART_COLORS = ["#ffffff", "#a0a0a0", "#808080", "#c0c0c0", "#909090", "#b0b0b0"];
+// --- Chart Colors (ChatGPT inspired) ---
+const CHART_COLORS = ["#10a37f", "#8e8e8e", "#6e6e6e", "#9b9b9b", "#4e4e4e", "#ececec"];
 const TOOLTIP_STYLE: React.CSSProperties = {
-  backgroundColor: "#0f0e12",
-  color: "#e5e5e5",
-  border: "1px solid #2a2a2a",
-  borderRadius: 0,
-  fontFamily: "'JetBrains Mono', monospace",
+  backgroundColor: "#2f2f2f",
+  color: "#ececec",
+  border: "1px solid #4e4e4e",
+  borderRadius: 8,
+  fontFamily: "system-ui, -apple-system, sans-serif",
   fontSize: 12,
   zIndex: 10,
 };
@@ -138,7 +138,7 @@ const TOOLTIP_WRAPPER_STYLE: React.CSSProperties = {
   zIndex: 10,
   outline: "none",
 };
-const LABEL_COLOR = "#6b6b6b";
+const LABEL_COLOR = "#8e8e8e";
 
 // --- AnalyticsDashboard ---
 function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRow[]; processingTime: number | null }) {
@@ -247,9 +247,9 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
   if (!results.length) {
     return (
       <div className="flex flex-col items-center justify-center py-24 text-center">
-        <BarChart3 className="w-16 h-16 mb-4 opacity-30" style={{ color: "#6b6b6b" }} strokeWidth={1.5} />
-        <p className="text-white" style={{ fontWeight: 400 }}>No data yet</p>
-        <p className="text-sm" style={{ color: "#6b6b6b" }}>Upload a file in the Upload tab to see analytics.</p>
+        <BarChart3 className="w-16 h-16 mb-4 opacity-30" style={{ color: "#6e6e6e" }} strokeWidth={1.5} />
+        <p style={{ fontWeight: 500, color: "#ececec", fontFamily: "system-ui, -apple-system, sans-serif" }}>No data yet</p>
+        <p className="text-sm" style={{ color: "#8e8e8e", fontFamily: "system-ui, -apple-system, sans-serif" }}>Upload a file in the Upload tab to see analytics.</p>
       </div>
     );
   }
@@ -259,26 +259,26 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
   return (
     <div>
       {/* Toolbar — processing time + confidence filter */}
-      <div className="flex items-center gap-4" style={{ marginBottom: 8 }}>
+      <div className="flex items-center gap-4" style={{ marginBottom: 16 }}>
         {processingTime !== null && (
-          <div className="flex items-center gap-2" style={{ color: "#555", fontSize: 11, fontFamily: "'Space Grotesk', sans-serif", letterSpacing: "0.05em" }}>
-            <Timer className="w-3.5 h-3.5" strokeWidth={1.5} />
-            <span>Processed in <strong style={{ color: "#ffffff", fontFamily: "'JetBrains Mono', monospace" }}>{processingTime}s</strong></span>
+          <div className="flex items-center gap-2" style={{ color: "#8e8e8e", fontSize: 13, fontFamily: "system-ui, -apple-system, sans-serif" }}>
+            <Timer className="w-4 h-4" strokeWidth={1.5} />
+            <span>Processed in <strong style={{ color: "#ececec" }}>{processingTime}s</strong></span>
           </div>
         )}
-        <div className="flex items-center gap-2 ml-auto">
-          <span style={{ fontSize: 9, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", fontWeight: 400, whiteSpace: "nowrap", fontFamily: "'Space Grotesk', sans-serif" }}>
-            MIN: <strong style={{ color: "#ffffff", fontFamily: "'JetBrains Mono', monospace" }}>{confidenceThreshold}%</strong>
+        <div className="flex items-center gap-3 ml-auto">
+          <span style={{ fontSize: 12, color: "#8e8e8e", fontFamily: "system-ui, -apple-system, sans-serif" }}>
+            Min: <strong style={{ color: "#ececec" }}>{confidenceThreshold}%</strong>
           </span>
           <input
             type="range" min={0} max={95} step={5}
             value={confidenceThreshold}
             onChange={(e) => setConfidenceThreshold(Number(e.target.value))}
-            className="w-24"
-            style={{ accentColor: "#ffffff" }}
+            className="w-28"
+            style={{ accentColor: "#10a37f" }}
           />
           {confidenceThreshold > 0 && (
-            <span style={{ fontSize: 10, padding: "2px 6px", backgroundColor: "#1e1e1e", color: "#555", fontFamily: "'JetBrains Mono', monospace" }}>
+            <span style={{ fontSize: 12, padding: "4px 10px", backgroundColor: "#2f2f2f", color: "#ececec", borderRadius: 12, fontFamily: "system-ui, -apple-system, sans-serif" }}>
               {filteredResults.length} / {results.length}
             </span>
           )}
@@ -286,25 +286,25 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
       </div>
 
       {/* Two-column dashboard */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
 
         {/* ── LEFT COLUMN ── */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
 
           {/* Summary Card — 2×2 metric grid */}
           {kpis && (
-            <div style={{ backgroundColor: "#161616", padding: 16 }}>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div style={{ backgroundColor: "#212121", border: "1px solid #3e3e3e", borderRadius: 12, padding: 20 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                 {[
-                  { label: "TOTAL ROWS", value: kpis.totalRows.toLocaleString() },
-                  { label: "AVG CONFIDENCE", value: `${kpis.avgConfidence}%` },
-                  { label: "HIGH CONF", value: `${highConfPct}%`, sub: `${kpis.highConfCount} of ${kpis.totalRows}` },
-                  { label: "TOP CATEGORY", value: kpis.topCategory, sub: `${kpis.topCategoryPct}% of rows` },
+                  { label: "Total Rows", value: kpis.totalRows.toLocaleString() },
+                  { label: "Avg Confidence", value: `${kpis.avgConfidence}%` },
+                  { label: "High Conf", value: `${highConfPct}%`, sub: `${kpis.highConfCount} of ${kpis.totalRows}` },
+                  { label: "Top Category", value: kpis.topCategory, sub: `${kpis.topCategoryPct}% of rows` },
                 ].map(({ label, value, sub }) => (
                   <div key={label}>
-                    <span style={{ fontSize: 10, color: "#555", letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 400, display: "block", marginBottom: 4, fontFamily: "'Space Grotesk', sans-serif" }}>{label}</span>
-                    <p style={{ fontSize: 20, fontWeight: 300, color: "#ffffff", fontFamily: "'Space Grotesk', sans-serif", lineHeight: 1.2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</p>
-                    {sub && <span style={{ fontSize: 10, color: "#555", fontFamily: "'Space Grotesk', sans-serif", marginTop: 2, display: "block" }}>{sub}</span>}
+                    <span style={{ fontSize: 12, color: "#8e8e8e", fontWeight: 400, display: "block", marginBottom: 6, fontFamily: "system-ui, -apple-system, sans-serif" }}>{label}</span>
+                    <p style={{ fontSize: 22, fontWeight: 600, color: "#ececec", fontFamily: "system-ui, -apple-system, sans-serif", lineHeight: 1.2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{value}</p>
+                    {sub && <span style={{ fontSize: 11, color: "#6e6e6e", fontFamily: "system-ui, -apple-system, sans-serif", marginTop: 4, display: "block" }}>{sub}</span>}
                   </div>
                 ))}
               </div>
@@ -312,68 +312,68 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
           )}
 
           {/* Top 5 Airports */}
-          <div style={{ backgroundColor: "#161616", padding: 16, flex: 1 }}>
-            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 14, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Top Airports</h3>
-            <p style={{ fontSize: 10, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2, fontFamily: "'Space Grotesk', sans-serif" }}>REPORTS BY DEPARTURE STATION</p>
+          <div style={{ backgroundColor: "#212121", border: "1px solid #3e3e3e", borderRadius: 12, padding: 20, flex: 1 }}>
+            <h3 style={{ color: "#ececec", fontWeight: 500, fontSize: 14, fontFamily: "system-ui, -apple-system, sans-serif" }}>Top Airports</h3>
+            <p style={{ fontSize: 12, color: "#6e6e6e", marginBottom: 12, marginTop: 4, fontFamily: "system-ui, -apple-system, sans-serif" }}>Reports by departure station</p>
             <ResponsiveContainer width="100%" height={140}>
               <BarChart data={airportData} layout="vertical" margin={{ left: 0, right: 16 }}>
                 <XAxis type="number" hide />
-                <YAxis dataKey="name" type="category" width={48} tick={{ fill: "#555", fontSize: 10, fontFamily: "'Space Grotesk', sans-serif" }} />
-                <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
-                <Bar dataKey="count" fill="#8BAF8B" radius={[0, 0, 0, 0]} name="Reports" barSize={12} />
+                <YAxis dataKey="name" type="category" width={48} tick={{ fill: "#8e8e8e", fontSize: 11, fontFamily: "system-ui, -apple-system, sans-serif" }} />
+                <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ fill: "rgba(255,255,255,0.05)" }} />
+                <Bar dataKey="count" fill="#10a37f" radius={[4, 4, 4, 4]} name="Reports" barSize={14} />
               </BarChart>
             </ResponsiveContainer>
           </div>
 
           {/* AI Confidence Breakdown */}
-          <div style={{ backgroundColor: "#161616", padding: 16 }}>
-            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 14, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Confidence Breakdown</h3>
-            <p style={{ fontSize: 10, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2, fontFamily: "'Space Grotesk', sans-serif" }}>MODEL CERTAINTY ACROSS {filteredResults.length} RECORDS</p>
+          <div style={{ backgroundColor: "#212121", border: "1px solid #3e3e3e", borderRadius: 12, padding: 20 }}>
+            <h3 style={{ color: "#ececec", fontWeight: 500, fontSize: 14, fontFamily: "system-ui, -apple-system, sans-serif" }}>Confidence Breakdown</h3>
+            <p style={{ fontSize: 12, color: "#6e6e6e", marginBottom: 12, marginTop: 4, fontFamily: "system-ui, -apple-system, sans-serif" }}>Model certainty across {filteredResults.length} records</p>
             <ResponsiveContainer width="100%" height={120}>
               <BarChart data={confidenceData} margin={{ left: 0, right: 8, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e1e1e" vertical={false} />
-                <XAxis dataKey="name" tick={{ fill: "#555", fontSize: 9, fontFamily: "'Space Grotesk', sans-serif" }} />
-                <YAxis tick={{ fill: "#555", fontSize: 9, fontFamily: "'Space Grotesk', sans-serif" }} />
-                <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
-                <Bar dataKey="count" fill="#ffffff" radius={[0, 0, 0, 0]} name="Records" barSize={18} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#3e3e3e" vertical={false} />
+                <XAxis dataKey="name" tick={{ fill: "#8e8e8e", fontSize: 10, fontFamily: "system-ui, -apple-system, sans-serif" }} />
+                <YAxis tick={{ fill: "#8e8e8e", fontSize: 10, fontFamily: "system-ui, -apple-system, sans-serif" }} />
+                <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ fill: "rgba(255,255,255,0.05)" }} />
+                <Bar dataKey="count" fill="#ececec" radius={[4, 4, 4, 4]} name="Records" barSize={20} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* ── RIGHT COLUMN ── */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
 
           {/* Volume Over Time — primary trend */}
-          <div style={{ backgroundColor: "#161616", padding: 16, flex: 1 }}>
-            <h3 style={{ color: "#ffffff", fontWeight: 300, fontSize: 14, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Volume Over Time</h3>
-            <p style={{ fontSize: 10, color: "#555", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 2, fontFamily: "'Space Grotesk', sans-serif" }}>DAILY TREND</p>
+          <div style={{ backgroundColor: "#212121", border: "1px solid #3e3e3e", borderRadius: 12, padding: 20, flex: 1 }}>
+            <h3 style={{ color: "#ececec", fontWeight: 500, fontSize: 14, fontFamily: "system-ui, -apple-system, sans-serif" }}>Volume Over Time</h3>
+            <p style={{ fontSize: 12, color: "#6e6e6e", marginBottom: 12, marginTop: 4, fontFamily: "system-ui, -apple-system, sans-serif" }}>Daily trend</p>
             <ResponsiveContainer width="100%" height={180}>
               <LineChart data={trendData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e1e1e" />
-                <XAxis dataKey="date" tick={{ fill: "#555", fontSize: 9, fontFamily: "'Space Grotesk', sans-serif" }} />
-                <YAxis tick={{ fill: "#555", fontSize: 10, fontFamily: "'Space Grotesk', sans-serif" }} />
-                <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ stroke: "#2a2a2a" }} />
-                <Line type="monotone" dataKey="count" stroke="#ffffff" strokeWidth={1.5} dot={{ r: 1.5, fill: "#ffffff" }} activeDot={{ r: 3 }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#3e3e3e" />
+                <XAxis dataKey="date" tick={{ fill: "#8e8e8e", fontSize: 10, fontFamily: "system-ui, -apple-system, sans-serif" }} />
+                <YAxis tick={{ fill: "#8e8e8e", fontSize: 11, fontFamily: "system-ui, -apple-system, sans-serif" }} />
+                <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ stroke: "#4e4e4e" }} />
+                <Line type="monotone" dataKey="count" stroke="#10a37f" strokeWidth={2} dot={{ r: 3, fill: "#10a37f" }} activeDot={{ r: 5 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
 
           {/* Categories + Source — secondary, side-by-side */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-            <div style={{ backgroundColor: "#161616", padding: 12 }}>
-              <h3 style={{ color: "#999", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Categories</h3>
-              <p style={{ fontSize: 9, color: "#444", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 8, marginTop: 1, fontFamily: "'Space Grotesk', sans-serif" }}>BY PREDICTED CATEGORY</p>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div style={{ backgroundColor: "#212121", border: "1px solid #3e3e3e", borderRadius: 12, padding: 16 }}>
+              <h3 style={{ color: "#ececec", fontWeight: 500, fontSize: 14, fontFamily: "system-ui, -apple-system, sans-serif" }}>Categories</h3>
+              <p style={{ fontSize: 11, color: "#6e6e6e", marginBottom: 12, marginTop: 2, fontFamily: "system-ui, -apple-system, sans-serif" }}>By predicted category</p>
               <ResponsiveContainer width="100%" height={160}>
                 <PieChart>
-                  <Pie data={categoryData} cx="30%" cy="50%" innerRadius={20} outerRadius={35} paddingAngle={0} dataKey="value">
+                  <Pie data={categoryData} cx="30%" cy="50%" innerRadius={22} outerRadius={38} paddingAngle={2} dataKey="value">
                     {categoryData.map((_, i) => (<Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />))}
                   </Pie>
                   <Tooltip
                     content={({ active, payload }: any) => {
                       if (!active || !payload?.length) return null;
                       return (
-                        <div style={{ ...TOOLTIP_STYLE, padding: "4px 8px", fontSize: 11 }}>
+                        <div style={{ ...TOOLTIP_STYLE, padding: "6px 10px", fontSize: 12 }}>
                           {payload[0].name}: {payload[0].value}
                         </div>
                       );
@@ -383,21 +383,21 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
                     layout="vertical" 
                     verticalAlign="middle" 
                     align="right"
-                    wrapperStyle={{ fontSize: 10, color: "#555", fontFamily: "'Space Grotesk', sans-serif", paddingLeft: 10 }} 
+                    wrapperStyle={{ fontSize: 11, color: "#8e8e8e", fontFamily: "system-ui, -apple-system, sans-serif", paddingLeft: 10 }} 
                   />
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            <div style={{ backgroundColor: "#161616", padding: 16 }}>
-              <h3 style={{ color: "#999", fontWeight: 300, fontSize: 13, letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Source</h3>
-              <p style={{ fontSize: 9, color: "#444", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 16, marginTop: 1, fontFamily: "'Space Grotesk', sans-serif" }}>CREW VS. PASSENGER</p>
+            <div style={{ backgroundColor: "#212121", border: "1px solid #3e3e3e", borderRadius: 12, padding: 16 }}>
+              <h3 style={{ color: "#ececec", fontWeight: 500, fontSize: 14, fontFamily: "system-ui, -apple-system, sans-serif" }}>Source</h3>
+              <p style={{ fontSize: 11, color: "#6e6e6e", marginBottom: 16, marginTop: 2, fontFamily: "system-ui, -apple-system, sans-serif" }}>Crew vs. passenger</p>
               <ResponsiveContainer width="100%" height={130}>
                 <PieChart>
                   <Pie 
                     data={sourceData} 
                     cx="50%" 
                     cy="50%" 
-                    outerRadius={32} 
+                    outerRadius={34} 
                     dataKey="value"
                   >
                     {sourceData.map((_, i) => (<Cell key={i} fill={CHART_COLORS[i % CHART_COLORS.length]} />))}
@@ -408,13 +408,13 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
                       const total = sourceData.reduce((sum, item) => sum + item.value, 0);
                       const percent = ((payload[0].value / total) * 100).toFixed(0);
                       return (
-                        <div style={{ ...TOOLTIP_STYLE, padding: "4px 8px", fontSize: 11 }}>
+                        <div style={{ ...TOOLTIP_STYLE, padding: "6px 10px", fontSize: 12 }}>
                           {payload[0].name}: {payload[0].value} ({percent}%)
                         </div>
                       );
                     }}
                   />
-                  <Legend verticalAlign="bottom" height={28} wrapperStyle={{ fontSize: 10, color: "#555", fontFamily: "'Space Grotesk', sans-serif" }} />
+                  <Legend verticalAlign="bottom" height={28} wrapperStyle={{ fontSize: 11, color: "#8e8e8e", fontFamily: "system-ui, -apple-system, sans-serif" }} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -562,20 +562,21 @@ export default function App() {
         background: "none",
         border: "none",
         padding: 0,
-        fontSize: 10,
+        fontSize: 13,
         fontWeight: 400,
-        letterSpacing: "0.1em",
-        textTransform: "uppercase" as const,
-        color: "#6b6b6b",
+        color: "#8e8e8e",
         cursor: "pointer",
         marginBottom: 24,
-        display: "inline-block",
-        fontFamily: "'Space Grotesk', sans-serif",
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 6,
+        fontFamily: "system-ui, -apple-system, sans-serif",
+        transition: "color 0.15s ease",
       }}
-      onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff"; }}
-      onMouseLeave={(e) => { e.currentTarget.style.color = "#6b6b6b"; }}
+      onMouseEnter={(e) => { e.currentTarget.style.color = "#ececec"; }}
+      onMouseLeave={(e) => { e.currentTarget.style.color = "#8e8e8e"; }}
     >
-      ← HOME
+      ← Back to home
     </button>
   );
 
@@ -588,7 +589,7 @@ export default function App() {
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: "rgba(0,0,0,0.8)",
+        backgroundColor: "rgba(0,0,0,0.85)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -598,8 +599,9 @@ export default function App() {
     >
       <div
         style={{
-          backgroundColor: "#161616",
-          border: "1px solid #2a2a2a",
+          backgroundColor: "#212121",
+          border: "1px solid #3e3e3e",
+          borderRadius: 16,
           padding: 32,
           maxWidth: 400,
           width: "90%",
@@ -607,10 +609,10 @@ export default function App() {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center gap-3 mb-4">
-          <Lock className="w-5 h-5" style={{ color: "#ffffff" }} strokeWidth={1.5} />
-          <h2 style={{ fontSize: 16, color: "#ffffff", fontWeight: 400 }}>Access Real Data</h2>
+          <Lock className="w-5 h-5" style={{ color: "#ececec" }} strokeWidth={1.5} />
+          <h2 style={{ fontSize: 18, color: "#ececec", fontWeight: 600, fontFamily: "system-ui, -apple-system, sans-serif" }}>Access Real Data</h2>
         </div>
-        <p style={{ fontSize: 12, color: "#6b6b6b", marginBottom: 20, lineHeight: 1.6 }}>
+        <p style={{ fontSize: 14, color: "#8e8e8e", marginBottom: 24, lineHeight: 1.6, fontFamily: "system-ui, -apple-system, sans-serif" }}>
           Enter the password to access classified flight crew feedback data.
         </p>
         <div style={{ position: "relative", marginBottom: 16 }}>
@@ -624,12 +626,14 @@ export default function App() {
             autoComplete="off"
             style={{
               width: "100%",
-              padding: "12px 40px 12px 12px",
-              backgroundColor: "#1a1a1a",
-              border: passwordError ? "1px solid #c0392b" : "1px solid #2a2a2a",
-              color: "#ffffff",
-              fontSize: 14,
+              padding: "14px 44px 14px 16px",
+              backgroundColor: "#171717",
+              border: passwordError ? "1px solid #ef4444" : "1px solid #3e3e3e",
+              borderRadius: 8,
+              color: "#ececec",
+              fontSize: 15,
               outline: "none",
+              fontFamily: "system-ui, -apple-system, sans-serif",
             }}
           />
           <button
@@ -637,7 +641,7 @@ export default function App() {
             onClick={() => setShowPassword(!showPassword)}
             style={{
               position: "absolute",
-              right: 12,
+              right: 14,
               top: "50%",
               transform: "translateY(-50%)",
               background: "none",
@@ -647,47 +651,55 @@ export default function App() {
             }}
           >
             {showPassword ? (
-              <EyeOff className="w-4 h-4" style={{ color: "#6b6b6b" }} strokeWidth={1.5} />
+              <EyeOff className="w-5 h-5" style={{ color: "#6e6e6e" }} strokeWidth={1.5} />
             ) : (
-              <Eye className="w-4 h-4" style={{ color: "#6b6b6b" }} strokeWidth={1.5} />
+              <Eye className="w-5 h-5" style={{ color: "#6e6e6e" }} strokeWidth={1.5} />
             )}
           </button>
         </div>
         {passwordError && (
-          <p style={{ fontSize: 11, color: "#c0392b", marginBottom: 12 }}>Incorrect password. Please try again.</p>
+          <p style={{ fontSize: 13, color: "#ef4444", marginBottom: 12, fontFamily: "system-ui, -apple-system, sans-serif" }}>Incorrect password. Please try again.</p>
         )}
         <div className="flex gap-3">
           <button
             onClick={() => setShowPasswordModal(false)}
             style={{
               flex: 1,
-              padding: "10px 16px",
+              padding: "12px 16px",
               backgroundColor: "transparent",
-              border: "1px solid #2a2a2a",
-              color: "#6b6b6b",
-              fontSize: 11,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
+              border: "1px solid #3e3e3e",
+              borderRadius: 20,
+              color: "#9b9b9b",
+              fontSize: 14,
+              fontWeight: 500,
               cursor: "pointer",
+              fontFamily: "system-ui, -apple-system, sans-serif",
+              transition: "all 0.15s ease",
             }}
+            onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#4e4e4e"; e.currentTarget.style.color = "#ececec"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#3e3e3e"; e.currentTarget.style.color = "#9b9b9b"; }}
           >
-            CANCEL
+            Cancel
           </button>
           <button
             onClick={handlePasswordSubmit}
             style={{
               flex: 1,
-              padding: "10px 16px",
-              backgroundColor: "#ffffff",
+              padding: "12px 16px",
+              backgroundColor: "#10a37f",
               border: "none",
-              color: "#0D0D0D",
-              fontSize: 11,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
+              borderRadius: 20,
+              color: "#ffffff",
+              fontSize: 14,
+              fontWeight: 500,
               cursor: "pointer",
+              fontFamily: "system-ui, -apple-system, sans-serif",
+              transition: "all 0.15s ease",
             }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#0d8a6a"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#10a37f"; }}
           >
-            UNLOCK
+            Unlock
           </button>
         </div>
       </div>
@@ -698,29 +710,29 @@ export default function App() {
   const DemoModeBanner = () => (
     <div
       style={{
-        backgroundColor: "#1a1a1a",
-        borderBottom: "1px solid #2a2a2a",
-        padding: "8px 24px",
+        backgroundColor: "#171717",
+        borderBottom: "1px solid rgba(255,255,255,0.08)",
+        padding: "10px 24px",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
       }}
     >
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3">
         <span
           style={{
-            fontSize: 9,
-            color: "#ffffff",
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
+            fontSize: 11,
+            color: "#ececec",
             fontWeight: 500,
-            padding: "2px 8px",
-            backgroundColor: "rgba(124, 156, 191, 0.15)",
+            padding: "4px 10px",
+            backgroundColor: "#2f2f2f",
+            borderRadius: 12,
+            fontFamily: "system-ui, -apple-system, sans-serif",
           }}
         >
-          DEMO MODE
+          Demo
         </span>
-        <span style={{ fontSize: 11, color: "#6b6b6b" }}>
+        <span style={{ fontSize: 13, color: "#8e8e8e", fontFamily: "system-ui, -apple-system, sans-serif" }}>
           Viewing sample data
         </span>
       </div>
@@ -730,18 +742,18 @@ export default function App() {
         style={{
           background: "none",
           border: "none",
-          color: "#6b6b6b",
-          fontSize: 10,
-          letterSpacing: "0.08em",
-          textTransform: "uppercase",
+          color: "#8e8e8e",
+          fontSize: 13,
           cursor: "pointer",
-          padding: "4px 8px",
+          padding: "6px 12px",
+          fontFamily: "system-ui, -apple-system, sans-serif",
+          transition: "color 0.15s ease",
         }}
-        onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff"; }}
-        onMouseLeave={(e) => { e.currentTarget.style.color = "#6b6b6b"; }}
+        onMouseEnter={(e) => { e.currentTarget.style.color = "#ececec"; }}
+        onMouseLeave={(e) => { e.currentTarget.style.color = "#8e8e8e"; }}
       >
-        <Lock className="w-3 h-3" strokeWidth={1.5} />
-        ACCESS REAL DATA
+        <Lock className="w-4 h-4" strokeWidth={1.5} />
+        Access real data
       </button>
     </div>
   );
@@ -750,29 +762,29 @@ export default function App() {
   const RealDataBanner = () => (
     <div
       style={{
-        backgroundColor: "rgba(45, 138, 78, 0.1)",
-        borderBottom: "1px solid rgba(45, 138, 78, 0.3)",
-        padding: "8px 24px",
+        backgroundColor: "rgba(16, 163, 127, 0.1)",
+        borderBottom: "1px solid rgba(16, 163, 127, 0.2)",
+        padding: "10px 24px",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
       }}
     >
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-3">
         <span
           style={{
-            fontSize: 9,
-            color: "#2d8a4e",
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
+            fontSize: 11,
+            color: "#10a37f",
             fontWeight: 500,
-            padding: "2px 8px",
-            backgroundColor: "rgba(45, 138, 78, 0.15)",
+            padding: "4px 10px",
+            backgroundColor: "rgba(16, 163, 127, 0.15)",
+            borderRadius: 12,
+            fontFamily: "system-ui, -apple-system, sans-serif",
           }}
         >
-          AUTHENTICATED
+          Authenticated
         </span>
-        <span style={{ fontSize: 11, color: "#6b6b6b" }}>
+        <span style={{ fontSize: 13, color: "#8e8e8e", fontFamily: "system-ui, -apple-system, sans-serif" }}>
           Viewing classified data
         </span>
       </div>
@@ -781,17 +793,17 @@ export default function App() {
         style={{
           background: "none",
           border: "none",
-          color: "#6b6b6b",
-          fontSize: 10,
-          letterSpacing: "0.08em",
-          textTransform: "uppercase",
+          color: "#8e8e8e",
+          fontSize: 13,
           cursor: "pointer",
-          padding: "4px 8px",
+          padding: "6px 12px",
+          fontFamily: "system-ui, -apple-system, sans-serif",
+          transition: "color 0.15s ease",
         }}
-        onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff"; }}
-        onMouseLeave={(e) => { e.currentTarget.style.color = "#6b6b6b"; }}
+        onMouseEnter={(e) => { e.currentTarget.style.color = "#ececec"; }}
+        onMouseLeave={(e) => { e.currentTarget.style.color = "#8e8e8e"; }}
       >
-        SWITCH TO DEMO
+        Switch to demo
       </button>
     </div>
   );
@@ -799,7 +811,7 @@ export default function App() {
   return (
     <>
       {showPasswordModal && <PasswordModal />}
-    <div className="flex min-h-screen" style={{ backgroundColor: "#000000" }}>
+    <div className="flex min-h-screen" style={{ backgroundColor: "#171717" }}>
       {/* Sidebar */}
       <Sidebar
         activePage={activePage}
@@ -811,7 +823,7 @@ export default function App() {
       {/* Main Content */}
       <main
         className="flex-1 overflow-y-auto flex flex-col"
-        style={{ backgroundColor: "#0D0D0D" }}
+        style={{ backgroundColor: "#171717" }}
       >
         {/* Mode Banner */}
         {isDemoMode ? <DemoModeBanner /> : <RealDataBanner />}
@@ -840,11 +852,11 @@ export default function App() {
 
           {/* CLASSIFY */}
           {activePage === "classify" && (
-            <div style={{ width: "100%" }}>
+            <div style={{ width: "100%", maxWidth: 800, margin: "0 auto" }}>
               <BackButton />
               <div style={{ marginBottom: 32 }}>
-                <h1 style={{ fontSize: 28, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Feedback Demo</h1>
-                <p style={{ fontSize: 14, color: "#555555", lineHeight: 1.7, fontWeight: 300, marginTop: 10, fontFamily: "'Space Grotesk', sans-serif" }}>
+                <h1 style={{ fontSize: 36, fontWeight: 600, color: "#ececec", fontFamily: "system-ui, -apple-system, sans-serif" }}>Feedback Demo</h1>
+                <p style={{ fontSize: 16, color: "#8e8e8e", lineHeight: 1.6, marginTop: 12, fontFamily: "system-ui, -apple-system, sans-serif" }}>
                   Enter a comment to see how the model classifies it.
                 </p>
               </div>
@@ -855,10 +867,10 @@ export default function App() {
               <div style={{ marginTop: 24 }}>
                 <div 
                   style={{ 
-                    backgroundColor: "#0f0f0f", 
-                    border: "1px solid #1a1a1a", 
-                    padding: "24px",
-                    borderRadius: 10,
+                    backgroundColor: "#212121", 
+                    border: "1px solid #3e3e3e", 
+                    padding: 24,
+                    borderRadius: 12,
                   }}
                 >
                   <textarea
@@ -874,16 +886,16 @@ export default function App() {
                     className="w-full"
                     style={{
                       backgroundColor: "transparent",
-                      color: "#cccccc",
+                      color: "#ececec",
                       border: "none",
                       borderRadius: 0,
                       resize: "none",
                       outline: "none",
-                      fontFamily: "'Space Grotesk', sans-serif",
-                      fontWeight: 300,
+                      fontFamily: "system-ui, -apple-system, sans-serif",
+                      fontWeight: 400,
                       fontSize: 15,
                       lineHeight: 1.7,
-                      minHeight: 120,
+                      minHeight: 140,
                     }}
                   />
                 </div>
@@ -893,21 +905,20 @@ export default function App() {
                   disabled={isAnalyzing || !modelLoaded}
                   className="w-full transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                   style={{
-                    backgroundColor: "#ffffff",
-                    color: "#0a0a0a",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.08em",
-                    fontWeight: 600,
-                    fontSize: 14,
+                    backgroundColor: "#ececec",
+                    color: "#171717",
+                    fontWeight: 500,
+                    fontSize: 15,
                     marginTop: 16,
-                    padding: "18px 24px",
-                    fontFamily: "'Space Grotesk', sans-serif",
-                    borderRadius: 8,
+                    padding: "16px 24px",
+                    fontFamily: "system-ui, -apple-system, sans-serif",
+                    borderRadius: 20,
+                    border: "none",
                   }}
-                  onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = "#f0f0f0"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
+                  onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = "#d4d4d4"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ececec"; }}
                 >
-                  {isAnalyzing ? "Analyzing..." : modelLoaded ? "Classify Feedback" : "Model Unavailable"}
+                  {isAnalyzing ? "Analyzing..." : modelLoaded ? "Classify feedback" : "Model unavailable"}
                 </button>
               </div>
 
@@ -919,11 +930,11 @@ export default function App() {
 
           {/* UPLOAD */}
           {activePage === "upload" && (
-            <div style={{ width: "100%" }}>
+            <div style={{ width: "100%", maxWidth: 900, margin: "0 auto" }}>
               <BackButton />
               <div style={{ marginBottom: 32 }}>
-                <h1 style={{ fontSize: 28, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Bulk Upload</h1>
-                <p style={{ fontSize: 14, color: "#555555", lineHeight: 1.7, fontWeight: 300, marginTop: 10, fontFamily: "'Space Grotesk', sans-serif" }}>
+                <h1 style={{ fontSize: 36, fontWeight: 600, color: "#ececec", fontFamily: "system-ui, -apple-system, sans-serif" }}>Bulk Upload</h1>
+                <p style={{ fontSize: 16, color: "#8e8e8e", lineHeight: 1.6, marginTop: 12, fontFamily: "system-ui, -apple-system, sans-serif" }}>
                   Upload a file with comments to classify them in bulk.
                 </p>
               </div>
@@ -942,14 +953,14 @@ export default function App() {
                       background: "none",
                       border: "none",
                       cursor: "pointer",
-                      fontFamily: "'Space Grotesk', sans-serif",
-                      color: "#ffffff",
+                      fontFamily: "system-ui, -apple-system, sans-serif",
+                      color: "#10a37f",
                       padding: 0,
                     }}
                     onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.7"; }}
                     onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
                   >
-                    <span style={{ fontSize: 13, letterSpacing: "0.08em", textTransform: "uppercase" }}>View Results</span>
+                    <span style={{ fontSize: 14, fontWeight: 500 }}>View results</span>
                     <span style={{ fontSize: 18 }}>→</span>
                   </button>
                 </div>
@@ -968,27 +979,20 @@ export default function App() {
           {activePage === "insights" && (
             <div style={{ width: "100%" }}>
               <BackButton />
-              <div style={{ marginBottom: 32 }}>
-                <h1 style={{ fontSize: 28, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Insights</h1>
-                <p style={{ fontSize: 14, color: "#555555", lineHeight: 1.7, fontWeight: 300, marginTop: 10, fontFamily: "'Space Grotesk', sans-serif" }}>
-                  Analytics dashboard for your classified feedback data.
-                </p>
-              </div>
-
-              <AnalyticsDashboard results={bulkResults} processingTime={processingTime} />
-
-              {bulkResults.length > 0 && (
-                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 24 }}>
+              <div style={{ marginBottom: 32, display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
+                <div>
+                  <h1 style={{ fontSize: 36, fontWeight: 600, color: "#ececec", fontFamily: "system-ui, -apple-system, sans-serif" }}>Insights</h1>
+                  <p style={{ fontSize: 16, color: "#8e8e8e", lineHeight: 1.6, marginTop: 12, fontFamily: "system-ui, -apple-system, sans-serif" }}>
+                    Analytics dashboard for your classified feedback data.
+                  </p>
+                </div>
+                {bulkResults.length > 0 && (
                   <button
                     onClick={() => {
                       try {
                         const workbook = XLSX.utils.book_new();
-                        
-                        // Get all columns, separate prediction columns to put them last
                         const allCols = Object.keys(bulkResults[0] || {});
                         const originalCols = allCols.filter(c => c !== "Predicted_Subcategory" && c !== "Subcategory_Confidence");
-                        
-                        // Rename and reorder columns
                         const reorderedResults = bulkResults.map(row => {
                           const newRow: any = {};
                           originalCols.forEach(col => { newRow[col] = row[col]; });
@@ -996,65 +1000,67 @@ export default function App() {
                           newRow["★ Confidence"] = row["Subcategory_Confidence"];
                           return newRow;
                         });
-                        
                         const orderedCols = [...originalCols, "★ Predicted Subcategory", "★ Confidence"];
                         const worksheet = XLSX.utils.json_to_sheet(reorderedResults, { header: orderedCols });
-                        
-                        // Set column widths
                         const colWidths = orderedCols.map(col => {
                           if (col.includes("Subcategory") || col.includes("Questions") || col.includes("Answers")) return { wch: 30 };
                           if (col.includes("Confidence")) return { wch: 15 };
                           return { wch: 12 };
                         });
                         worksheet["!cols"] = colWidths;
-                        
                         XLSX.utils.book_append_sheet(workbook, worksheet, "Classified Results");
                         XLSX.writeFile(workbook, "classified_results.xlsx");
                       } catch (err) {
                         alert("Failed to generate Excel file.");
                       }
                     }}
-                    className="flex items-center gap-2 transition-colors"
+                    className="flex items-center gap-2"
                     style={{
-                      background: "none",
-                      border: "none",
+                      backgroundColor: "#212121",
+                      border: "1px solid #3e3e3e",
+                      borderRadius: 20,
                       cursor: "pointer",
-                      fontFamily: "'Space Grotesk', sans-serif",
-                      color: "#ffffff",
-                      padding: 0,
+                      fontFamily: "system-ui, -apple-system, sans-serif",
+                      color: "#ececec",
+                      padding: "10px 18px",
+                      fontSize: 14,
+                      fontWeight: 500,
+                      transition: "all 0.15s ease",
                     }}
-                    onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.7"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
+                    onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#2f2f2f"; e.currentTarget.style.borderColor = "#4e4e4e"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#212121"; e.currentTarget.style.borderColor = "#3e3e3e"; }}
                   >
                     <Download className="w-4 h-4" strokeWidth={1.5} />
-                    <span style={{ fontSize: 13, letterSpacing: "0.08em", textTransform: "uppercase" }}>Download Results</span>
+                    <span>Download</span>
                   </button>
-                </div>
-              )}
+                )}
+              </div>
+
+              <AnalyticsDashboard results={bulkResults} processingTime={processingTime} />
             </div>
           )}
 
           {/* ABOUT */}
           {activePage === "about" && (
-            <div style={{ width: "100%" }}>
+            <div style={{ width: "100%", maxWidth: 800, margin: "0 auto" }}>
               <BackButton />
               
               {/* Header */}
               <div style={{ marginBottom: 32 }}>
-                <h1 style={{ fontSize: 28, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>About</h1>
-                <p style={{ fontSize: 14, color: "#555555", lineHeight: 1.7, fontWeight: 300, marginTop: 10, fontFamily: "'Space Grotesk', sans-serif" }}>
+                <h1 style={{ fontSize: 36, fontWeight: 600, color: "#ececec", fontFamily: "system-ui, -apple-system, sans-serif" }}>About</h1>
+                <p style={{ fontSize: 16, color: "#8e8e8e", lineHeight: 1.6, marginTop: 12, fontFamily: "system-ui, -apple-system, sans-serif" }}>
                   How the classification model works.
                 </p>
               </div>
 
               {/* Pipeline Section */}
-              <div style={{ backgroundColor: "#0f0f0f", border: "1px solid #1a1a1a", padding: "32px", borderRadius: 12 }}>
+              <div style={{ backgroundColor: "#212121", border: "1px solid #3e3e3e", padding: 32, borderRadius: 12 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
-                  <div style={{ width: 24, height: 1, backgroundColor: "#2a2a2a" }} />
-                  <span style={{ fontSize: 10, fontWeight: 500, color: "#555555", letterSpacing: "0.1em", textTransform: "uppercase", fontFamily: "'Space Grotesk', sans-serif" }}>
+                  <div style={{ width: 24, height: 1, backgroundColor: "#3e3e3e" }} />
+                  <span style={{ fontSize: 12, fontWeight: 500, color: "#8e8e8e", fontFamily: "system-ui, -apple-system, sans-serif" }}>
                     Processing Pipeline
                   </span>
-                  <div style={{ flex: 1, height: 1, backgroundColor: "#2a2a2a" }} />
+                  <div style={{ flex: 1, height: 1, backgroundColor: "#3e3e3e" }} />
                 </div>
                 <PipelineVisualization />
               </div>
@@ -1064,8 +1070,8 @@ export default function App() {
                 style={{ 
                   marginTop: 16, 
                   padding: "28px 32px",
-                  backgroundColor: "#111111",
-                  border: "1px solid #1a1a1a",
+                  backgroundColor: "#212121",
+                  border: "1px solid #3e3e3e",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
@@ -1074,11 +1080,11 @@ export default function App() {
                 }}
               >
                 <p style={{ 
-                  fontSize: 14, 
-                  color: "#777777", 
+                  fontSize: 15, 
+                  color: "#9b9b9b", 
                   lineHeight: 1.8, 
-                  fontWeight: 300, 
-                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontWeight: 400, 
+                  fontFamily: "system-ui, -apple-system, sans-serif",
                   flex: 1,
                 }}>
                   Powered by a fine-tuned{" "}
@@ -1086,7 +1092,7 @@ export default function App() {
                     href="https://www.nvidia.com/en-us/glossary/bert/" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    style={{ color: "#ffffff", textDecoration: "none", fontWeight: 400 }}
+                    style={{ color: "#10a37f", textDecoration: "none", fontWeight: 500 }}
                     onMouseEnter={(e) => { e.currentTarget.style.textDecoration = "underline"; }}
                     onMouseLeave={(e) => { e.currentTarget.style.textDecoration = "none"; }}
                   >BERT</a> model that transforms hours of manual categorization into seconds of automated processing.
@@ -1094,19 +1100,18 @@ export default function App() {
 
                 <div style={{ textAlign: "right", flexShrink: 0 }}>
                   <span style={{ 
-                    fontSize: 24, 
-                    color: "#ffffff", 
-                    fontFamily: "'JetBrains Mono', monospace", 
-                    fontWeight: 400,
+                    fontSize: 28, 
+                    color: "#ececec", 
+                    fontFamily: "system-ui, -apple-system, sans-serif", 
+                    fontWeight: 600,
                     display: "block",
                   }}>1000+</span>
                   <span style={{ 
-                    fontSize: 10, 
-                    color: "#555555", 
+                    fontSize: 12, 
+                    color: "#6e6e6e", 
                     display: "block", 
-                    letterSpacing: "0.08em", 
-                    marginTop: 2,
-                    fontFamily: "'Space Grotesk', sans-serif",
+                    marginTop: 4,
+                    fontFamily: "system-ui, -apple-system, sans-serif",
                   }}>comments/min</span>
                 </div>
               </div>
