@@ -890,15 +890,16 @@ export default function App() {
                 <button
                   onClick={handleAnalyze}
                   disabled={isAnalyzing || !modelLoaded}
-                  className="w-full py-4 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="w-full transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                   style={{
                     backgroundColor: "#ffffff",
                     color: "#0a0a0a",
                     textTransform: "uppercase",
-                    letterSpacing: "0.06em",
+                    letterSpacing: "0.08em",
                     fontWeight: 600,
-                    fontSize: 12,
-                    marginTop: 12,
+                    fontSize: 14,
+                    marginTop: 16,
+                    padding: "18px 24px",
                     fontFamily: "'Space Grotesk', sans-serif",
                   }}
                   onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = "#f0f0f0"; }}
