@@ -1,62 +1,25 @@
-import { useState, useEffect, useRef } from "react";
-import { UploadCloud, ChevronRight, ChevronDown, FileText, Clock } from "lucide-react";
-import { UploadHistory } from "./UploadHistory";
+import { useState, useRef } from "react";
+import { UploadCloud, FileText } from "lucide-react";
 import Papa from "papaparse";
 
 interface BulkUploadProps {
-  onUpload: (data: Record<string, string>[], fileName: string) => void;
-  isProcessing: boolean;
-  processedData: Record<string, string>[] | null;
-  onNavigateToResults: () => void;
-  hasData: boolean;
-  selectedFile: string;
-  processingTime?: number | null;
-  onSelectHistoryItem: (fileName: string) => void;
+  onPredict: (text: string) => Promise<any>;
+  onUploadComplete: (results: any[], file: File, processingTime: number) => void;
 }
 
-function getRecentUploads(): { name: string; date: number; rowCount: number }[] {
-  try {
-    const data = localStorage.getItem("recentUploads");
-    if (!data) return [];
-    return JSON.parse(data);
-  } catch {
-    return [];
-  }
-}
-
-export function BulkUpload({
-  onUpload,
-  isProcessing,
-  processedData,
-  onNavigateToResults,
-  hasData,
-  selectedFile,
-  processingTime,
-  onSelectHistoryItem,
-}: BulkUploadProps) {
+export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
   const [parsedPreview, setParsedPreview] = useState<Record<string, string>[] | null>(null);
   const [headers, setHeaders] = useState<string[]>([]);
   const [currentFileName, setCurrentFileName] = useState<string | null>(null);
-  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
-  const [recentUploads] = useState<{ name: string; date: number; rowCount: number }[]>(getRecentUploads());
+  const [currentFile, setCurrentFile] = useState<File | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-
-  useEffect(() => {
-    if (selectedFile && selectedFile !== currentFileName) {
-      const data = localStorage.getItem(`upload_${selectedFile}_original`);
-      if (data) {
-        const parsed = JSON.parse(data);
-        setParsedPreview(parsed);
-        setHeaders(Object.keys(parsed[0] || {}));
-        setCurrentFileName(selectedFile);
-      }
-    }
-  }, [selectedFile, currentFileName]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    setCurrentFile(file);
     const reader = new FileReader();
     reader.onload = (ev) => {
       const text = ev.target?.result as string;
@@ -69,16 +32,54 @@ export function BulkUpload({
           setParsedPreview(data);
           setHeaders(cols);
           setCurrentFileName(file.name);
-          localStorage.setItem(`upload_${file.name}_original`, JSON.stringify(data));
         },
       });
     };
     reader.readAsText(file);
   };
 
-  const handleStartPrediction = () => {
-    if (parsedPreview && currentFileName) {
-      onUpload(parsedPreview, currentFileName);
+  const handleStartPrediction = async () => {
+    if (!parsedPreview || !currentFile) return;
+    
+    setIsProcessing(true);
+    const startTime = performance.now();
+    
+    try {
+      // Find the comment column
+      const commentKey = headers.find(h => 
+        h.toLowerCase().includes("comment") || 
+        h.toLowerCase().includes("question") || 
+        h.toLowerCase().includes("answer") ||
+        h.toLowerCase().includes("feedback")
+      ) || headers[0];
+
+      const results = [];
+      for (const row of parsedPreview) {
+        const text = row[commentKey] || "";
+        if (text.trim()) {
+          const prediction = await onPredict(text);
+          results.push({
+            ...row,
+            Predicted_Subcategory: prediction.subPredictions?.[0]?.label || "Unknown",
+            Subcategory_Confidence: `${((prediction.subPredictions?.[0]?.confidence || 0) * 100).toFixed(1)}%`,
+          });
+        } else {
+          results.push({
+            ...row,
+            Predicted_Subcategory: "No text",
+            Subcategory_Confidence: "0%",
+          });
+        }
+      }
+      
+      const endTime = performance.now();
+      const processingTime = (endTime - startTime) / 1000;
+      
+      onUploadComplete(results, currentFile, processingTime);
+    } catch (err) {
+      console.error("Prediction failed:", err);
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -161,15 +162,6 @@ export function BulkUpload({
                 {parsedPreview.length} rows
               </span>
             </div>
-
-            {processingTime && (
-              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <Clock className="w-3 h-3" style={{ color: "#8e8e8e" }} />
-                <span style={{ fontSize: 12, color: "#8e8e8e", letterSpacing: "0.02em" }}>
-                  {processingTime.toFixed(1)}s
-                </span>
-              </div>
-            )}
           </div>
 
           {/* Table */}
@@ -235,79 +227,24 @@ export function BulkUpload({
               backgroundColor: "#1a1a1a",
             }}
           >
-            {!hasData && (
-              <button
-                onClick={handleStartPrediction}
-                disabled={isProcessing}
-                style={{
-                  backgroundColor: isProcessing ? "#2f2f2f" : "#10a37f",
-                  color: isProcessing ? "#6e6e6e" : "#ffffff",
-                  border: "none",
-                  padding: "10px 20px",
-                  fontSize: 14,
-                  fontWeight: 500,
-                  borderRadius: 20,
-                  cursor: isProcessing ? "not-allowed" : "pointer",
-                  transition: "all 0.15s ease",
-                }}
-              >
-                {isProcessing ? "Processing..." : "Start prediction"}
-              </button>
-            )}
-
-            {hasData && (
-              <button
-                onClick={onNavigateToResults}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 4,
-                  backgroundColor: "transparent",
-                  color: "#10a37f",
-                  border: "none",
-                  padding: 0,
-                  fontSize: 14,
-                  fontWeight: 500,
-                  cursor: "pointer",
-                }}
-              >
-                View results
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            )}
+            <button
+              onClick={handleStartPrediction}
+              disabled={isProcessing}
+              style={{
+                backgroundColor: isProcessing ? "#2f2f2f" : "#10a37f",
+                color: isProcessing ? "#6e6e6e" : "#ffffff",
+                border: "none",
+                padding: "10px 20px",
+                fontSize: 14,
+                fontWeight: 500,
+                borderRadius: 20,
+                cursor: isProcessing ? "not-allowed" : "pointer",
+                transition: "all 0.15s ease",
+              }}
+            >
+              {isProcessing ? "Processing..." : "Start prediction"}
+            </button>
           </div>
-        </div>
-      )}
-
-      {/* Recent uploads */}
-      {recentUploads.length > 0 && (
-        <div>
-          <button
-            onClick={() => setIsHistoryOpen(!isHistoryOpen)}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              background: "none",
-              border: "none",
-              padding: 0,
-              cursor: "pointer",
-              color: "#8e8e8e",
-              fontSize: 13,
-              marginBottom: 12,
-            }}
-          >
-            {isHistoryOpen ? (
-              <ChevronDown className="w-4 h-4" />
-            ) : (
-              <ChevronRight className="w-4 h-4" />
-            )}
-            Recent uploads
-          </button>
-
-          {isHistoryOpen && (
-            <UploadHistory onSelectHistory={onSelectHistoryItem} selectedFile={selectedFile} />
-          )}
         </div>
       )}
     </div>
