@@ -41,6 +41,7 @@ export function SampleComments({ onSelectSample }: SampleCommentsProps) {
               border: "1px solid #1a1a1a",
               position: "relative",
               overflow: "hidden",
+              borderRadius: 10,
             }}
             onMouseEnter={(e) => { 
               e.currentTarget.style.backgroundColor = "#141414"; 

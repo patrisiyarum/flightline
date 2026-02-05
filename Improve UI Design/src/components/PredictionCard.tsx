@@ -27,6 +27,7 @@ export function PredictionCard({ subPredictions }: PredictionCardProps) {
           border: "1px solid #1a1a1a",
           padding: "24px 28px",
           marginBottom: 12,
+          borderRadius: 10,
         }}
       >
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -77,6 +78,7 @@ export function PredictionCard({ subPredictions }: PredictionCardProps) {
             height: 4, 
             backgroundColor: "#1a1a1a",
             overflow: "hidden",
+            borderRadius: 2,
           }}
         >
           <div
@@ -85,6 +87,7 @@ export function PredictionCard({ subPredictions }: PredictionCardProps) {
               height: "100%", 
               backgroundColor: "#7C9CBF",
               transition: "width 0.5s ease",
+              borderRadius: 2,
             }}
           />
         </div>
@@ -97,6 +100,7 @@ export function PredictionCard({ subPredictions }: PredictionCardProps) {
             backgroundColor: "#0a0a0a", 
             border: "1px solid #1a1a1a",
             padding: "16px 24px",
+            borderRadius: 10,
           }}
         >
           <span 
@@ -150,6 +154,7 @@ export function PredictionCard({ subPredictions }: PredictionCardProps) {
                         height: 2, 
                         backgroundColor: "#1a1a1a",
                         overflow: "hidden",
+                        borderRadius: 1,
                       }}
                     >
                       <div
@@ -158,6 +163,7 @@ export function PredictionCard({ subPredictions }: PredictionCardProps) {
                           height: "100%", 
                           backgroundColor: "#333333",
                           transition: "width 0.3s ease",
+                          borderRadius: 1,
                         }}
                       />
                     </div>

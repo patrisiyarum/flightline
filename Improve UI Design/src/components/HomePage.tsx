@@ -68,6 +68,7 @@ export function PipelineVisualization() {
                 position: "relative",
                 cursor: "pointer",
                 transition: "all 0.2s ease",
+                borderRadius: 8,
               }}
               onMouseEnter={(e) => {
                 if (activeStage !== i) {
@@ -162,6 +163,7 @@ export function PipelineVisualization() {
                     width: 5,
                     height: 5,
                     backgroundColor: "#7C9CBF",
+                    borderRadius: "50%",
                     animation: `pipeline-dot 2s ease-in-out infinite`,
                     animationDelay: `${i * 0.5}s`,
                   }}
@@ -262,6 +264,7 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
                   fontWeight: 500,
                   letterSpacing: "0.06em",
                   cursor: "pointer",
+                  borderRadius: 8,
                 }}
                 onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#f0f0f0"; }}
                 onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
@@ -281,6 +284,7 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
                   fontWeight: 400,
                   letterSpacing: "0.06em",
                   cursor: "pointer",
+                  borderRadius: 8,
                 }}
                 onMouseEnter={(e) => { 
                   e.currentTarget.style.borderColor = "#555555"; 
@@ -332,6 +336,7 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
                   display: "flex",
                   alignItems: "flex-start",
                   gap: 16,
+                  borderRadius: 10,
                 }}
                 onMouseEnter={(e) => { 
                   e.currentTarget.style.backgroundColor = "#161616"; 
@@ -352,6 +357,7 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
                     backgroundColor: "#0a0a0a",
                     border: "1px solid #222222",
                     flexShrink: 0,
+                    borderRadius: 8,
                   }}
                 >
                   <Icon className="w-4 h-4" style={{ color: "#7C9CBF" }} strokeWidth={1.5} />
@@ -395,9 +401,9 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
           }}
         >
           <div style={{ display: "flex", gap: 4 }}>
-            <span style={{ width: 6, height: 6, backgroundColor: "#7C9CBF", display: "inline-block" }} />
-            <span style={{ width: 6, height: 6, backgroundColor: "#7C9CBF", opacity: 0.5, display: "inline-block" }} />
-            <span style={{ width: 6, height: 6, backgroundColor: "#7C9CBF", opacity: 0.2, display: "inline-block" }} />
+            <span style={{ width: 6, height: 6, backgroundColor: "#7C9CBF", display: "inline-block", borderRadius: "50%" }} />
+            <span style={{ width: 6, height: 6, backgroundColor: "#7C9CBF", opacity: 0.5, display: "inline-block", borderRadius: "50%" }} />
+            <span style={{ width: 6, height: 6, backgroundColor: "#7C9CBF", opacity: 0.2, display: "inline-block", borderRadius: "50%" }} />
           </div>
 
           <span style={{ fontSize: 13, color: "#666666", fontWeight: 300 }}>

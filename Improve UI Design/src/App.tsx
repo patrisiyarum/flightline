@@ -858,6 +858,7 @@ export default function App() {
                     backgroundColor: "#0f0f0f", 
                     border: "1px solid #1a1a1a", 
                     padding: "24px",
+                    borderRadius: 10,
                   }}
                 >
                   <textarea
@@ -901,6 +902,7 @@ export default function App() {
                     marginTop: 16,
                     padding: "18px 24px",
                     fontFamily: "'Space Grotesk', sans-serif",
+                    borderRadius: 8,
                   }}
                   onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = "#f0f0f0"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
@@ -1046,7 +1048,7 @@ export default function App() {
               </div>
 
               {/* Pipeline Section */}
-              <div style={{ backgroundColor: "#0f0f0f", border: "1px solid #1a1a1a", padding: "32px" }}>
+              <div style={{ backgroundColor: "#0f0f0f", border: "1px solid #1a1a1a", padding: "32px", borderRadius: 12 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
                   <div style={{ width: 24, height: 1, backgroundColor: "#2a2a2a" }} />
                   <span style={{ fontSize: 10, fontWeight: 500, color: "#555555", letterSpacing: "0.1em", textTransform: "uppercase", fontFamily: "'Space Grotesk', sans-serif" }}>
@@ -1068,6 +1070,7 @@ export default function App() {
                   alignItems: "center",
                   justifyContent: "space-between",
                   gap: 40,
+                  borderRadius: 12,
                 }}
               >
                 <p style={{ 

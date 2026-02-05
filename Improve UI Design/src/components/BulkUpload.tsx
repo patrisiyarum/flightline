@@ -247,7 +247,7 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
   };
 
   return (
-    <div style={{ backgroundColor: "#141414", border: "1px solid #222222", width: "100%" }}>
+    <div style={{ backgroundColor: "#141414", border: "1px solid #222222", width: "100%", borderRadius: 12 }}>
       {/* Drop zone */}
       <div
         className="text-center transition-all"
@@ -257,6 +257,7 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
           cursor: "pointer",
           padding: "48px 40px",
           margin: 24,
+          borderRadius: 10,
         }}
         onMouseEnter={(e) => { 
           e.currentTarget.style.borderColor = "#555555"; 
@@ -289,7 +290,7 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
         <div style={{ padding: "0 24px 24px" }}>
           <div
             className="flex items-center gap-3 mb-5"
-            style={{ padding: "14px 18px", backgroundColor: "rgba(74,222,128,0.06)", border: "1px solid rgba(74,222,128,0.15)" }}
+            style={{ padding: "14px 18px", backgroundColor: "rgba(74,222,128,0.06)", border: "1px solid rgba(74,222,128,0.15)", borderRadius: 8 }}
           >
             <CheckCircle2 className="h-4 w-4 flex-shrink-0" style={{ color: "#4ade80" }} strokeWidth={1.5} />
             <span style={{ fontSize: 13, color: "#4ade80", fontWeight: 400 }}>
@@ -297,7 +298,7 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
             </span>
           </div>
 
-          <div className="overflow-x-auto" style={{ border: "1px solid #222222" }}>
+          <div className="overflow-x-auto" style={{ border: "1px solid #222222", borderRadius: 8, overflow: "hidden" }}>
             <table className="w-full text-sm">
               <thead>
                 <tr style={{ backgroundColor: "#1a1a1a" }}>
@@ -353,6 +354,7 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
                 fontWeight: 600,
                 fontSize: 14,
                 padding: "18px 24px",
+                borderRadius: 8,
               }}
               onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = "#f0f0f0"; }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
@@ -372,10 +374,10 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
               {Math.round(progress)}%
             </span>
           </div>
-          <div className="overflow-hidden" style={{ height: 3, backgroundColor: "#1a1a1a" }}>
+          <div className="overflow-hidden" style={{ height: 4, backgroundColor: "#1a1a1a", borderRadius: 2 }}>
             <div
               className="transition-all"
-              style={{ width: `${progress}%`, height: "100%", backgroundColor: "#7C9CBF" }}
+              style={{ width: `${progress}%`, height: "100%", backgroundColor: "#7C9CBF", borderRadius: 2 }}
             />
           </div>
         </div>
@@ -386,7 +388,7 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
         <div style={{ padding: "0 24px 24px" }}>
           <div
             className="flex items-center gap-3 mb-5"
-            style={{ padding: "14px 18px", backgroundColor: "rgba(74,222,128,0.06)", border: "1px solid rgba(74,222,128,0.15)" }}
+            style={{ padding: "14px 18px", backgroundColor: "rgba(74,222,128,0.06)", border: "1px solid rgba(74,222,128,0.15)", borderRadius: 8 }}
           >
             <CheckCircle2 className="h-4 w-4 flex-shrink-0" style={{ color: "#4ade80" }} strokeWidth={1.5} />
             <span style={{ fontSize: 13, color: "#4ade80", fontWeight: 400 }}>
@@ -405,6 +407,7 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
               letterSpacing: "0.08em",
               fontWeight: 500,
               fontSize: 12,
+              borderRadius: 8,
             }}
             onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#eeeeee"; }}
             onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
