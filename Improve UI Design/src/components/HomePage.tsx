@@ -129,29 +129,12 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
             fontSize: 36,
             fontWeight: 600,
             color: "#ececec",
-            marginBottom: 8,
+            marginBottom: 16,
             fontFamily: "system-ui, -apple-system, sans-serif",
           }}
         >
           Flightline
         </h1>
-        <button
-          onClick={() => onNavigate("about")}
-          style={{
-            background: "none",
-            border: "none",
-            fontSize: 13,
-            color: "#6e6e6e",
-            cursor: "pointer",
-            marginBottom: 16,
-            fontFamily: "system-ui, -apple-system, sans-serif",
-            transition: "color 0.15s ease",
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.color = "#10a37f"; }}
-          onMouseLeave={(e) => { e.currentTarget.style.color = "#6e6e6e"; }}
-        >
-          About →
-        </button>
         <p style={{ fontSize: 16, color: "#8e8e8e", lineHeight: 1.6, maxWidth: 480, margin: "0 auto" }}>
           Upload crew feedback to classify it, explore insights, or test single comments in the demo.
         </p>
@@ -205,7 +188,7 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
       </div>
 
       {/* Get started button */}
-      <div style={{ textAlign: "center" }}>
+      <div style={{ textAlign: "center", marginBottom: 60 }}>
         <button
           onClick={() => onNavigate("classify")}
           style={{
@@ -224,6 +207,41 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
         >
           Get started
         </button>
+      </div>
+
+      {/* About Section */}
+      <div style={{ borderTop: "1px solid #2f2f2f", paddingTop: 48 }}>
+        <p style={{ fontSize: 12, color: "#6e6e6e", textAlign: "center", marginBottom: 24, fontFamily: "system-ui, -apple-system, sans-serif" }}>
+          How it works
+        </p>
+        
+        <PipelineVisualization />
+
+        <div style={{ marginTop: 32, textAlign: "center" }}>
+          <p style={{ 
+            fontSize: 15, 
+            color: "#8e8e8e", 
+            lineHeight: 1.7, 
+            maxWidth: 520, 
+            margin: "0 auto",
+            fontFamily: "system-ui, -apple-system, sans-serif",
+          }}>
+            Powered by a fine-tuned{" "}
+            <a 
+              href="https://www.nvidia.com/en-us/glossary/bert/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{ color: "#10a37f", textDecoration: "none" }}
+              onMouseEnter={(e) => { e.currentTarget.style.textDecoration = "underline"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.textDecoration = "none"; }}
+            >BERT</a> model that transforms hours of manual categorization into seconds of automated processing.
+          </p>
+          
+          <div style={{ marginTop: 24 }}>
+            <span style={{ fontSize: 28, color: "#ececec", fontWeight: 600, fontFamily: "system-ui, -apple-system, sans-serif" }}>1000+</span>
+            <span style={{ fontSize: 13, color: "#6e6e6e", marginLeft: 8 }}>comments/min</span>
+          </div>
+        </div>
       </div>
 
       {/* Stats */}
