@@ -840,78 +840,87 @@ export default function App() {
 
           {/* CLASSIFY */}
           {activePage === "classify" && (
-            <div className="space-y-8" style={{ width: "100%" }}>
+            <div style={{ width: "100%" }}>
               <BackButton />
-              <div style={{ marginBottom: 24 }}>
-                <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Feedback Demo</h1>
-                <p style={{ fontSize: 14, color: "#6b6b6b", lineHeight: 1.7, fontWeight: 300, marginTop: 8, fontFamily: "'Space Grotesk', sans-serif" }}>
-                  Enter a single comment to see its predicted subcategory.
+              <div style={{ marginBottom: 32 }}>
+                <h1 style={{ fontSize: 28, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Feedback Demo</h1>
+                <p style={{ fontSize: 14, color: "#555555", lineHeight: 1.7, fontWeight: 300, marginTop: 10, fontFamily: "'Space Grotesk', sans-serif" }}>
+                  Enter a comment to see how the model classifies it.
                 </p>
               </div>
 
               <SampleComments onSelectSample={handleSelectSample} />
 
-              <div style={{ backgroundColor: "#141414", border: "1px solid #222222", padding: "24px 28px" }}>
-                <textarea
-                  placeholder="Paste a crew feedback comment here..."
-                  value={commentText}
-                  onChange={(e) => setCommentText(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey && commentText.trim() && modelLoaded && !isAnalyzing) {
-                      e.preventDefault();
-                      handleAnalyze();
-                    }
+              {/* Input area */}
+              <div style={{ marginTop: 24 }}>
+                <div 
+                  style={{ 
+                    backgroundColor: "#0f0f0f", 
+                    border: "1px solid #1a1a1a", 
+                    padding: "24px",
                   }}
-                  className="w-full min-h-[100px] mb-5 p-4"
-                  style={{
-                    backgroundColor: "#0f0f0f",
-                    color: "#cccccc",
-                    border: "1px solid #222222",
-                    borderRadius: 0,
-                    resize: "vertical",
-                    outline: "none",
-                    fontFamily: "'Space Grotesk', sans-serif",
-                    fontWeight: 300,
-                    fontSize: 14,
-                    lineHeight: 1.6,
-                  }}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = "#444444"; }}
-                  onBlur={(e) => { e.currentTarget.style.borderColor = "#222222"; }}
-                />
+                >
+                  <textarea
+                    placeholder="Paste a crew feedback comment here..."
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey && commentText.trim() && modelLoaded && !isAnalyzing) {
+                        e.preventDefault();
+                        handleAnalyze();
+                      }
+                    }}
+                    className="w-full"
+                    style={{
+                      backgroundColor: "transparent",
+                      color: "#cccccc",
+                      border: "none",
+                      borderRadius: 0,
+                      resize: "none",
+                      outline: "none",
+                      fontFamily: "'Space Grotesk', sans-serif",
+                      fontWeight: 300,
+                      fontSize: 15,
+                      lineHeight: 1.7,
+                      minHeight: 120,
+                    }}
+                  />
+                </div>
+
                 <button
                   onClick={handleAnalyze}
                   disabled={isAnalyzing || !modelLoaded}
-                  className="w-full py-3 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full py-4 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                   style={{
                     backgroundColor: "#ffffff",
                     color: "#0a0a0a",
                     textTransform: "uppercase",
-                    letterSpacing: "0.08em",
-                    fontWeight: 500,
+                    letterSpacing: "0.06em",
+                    fontWeight: 600,
                     fontSize: 12,
+                    marginTop: 12,
+                    fontFamily: "'Space Grotesk', sans-serif",
                   }}
-                  onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = "#eeeeee"; }}
+                  onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = "#f0f0f0"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
                 >
                   {isAnalyzing ? "Analyzing..." : modelLoaded ? "Classify Feedback" : "Model Unavailable"}
                 </button>
-
-                {predictions && (
-                  <div className="mt-8">
-                    <PredictionCard subPredictions={predictions.subPredictions} />
-                  </div>
-                )}
               </div>
+
+              {predictions && (
+                <PredictionCard subPredictions={predictions.subPredictions} />
+              )}
             </div>
           )}
 
           {/* UPLOAD */}
           {activePage === "upload" && (
-            <div className="space-y-8" style={{ width: "100%" }}>
+            <div style={{ width: "100%" }}>
               <BackButton />
-              <div style={{ marginBottom: 24 }}>
-                <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Bulk Upload</h1>
-                <p style={{ fontSize: 14, color: "#6b6b6b", lineHeight: 1.7, fontWeight: 300, marginTop: 8, fontFamily: "'Space Grotesk', sans-serif" }}>
+              <div style={{ marginBottom: 32 }}>
+                <h1 style={{ fontSize: 28, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Bulk Upload</h1>
+                <p style={{ fontSize: 14, color: "#555555", lineHeight: 1.7, fontWeight: 300, marginTop: 10, fontFamily: "'Space Grotesk', sans-serif" }}>
                   Upload a file with comments to classify them in bulk.
                 </p>
               </div>
@@ -954,11 +963,11 @@ export default function App() {
 
           {/* INSIGHTS */}
           {activePage === "insights" && (
-            <div className="space-y-8" style={{ width: "100%" }}>
+            <div style={{ width: "100%" }}>
               <BackButton />
-              <div style={{ marginBottom: 24 }}>
-                <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>Insights</h1>
-                <p style={{ fontSize: 14, color: "#6b6b6b", lineHeight: 1.7, fontWeight: 300, marginTop: 8, fontFamily: "'Space Grotesk', sans-serif" }}>
+              <div style={{ marginBottom: 32 }}>
+                <h1 style={{ fontSize: 28, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>Insights</h1>
+                <p style={{ fontSize: 14, color: "#555555", lineHeight: 1.7, fontWeight: 300, marginTop: 10, fontFamily: "'Space Grotesk', sans-serif" }}>
                   Analytics dashboard for your classified feedback data.
                 </p>
               </div>
@@ -1024,73 +1033,77 @@ export default function App() {
 
           {/* ABOUT */}
           {activePage === "about" && (
-            <div className="space-y-0" style={{ width: "100%" }}>
+            <div style={{ width: "100%" }}>
               <BackButton />
               
               {/* Header */}
               <div style={{ marginBottom: 32 }}>
-                <h1 style={{ fontSize: 24, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.03em", fontFamily: "'Space Grotesk', sans-serif" }}>About</h1>
-                <p style={{ fontSize: 14, color: "#6b6b6b", lineHeight: 1.7, fontWeight: 300, marginTop: 8, fontFamily: "'Space Grotesk', sans-serif" }}>
+                <h1 style={{ fontSize: 28, fontWeight: 300, color: "#ffffff", letterSpacing: "-0.02em", fontFamily: "'Space Grotesk', sans-serif" }}>About</h1>
+                <p style={{ fontSize: 14, color: "#555555", lineHeight: 1.7, fontWeight: 300, marginTop: 10, fontFamily: "'Space Grotesk', sans-serif" }}>
                   How the classification model works.
                 </p>
               </div>
 
-              {/* Main content card */}
-              <div style={{ backgroundColor: "#141414", border: "1px solid #222222" }}>
-                
-                {/* Pipeline Section */}
-                <div style={{ padding: "40px 32px 32px" }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 32 }}>
-                    <div style={{ width: 24, height: 1, backgroundColor: "#333333" }} />
-                    <span style={{ fontSize: 10, fontWeight: 400, color: "#555555", letterSpacing: "0.15em", textTransform: "uppercase", fontFamily: "'JetBrains Mono', monospace" }}>
-                      Processing Pipeline
-                    </span>
-                    <div style={{ width: 24, height: 1, backgroundColor: "#333333" }} />
-                  </div>
-                  <PipelineVisualization />
+              {/* Pipeline Section */}
+              <div style={{ backgroundColor: "#0f0f0f", border: "1px solid #1a1a1a", padding: "32px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+                  <div style={{ width: 24, height: 1, backgroundColor: "#2a2a2a" }} />
+                  <span style={{ fontSize: 10, fontWeight: 500, color: "#555555", letterSpacing: "0.1em", textTransform: "uppercase", fontFamily: "'Space Grotesk', sans-serif" }}>
+                    Processing Pipeline
+                  </span>
+                  <div style={{ flex: 1, height: 1, backgroundColor: "#2a2a2a" }} />
                 </div>
+                <PipelineVisualization />
+              </div>
 
-                {/* Divider */}
-                <div style={{ height: 1, backgroundColor: "#1f1f1f", margin: "0 32px" }} />
+              {/* Description */}
+              <div 
+                style={{ 
+                  marginTop: 16, 
+                  padding: "28px 32px",
+                  backgroundColor: "#111111",
+                  border: "1px solid #1a1a1a",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: 40,
+                }}
+              >
+                <p style={{ 
+                  fontSize: 14, 
+                  color: "#777777", 
+                  lineHeight: 1.8, 
+                  fontWeight: 300, 
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  flex: 1,
+                }}>
+                  Powered by a fine-tuned{" "}
+                  <a 
+                    href="https://www.nvidia.com/en-us/glossary/bert/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    style={{ color: "#7C9CBF", textDecoration: "none", fontWeight: 400 }}
+                    onMouseEnter={(e) => { e.currentTarget.style.textDecoration = "underline"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.textDecoration = "none"; }}
+                  >BERT</a> model that transforms hours of manual categorization into seconds of automated processing.
+                </p>
 
-                {/* Stats and Description */}
-                <div style={{ padding: "32px" }}>
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 48, alignItems: "center" }}>
-                    
-                    {/* Description */}
-                    <div>
-                      <p style={{ fontSize: 14, color: "#888888", lineHeight: 1.8, fontWeight: 300, fontFamily: "'Space Grotesk', sans-serif" }}>
-                        Powered by a fine-tuned{" "}
-                        <a 
-                          href="https://www.nvidia.com/en-us/glossary/bert/" 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          style={{ color: "#7C9CBF", textDecoration: "none", fontWeight: 400 }}
-                          onMouseEnter={(e) => { e.currentTarget.style.textDecoration = "underline"; }}
-                          onMouseLeave={(e) => { e.currentTarget.style.textDecoration = "none"; }}
-                        >BERT</a> model that transforms hours of manual categorization into seconds of automated processing.
-                      </p>
-                    </div>
-
-                    {/* Stat */}
-                    <div style={{ textAlign: "center" }}>
-                      <span style={{ 
-                        fontSize: 20, 
-                        color: "#7C9CBF", 
-                        fontFamily: "'JetBrains Mono', monospace", 
-                        fontWeight: 400,
-                        display: "block",
-                      }}>1000+</span>
-                      <span style={{ 
-                        fontSize: 9, 
-                        color: "#555555", 
-                        display: "block", 
-                        letterSpacing: "0.1em", 
-                        marginTop: 4,
-                        fontFamily: "'JetBrains Mono', monospace",
-                      }}>COMMENTS/MIN</span>
-                    </div>
-                  </div>
+                <div style={{ textAlign: "right", flexShrink: 0 }}>
+                  <span style={{ 
+                    fontSize: 24, 
+                    color: "#7C9CBF", 
+                    fontFamily: "'JetBrains Mono', monospace", 
+                    fontWeight: 400,
+                    display: "block",
+                  }}>1000+</span>
+                  <span style={{ 
+                    fontSize: 10, 
+                    color: "#555555", 
+                    display: "block", 
+                    letterSpacing: "0.08em", 
+                    marginTop: 2,
+                    fontFamily: "'Space Grotesk', sans-serif",
+                  }}>comments/min</span>
                 </div>
               </div>
             </div>

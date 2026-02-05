@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Upload, Brain, BarChart3 } from "lucide-react";
+import { Upload, Brain, BarChart3, ArrowRight } from "lucide-react";
 import type { Page } from "./Sidebar";
 
 interface HomePageProps {
@@ -43,7 +43,7 @@ export function PipelineVisualization() {
   const [activeStage, setActiveStage] = useState<number | null>(null);
 
   return (
-    <div style={{ padding: "24px 0 8px" }}>
+    <div style={{ padding: "16px 0" }}>
       {/* Pipeline stages */}
       <div
         className="pipeline-stages"
@@ -60,34 +60,33 @@ export function PipelineVisualization() {
             <div
               onClick={() => setActiveStage(activeStage === i ? null : i)}
               style={{
-                backgroundColor: activeStage === i ? "#1f1f1f" : (stage.isBert ? "#1a1a1a" : "#0D0D0D"),
-                border: activeStage === i ? "1px solid #7C9CBF" : (stage.isBert ? "1px solid #7C9CBF" : "1px solid #2a2a2a"),
-                padding: "14px 22px",
+                backgroundColor: activeStage === i ? "#1a1a1a" : "#111111",
+                border: activeStage === i ? "1px solid #7C9CBF" : (stage.isBert ? "1px solid #333333" : "1px solid #222222"),
+                padding: "16px 24px",
                 textAlign: "center",
-                minWidth: 110,
+                minWidth: 120,
                 position: "relative",
                 cursor: "pointer",
                 transition: "all 0.2s ease",
-                transform: activeStage === i ? "scale(1.02)" : "scale(1)",
               }}
               onMouseEnter={(e) => {
                 if (activeStage !== i) {
-                  e.currentTarget.style.backgroundColor = "#1f1f1f";
+                  e.currentTarget.style.borderColor = "#444444";
                 }
               }}
               onMouseLeave={(e) => {
                 if (activeStage !== i) {
-                  e.currentTarget.style.backgroundColor = stage.isBert ? "#1a1a1a" : "#0D0D0D";
+                  e.currentTarget.style.borderColor = stage.isBert ? "#333333" : "#222222";
                 }
               }}
             >
               <div
                 style={{
                   position: "absolute",
-                  top: 6,
-                  left: 10,
-                  fontSize: 8,
-                  color: stage.isBert ? "#7C9CBF" : "#444",
+                  top: 8,
+                  left: 12,
+                  fontSize: 9,
+                  color: activeStage === i ? "#7C9CBF" : "#444444",
                   fontFamily: "'JetBrains Mono', monospace",
                 }}
               >
@@ -95,11 +94,11 @@ export function PipelineVisualization() {
               </div>
               <div
                 style={{
-                  fontSize: 11,
-                  fontWeight: 400,
-                  color: activeStage === i ? "#ffffff" : (stage.isBert ? "#7C9CBF" : "#ffffff"),
-                  letterSpacing: "0.1em",
-                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: 12,
+                  fontWeight: 500,
+                  color: activeStage === i ? "#ffffff" : (stage.isBert ? "#999999" : "#888888"),
+                  letterSpacing: "0.08em",
+                  fontFamily: "'Space Grotesk', sans-serif",
                   marginBottom: 4,
                 }}
               >
@@ -107,11 +106,10 @@ export function PipelineVisualization() {
               </div>
               <div
                 style={{
-                  fontSize: 9,
-                  color: "#6b6b6b",
-                  letterSpacing: "0.06em",
-                  fontFamily: "'JetBrains Mono', monospace",
-                  textTransform: "uppercase",
+                  fontSize: 10,
+                  color: "#555555",
+                  letterSpacing: "0.04em",
+                  fontFamily: "'Space Grotesk', sans-serif",
                 }}
               >
                 {stage.sub}
@@ -120,13 +118,12 @@ export function PipelineVisualization() {
                 <div
                   style={{
                     position: "absolute",
-                    bottom: 4,
-                    right: 6,
-                    fontSize: 7,
-                    color: "#7C9CBF",
+                    bottom: 6,
+                    right: 8,
+                    fontSize: 8,
+                    color: activeStage === i ? "#7C9CBF" : "#444444",
                     fontFamily: "'JetBrains Mono', monospace",
-                    letterSpacing: "0.08em",
-                    textTransform: "uppercase",
+                    letterSpacing: "0.06em",
                   }}
                 >
                   BERT
@@ -134,33 +131,30 @@ export function PipelineVisualization() {
               )}
             </div>
 
-            {/* Connector arrow with animated dot */}
+            {/* Connector */}
             {i < pipelineStages.length - 1 && (
               <div
-                className="pipeline-connector"
                 style={{
                   position: "relative",
-                  width: 48,
+                  width: 40,
                   height: 1,
                   backgroundColor: "#2a2a2a",
-                  overflow: "visible",
                 }}
               >
-                {/* Arrow head */}
                 <div
                   style={{
                     position: "absolute",
-                    right: -3,
+                    right: -2,
                     top: -3,
                     width: 0,
                     height: 0,
                     borderTop: "3px solid transparent",
                     borderBottom: "3px solid transparent",
-                    borderLeft: "5px solid #2a2a2a",
+                    borderLeft: "4px solid #2a2a2a",
                   }}
                 />
-                {/* Animated dot */}
                 <div
+                  className="pipeline-dot"
                   style={{
                     position: "absolute",
                     top: -2,
@@ -168,7 +162,7 @@ export function PipelineVisualization() {
                     width: 5,
                     height: 5,
                     backgroundColor: "#7C9CBF",
-                    animation: `pipeline-dot 2s ease-in-out infinite, pipeline-pulse 2s ease-in-out infinite`,
+                    animation: `pipeline-dot 2s ease-in-out infinite`,
                     animationDelay: `${i * 0.5}s`,
                   }}
                 />
@@ -178,18 +172,16 @@ export function PipelineVisualization() {
         ))}
       </div>
 
-      {/* Explanation text */}
+      {/* Explanation */}
       <div
         style={{
-          marginTop: 20,
+          marginTop: 24,
           textAlign: "center",
           transition: "all 0.3s ease",
-          maxHeight: activeStage !== null ? 100 : 0,
-          opacity: activeStage !== null ? 1 : 0,
-          overflow: "hidden",
+          minHeight: 40,
         }}
       >
-        {activeStage !== null && (
+        {activeStage !== null ? (
           <p 
             style={{ 
               fontSize: 13, 
@@ -197,114 +189,115 @@ export function PipelineVisualization() {
               lineHeight: 1.7, 
               fontWeight: 300,
               fontFamily: "'Space Grotesk', sans-serif",
-              maxWidth: 500,
+              maxWidth: 480,
               margin: "0 auto",
             }}
           >
             {pipelineStages[activeStage].explanation}
           </p>
+        ) : (
+          <p 
+            style={{ 
+              fontSize: 11, 
+              color: "#444444", 
+              fontFamily: "'Space Grotesk', sans-serif",
+            }}
+          >
+            Click any step to learn more
+          </p>
         )}
       </div>
-
-      {/* Hint text */}
-      {activeStage === null && (
-        <p 
-          style={{ 
-            fontSize: 11, 
-            color: "#555555", 
-            textAlign: "center", 
-            marginTop: 16,
-            fontFamily: "'Space Grotesk', sans-serif",
-          }}
-        >
-          Click any step to learn more
-        </p>
-      )}
     </div>
   );
 }
 
 export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProps) {
   return (
-    <div className="pb-8" style={{ display: "flex", flexDirection: "column", gap: 40 }}>
-      {/* Hero Section — two-column grid */}
+    <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+      {/* Hero Section */}
       <div
         style={{
-          backgroundColor: "#161616",
-          borderBottom: "1px solid #2a2a2a",
-          padding: "40px 32px",
+          padding: "48px 40px",
+          borderBottom: "1px solid #1a1a1a",
         }}
       >
-        <div className="grid gap-24 md:grid-cols-2">
-          {/* Left column: headline + CTA */}
-          <div style={{ paddingRight: 40 }}>
+        <div className="grid gap-16 md:grid-cols-2" style={{ alignItems: "start" }}>
+          {/* Left column */}
+          <div>
             <h1
               style={{
-                fontSize: 24,
+                fontSize: 32,
                 fontWeight: 300,
-                lineHeight: 1.1,
-                letterSpacing: "-0.03em",
+                lineHeight: 1.2,
+                letterSpacing: "-0.02em",
                 color: "#ffffff",
-                marginBottom: 16,
+                marginBottom: 20,
                 fontFamily: "'Space Grotesk', sans-serif",
               }}
             >
               Flightline
             </h1>
 
-            <p style={{ color: "#6b6b6b", fontSize: 14, lineHeight: 1.7, fontWeight: 300, marginBottom: 48 }}>
+            <p style={{ 
+              color: "#666666", 
+              fontSize: 15, 
+              lineHeight: 1.8, 
+              fontWeight: 300, 
+              marginBottom: 40,
+              maxWidth: 380,
+            }}>
               Upload crew feedback to classify it, then explore insights or test single comments in the demo.
             </p>
 
-            <div className="flex items-center gap-6" style={{ marginTop: 16 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
               <button
                 onClick={() => onNavigate("classify")}
-                className="inline-flex items-center gap-2 text-sm transition-colors"
+                className="inline-flex items-center gap-3 transition-all"
                 style={{
-                  background: "none",
+                  background: "#ffffff",
                   border: "none",
-                  padding: 0,
-                  color: "#ffffff",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.08em",
-                  fontWeight: 400,
+                  padding: "14px 28px",
+                  color: "#0a0a0a",
+                  fontSize: 12,
+                  fontWeight: 500,
+                  letterSpacing: "0.06em",
                   cursor: "pointer",
-                  textDecoration: "none",
                 }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.textDecoration = "underline";
-                  (e.currentTarget.style as any).textUnderlineOffset = "4px";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.textDecoration = "none";
-                }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#f0f0f0"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
               >
                 GET STARTED
-                <span style={{ fontFamily: "'JetBrains Mono', monospace" }}>&rarr;</span>
+                <ArrowRight className="w-4 h-4" strokeWidth={2} />
               </button>
               <button
                 onClick={() => onNavigate("upload")}
-                className="inline-flex items-center gap-2 text-sm transition-colors"
+                className="transition-colors"
                 style={{
                   background: "none",
-                  border: "none",
-                  padding: 0,
-                  color: "#6b6b6b",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.08em",
+                  border: "1px solid #333333",
+                  padding: "14px 28px",
+                  color: "#888888",
+                  fontSize: 12,
                   fontWeight: 400,
+                  letterSpacing: "0.06em",
                   cursor: "pointer",
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.color = "#6b6b6b"; }}
+                onMouseEnter={(e) => { 
+                  e.currentTarget.style.borderColor = "#555555"; 
+                  e.currentTarget.style.color = "#ffffff"; 
+                }}
+                onMouseLeave={(e) => { 
+                  e.currentTarget.style.borderColor = "#333333"; 
+                  e.currentTarget.style.color = "#888888"; 
+                }}
               >
                 UPLOAD FILE
               </button>
             </div>
           </div>
 
-          {/* Right column: How It Works cards */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {/* Right column - feature cards */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
             {[
               {
                 icon: Upload,
@@ -323,7 +316,7 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
               {
                 icon: Brain,
                 step: "03",
-                title: "FEEDBACK DEMO",
+                title: "DEMO",
                 desc: "Test how the model classifies any text you type.",
                 action: () => onNavigate("classify"),
               },
@@ -331,68 +324,102 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
               <button
                 key={step}
                 onClick={action}
-                className="text-left p-4 transition-colors"
+                className="text-left transition-all"
                 style={{
-                  backgroundColor: "transparent",
-                  borderLeft: "2px solid #2a2a2a",
+                  backgroundColor: "#111111",
+                  border: "1px solid #1a1a1a",
+                  padding: "20px 24px",
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: 16,
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "#1e1e1e"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; }}
+                onMouseEnter={(e) => { 
+                  e.currentTarget.style.backgroundColor = "#161616"; 
+                  e.currentTarget.style.borderColor = "#2a2a2a";
+                }}
+                onMouseLeave={(e) => { 
+                  e.currentTarget.style.backgroundColor = "#111111"; 
+                  e.currentTarget.style.borderColor = "#1a1a1a";
+                }}
               >
-                <div className="flex items-center gap-3 mb-2">
-                  <Icon className="w-4 h-4" style={{ color: "#6b6b6b" }} strokeWidth={1.5} />
-                  <span style={{ fontSize: 11, fontWeight: 400, color: "#6b6b6b", fontFamily: "'JetBrains Mono', monospace" }}>{step}</span>
-                  <span style={{ color: "#ffffff", fontWeight: 400, fontSize: 11, letterSpacing: "0.1em", textTransform: "uppercase" }}>{title}</span>
+                <div 
+                  style={{ 
+                    width: 40, 
+                    height: 40, 
+                    display: "flex", 
+                    alignItems: "center", 
+                    justifyContent: "center",
+                    backgroundColor: "#0a0a0a",
+                    border: "1px solid #222222",
+                    flexShrink: 0,
+                  }}
+                >
+                  <Icon className="w-4 h-4" style={{ color: "#7C9CBF" }} strokeWidth={1.5} />
                 </div>
-                <p style={{ color: "#6b6b6b", fontSize: 12, lineHeight: 1.6, fontWeight: 300 }}>{desc}</p>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                    <span style={{ 
+                      fontSize: 10, 
+                      color: "#444444", 
+                      fontFamily: "'JetBrains Mono', monospace" 
+                    }}>{step}</span>
+                    <span style={{ 
+                      color: "#ffffff", 
+                      fontWeight: 500, 
+                      fontSize: 12, 
+                      letterSpacing: "0.08em" 
+                    }}>{title}</span>
+                  </div>
+                  <p style={{ 
+                    color: "#666666", 
+                    fontSize: 13, 
+                    lineHeight: 1.5, 
+                    fontWeight: 300 
+                  }}>{desc}</p>
+                </div>
               </button>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Recent Activity — compact inline row */}
+      {/* Activity indicator */}
       {totalUploads > 0 && (
         <div
           style={{
-            borderTop: "1px solid #2a2a2a",
-            paddingTop: 16,
+            padding: "20px 40px",
             display: "flex",
             alignItems: "center",
-            gap: 12,
+            gap: 16,
+            borderBottom: "1px solid #1a1a1a",
           }}
         >
-          {/* Decorative dot cluster */}
-          <div style={{ display: "flex", gap: 3 }}>
-            <span style={{ width: 4, height: 4, backgroundColor: "#7C9CBF", opacity: 1, display: "inline-block" }} />
-            <span style={{ width: 4, height: 4, backgroundColor: "#8BAF8B", opacity: 0.7, display: "inline-block" }} />
-            <span style={{ width: 4, height: 4, backgroundColor: "#B8A9C9", opacity: 0.4, display: "inline-block" }} />
+          <div style={{ display: "flex", gap: 4 }}>
+            <span style={{ width: 6, height: 6, backgroundColor: "#7C9CBF", display: "inline-block" }} />
+            <span style={{ width: 6, height: 6, backgroundColor: "#7C9CBF", opacity: 0.5, display: "inline-block" }} />
+            <span style={{ width: 6, height: 6, backgroundColor: "#7C9CBF", opacity: 0.2, display: "inline-block" }} />
           </div>
 
-          {/* Stat text */}
-          <span style={{ fontSize: 12, color: "#6b6b6b", fontWeight: 300 }}>
+          <span style={{ fontSize: 13, color: "#666666", fontWeight: 300 }}>
             <span style={{ fontFamily: "'JetBrains Mono', monospace", color: "#ffffff" }}>{totalUploads}</span> file{totalUploads !== 1 ? "s" : ""} processed
           </span>
 
-          <span style={{ color: "#2a2a2a" }}>&middot;</span>
+          <span style={{ color: "#333333" }}>|</span>
 
-          {/* View history link */}
           <button
             onClick={() => onNavigate("upload")}
             style={{
               background: "none",
               border: "none",
               padding: 0,
-              color: "#6b6b6b",
-              fontSize: 10,
+              color: "#7C9CBF",
+              fontSize: 11,
               fontWeight: 400,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
+              letterSpacing: "0.08em",
               cursor: "pointer",
-              fontFamily: "'Space Grotesk', sans-serif",
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = "#6b6b6b"; }}
+            onMouseEnter={(e) => { e.currentTarget.style.textDecoration = "underline"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.textDecoration = "none"; }}
           >
             VIEW HISTORY
           </button>

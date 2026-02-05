@@ -22,73 +22,64 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
     <aside
       className="flex flex-col h-screen sticky top-0"
       style={{
-        width: "var(--sidebar-width, 248px)",
-        minWidth: "var(--sidebar-width, 248px)",
-        backgroundColor: "#d9d9d9",
-        borderRight: "1px solid #c0c0c0",
+        width: "var(--sidebar-width, 240px)",
+        minWidth: "var(--sidebar-width, 240px)",
+        backgroundColor: "#f5f5f5",
+        borderRight: "1px solid #e0e0e0",
       }}
     >
       {/* Logo */}
       <div
         style={{
-          padding: "24px var(--sidebar-padding-x, 24px) 16px",
-          borderBottom: "1px solid #c0c0c0",
-          marginBottom: 8,
+          padding: "28px 24px 20px",
+          borderBottom: "1px solid #e0e0e0",
         }}
       >
-        <div>
-          <h1
-            style={{
-              fontSize: 11,
-              fontWeight: 500,
-              color: "#0f0e12",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              lineHeight: 1.4,
-            }}
-          >
-            Delta Airlines
-          </h1>
-        </div>
+        <h1
+          style={{
+            fontSize: 13,
+            fontWeight: 600,
+            color: "#1a1a1a",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            fontFamily: "'Space Grotesk', sans-serif",
+          }}
+        >
+          Delta Airlines
+        </h1>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 py-2">
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "var(--sidebar-nav-gap, 2px)",
-          }}
-        >
+      <nav style={{ flex: 1, padding: "16px 0" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
           {NAV_ITEMS.map(({ page, label, icon: Icon }) => {
             const isActive = activePage === page;
             return (
               <button
                 key={page}
                 onClick={() => onNavigate(page)}
-                className="w-full flex items-center gap-3 text-left transition-colors"
+                className="w-full flex items-center gap-3 text-left transition-all"
                 style={{
-                  padding: "10px var(--sidebar-padding-x, 24px)",
-                  backgroundColor: isActive ? "rgba(0,0,0,0.06)" : "transparent",
-                  color: isActive ? "#0f0e12" : "#6b6b6b",
-                  borderLeft: isActive ? "2px solid #0f0e12" : "2px solid transparent",
+                  padding: "12px 24px",
+                  backgroundColor: isActive ? "#ffffff" : "transparent",
+                  color: isActive ? "#1a1a1a" : "#666666",
+                  borderLeft: isActive ? "3px solid #1a1a1a" : "3px solid transparent",
                   fontSize: 11,
-                  fontWeight: isActive ? 500 : 400,
-                  letterSpacing: "0.1em",
+                  fontWeight: isActive ? 600 : 400,
+                  letterSpacing: "0.08em",
                   textTransform: "uppercase",
-                  lineHeight: 1.6,
+                  fontFamily: "'Space Grotesk', sans-serif",
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive) {
-                    e.currentTarget.style.color = "#0f0e12";
-                    e.currentTarget.style.backgroundColor = "rgba(0,0,0,0.04)";
+                    e.currentTarget.style.backgroundColor = "#ebebeb";
+                    e.currentTarget.style.color = "#1a1a1a";
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isActive) {
-                    e.currentTarget.style.color = "#6b6b6b";
                     e.currentTarget.style.backgroundColor = "transparent";
+                    e.currentTarget.style.color = "#666666";
                   }
                 }}
               >
@@ -102,55 +93,59 @@ export function Sidebar({ activePage, onNavigate, apiOnline, modelLoaded }: Side
 
       {/* Status */}
       <div
-        className="space-y-3"
         style={{
-          padding: "16px var(--sidebar-padding-x, 24px) 24px",
-          borderTop: "1px solid #c0c0c0",
+          padding: "20px 24px",
+          borderTop: "1px solid #e0e0e0",
+          backgroundColor: "#fafafa",
         }}
       >
-        <div className="flex items-center gap-3 py-1">
-          <span
-            style={{
-              width: 6,
-              height: 6,
-              backgroundColor: apiOnline ? "#2d8a4e" : "#c0392b",
-              display: "inline-block",
-              borderRadius: "50%",
-            }}
-          />
-          <span
-            style={{
-              fontSize: 9,
-              fontWeight: 500,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              color: apiOnline ? "#2d8a4e" : "#c0392b",
-            }}
-          >
-            {apiOnline ? "ONLINE" : "OFFLINE"}
-          </span>
-        </div>
-        <div className="flex items-center gap-3 py-1">
-          <span
-            style={{
-              width: 6,
-              height: 6,
-              backgroundColor: modelLoaded ? "#2d8a4e" : "#c0392b",
-              display: "inline-block",
-              borderRadius: "50%",
-            }}
-          />
-          <span
-            style={{
-              fontSize: 9,
-              fontWeight: 500,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              color: modelLoaded ? "#2d8a4e" : "#c0392b",
-            }}
-          >
-            {modelLoaded ? "MODEL READY" : "MODEL N/A"}
-          </span>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <div className="flex items-center gap-3">
+            <span
+              style={{
+                width: 8,
+                height: 8,
+                backgroundColor: apiOnline ? "#22c55e" : "#ef4444",
+                display: "inline-block",
+                borderRadius: "50%",
+              }}
+            />
+            <span
+              style={{
+                fontSize: 10,
+                fontWeight: 500,
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                color: apiOnline ? "#16a34a" : "#dc2626",
+                fontFamily: "'Space Grotesk', sans-serif",
+              }}
+            >
+              {apiOnline ? "Online" : "Offline"}
+            </span>
+          </div>
+          <div className="flex items-center gap-3">
+            <span
+              style={{
+                width: 8,
+                height: 8,
+                backgroundColor: modelLoaded ? "#22c55e" : "#ef4444",
+                display: "inline-block",
+                borderRadius: "50%",
+              }}
+            />
+            <span
+              style={{
+                fontSize: 10,
+                fontWeight: 500,
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                color: modelLoaded ? "#16a34a" : "#dc2626",
+                fontFamily: "'Space Grotesk', sans-serif",
+              }}
+            >
+              {modelLoaded ? "Model Ready" : "Model N/A"}
+            </span>
+          </div>
         </div>
       </div>
     </aside>
