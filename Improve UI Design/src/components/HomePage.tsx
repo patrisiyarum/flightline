@@ -129,12 +129,29 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
             fontSize: 36,
             fontWeight: 600,
             color: "#ececec",
-            marginBottom: 16,
+            marginBottom: 8,
             fontFamily: "system-ui, -apple-system, sans-serif",
           }}
         >
           Flightline
         </h1>
+        <button
+          onClick={() => onNavigate("about")}
+          style={{
+            background: "none",
+            border: "none",
+            fontSize: 13,
+            color: "#6e6e6e",
+            cursor: "pointer",
+            marginBottom: 16,
+            fontFamily: "system-ui, -apple-system, sans-serif",
+            transition: "color 0.15s ease",
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = "#10a37f"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = "#6e6e6e"; }}
+        >
+          About →
+        </button>
         <p style={{ fontSize: 16, color: "#8e8e8e", lineHeight: 1.6, maxWidth: 480, margin: "0 auto" }}>
           Upload crew feedback to classify it, explore insights, or test single comments in the demo.
         </p>

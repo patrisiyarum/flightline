@@ -128,8 +128,8 @@ interface BulkResultRow {
   [key: string]: any;
 }
 
-// --- Chart Colors (ChatGPT inspired) ---
-const CHART_COLORS = ["#10a37f", "#8e8e8e", "#6e6e6e", "#9b9b9b", "#4e4e4e", "#ececec"];
+// --- Chart Colors (three-color palette with green) ---
+const CHART_COLORS = ["#10a37f", "#6366f1", "#f59e0b", "#10a37f", "#6366f1", "#f59e0b"];
 const TOOLTIP_STYLE: React.CSSProperties = {
   backgroundColor: "#2f2f2f",
   color: "#ececec",
