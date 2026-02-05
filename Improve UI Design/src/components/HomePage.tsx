@@ -61,7 +61,7 @@ export function PipelineVisualization() {
               onClick={() => setActiveStage(activeStage === i ? null : i)}
               style={{
                 backgroundColor: activeStage === i ? "#1a1a1a" : "#111111",
-                border: activeStage === i ? "1px solid #7C9CBF" : (stage.isBert ? "1px solid #333333" : "1px solid #222222"),
+                border: activeStage === i ? "1px solid #ffffff" : (stage.isBert ? "1px solid #333333" : "1px solid #222222"),
                 padding: "16px 24px",
                 textAlign: "center",
                 minWidth: 120,
@@ -87,7 +87,7 @@ export function PipelineVisualization() {
                   top: 8,
                   left: 12,
                   fontSize: 9,
-                  color: activeStage === i ? "#7C9CBF" : "#444444",
+                  color: activeStage === i ? "#ffffff" : "#444444",
                   fontFamily: "'JetBrains Mono', monospace",
                 }}
               >
@@ -122,7 +122,7 @@ export function PipelineVisualization() {
                     bottom: 6,
                     right: 8,
                     fontSize: 8,
-                    color: activeStage === i ? "#7C9CBF" : "#444444",
+                    color: activeStage === i ? "#ffffff" : "#444444",
                     fontFamily: "'JetBrains Mono', monospace",
                     letterSpacing: "0.06em",
                   }}
@@ -162,7 +162,7 @@ export function PipelineVisualization() {
                     left: 0,
                     width: 5,
                     height: 5,
-                    backgroundColor: "#7C9CBF",
+                    backgroundColor: "#ffffff",
                     borderRadius: "50%",
                     animation: `pipeline-dot 2s ease-in-out infinite`,
                     animationDelay: `${i * 0.5}s`,
@@ -335,7 +335,7 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
                     borderRadius: 8,
                   }}
                 >
-                  <Icon className="w-4 h-4" style={{ color: "#7C9CBF" }} strokeWidth={1.5} />
+                  <Icon className="w-4 h-4" style={{ color: "#ffffff" }} strokeWidth={1.5} />
                 </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
@@ -376,9 +376,9 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
           }}
         >
           <div style={{ display: "flex", gap: 4 }}>
-            <span style={{ width: 6, height: 6, backgroundColor: "#7C9CBF", display: "inline-block", borderRadius: "50%" }} />
-            <span style={{ width: 6, height: 6, backgroundColor: "#7C9CBF", opacity: 0.5, display: "inline-block", borderRadius: "50%" }} />
-            <span style={{ width: 6, height: 6, backgroundColor: "#7C9CBF", opacity: 0.2, display: "inline-block", borderRadius: "50%" }} />
+            <span style={{ width: 6, height: 6, backgroundColor: "#ffffff", display: "inline-block", borderRadius: "50%" }} />
+            <span style={{ width: 6, height: 6, backgroundColor: "#ffffff", opacity: 0.5, display: "inline-block", borderRadius: "50%" }} />
+            <span style={{ width: 6, height: 6, backgroundColor: "#ffffff", opacity: 0.2, display: "inline-block", borderRadius: "50%" }} />
           </div>
 
           <span style={{ fontSize: 13, color: "#666666", fontWeight: 300 }}>
@@ -393,7 +393,7 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
               background: "none",
               border: "none",
               padding: 0,
-              color: "#7C9CBF",
+              color: "#ffffff",
               fontSize: 11,
               fontWeight: 400,
               letterSpacing: "0.08em",

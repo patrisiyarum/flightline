@@ -124,7 +124,7 @@ interface BulkResultRow {
 }
 
 // --- Chart Colors (monochrome + one accent) ---
-const CHART_COLORS = ["#7C9CBF", "#8BAF8B", "#B8A9C9", "#C4B7A6", "#8ABCC4", "#A3A3A3"];
+const CHART_COLORS = ["#ffffff", "#a0a0a0", "#808080", "#c0c0c0", "#909090", "#b0b0b0"];
 const TOOLTIP_STYLE: React.CSSProperties = {
   backgroundColor: "#0f0e12",
   color: "#e5e5e5",
@@ -275,7 +275,7 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
             value={confidenceThreshold}
             onChange={(e) => setConfidenceThreshold(Number(e.target.value))}
             className="w-24"
-            style={{ accentColor: "#7C9CBF" }}
+            style={{ accentColor: "#ffffff" }}
           />
           {confidenceThreshold > 0 && (
             <span style={{ fontSize: 10, padding: "2px 6px", backgroundColor: "#1e1e1e", color: "#555", fontFamily: "'JetBrains Mono', monospace" }}>
@@ -335,7 +335,7 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
                 <XAxis dataKey="name" tick={{ fill: "#555", fontSize: 9, fontFamily: "'Space Grotesk', sans-serif" }} />
                 <YAxis tick={{ fill: "#555", fontSize: 9, fontFamily: "'Space Grotesk', sans-serif" }} />
                 <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ fill: "rgba(255,255,255,0.03)" }} />
-                <Bar dataKey="count" fill="#7C9CBF" radius={[0, 0, 0, 0]} name="Records" barSize={18} />
+                <Bar dataKey="count" fill="#ffffff" radius={[0, 0, 0, 0]} name="Records" barSize={18} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -354,7 +354,7 @@ function AnalyticsDashboard({ results, processingTime }: { results: BulkResultRo
                 <XAxis dataKey="date" tick={{ fill: "#555", fontSize: 9, fontFamily: "'Space Grotesk', sans-serif" }} />
                 <YAxis tick={{ fill: "#555", fontSize: 10, fontFamily: "'Space Grotesk', sans-serif" }} />
                 <Tooltip contentStyle={TOOLTIP_STYLE} wrapperStyle={TOOLTIP_WRAPPER_STYLE} cursor={{ stroke: "#2a2a2a" }} />
-                <Line type="monotone" dataKey="count" stroke="#7C9CBF" strokeWidth={1.5} dot={{ r: 1.5, fill: "#7C9CBF" }} activeDot={{ r: 3 }} />
+                <Line type="monotone" dataKey="count" stroke="#ffffff" strokeWidth={1.5} dot={{ r: 1.5, fill: "#ffffff" }} activeDot={{ r: 3 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -607,7 +607,7 @@ export default function App() {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center gap-3 mb-4">
-          <Lock className="w-5 h-5" style={{ color: "#7C9CBF" }} strokeWidth={1.5} />
+          <Lock className="w-5 h-5" style={{ color: "#ffffff" }} strokeWidth={1.5} />
           <h2 style={{ fontSize: 16, color: "#ffffff", fontWeight: 400 }}>Access Real Data</h2>
         </div>
         <p style={{ fontSize: 12, color: "#6b6b6b", marginBottom: 20, lineHeight: 1.6 }}>
@@ -710,7 +710,7 @@ export default function App() {
         <span
           style={{
             fontSize: 9,
-            color: "#7C9CBF",
+            color: "#ffffff",
             letterSpacing: "0.1em",
             textTransform: "uppercase",
             fontWeight: 500,
@@ -1086,7 +1086,7 @@ export default function App() {
                     href="https://www.nvidia.com/en-us/glossary/bert/" 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    style={{ color: "#7C9CBF", textDecoration: "none", fontWeight: 400 }}
+                    style={{ color: "#ffffff", textDecoration: "none", fontWeight: 400 }}
                     onMouseEnter={(e) => { e.currentTarget.style.textDecoration = "underline"; }}
                     onMouseLeave={(e) => { e.currentTarget.style.textDecoration = "none"; }}
                   >BERT</a> model that transforms hours of manual categorization into seconds of automated processing.
@@ -1095,7 +1095,7 @@ export default function App() {
                 <div style={{ textAlign: "right", flexShrink: 0 }}>
                   <span style={{ 
                     fontSize: 24, 
-                    color: "#7C9CBF", 
+                    color: "#ffffff", 
                     fontFamily: "'JetBrains Mono', monospace", 
                     fontWeight: 400,
                     display: "block",

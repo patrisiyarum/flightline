@@ -85,7 +85,7 @@ export function PredictionCard({ subPredictions }: PredictionCardProps) {
             style={{ 
               width: `${Math.min(topPrediction.probability, 100)}%`, 
               height: "100%", 
-              backgroundColor: "#7C9CBF",
+              backgroundColor: "#ffffff",
               transition: "width 0.5s ease",
               borderRadius: 2,
             }}

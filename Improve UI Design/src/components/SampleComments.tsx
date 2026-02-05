@@ -70,7 +70,7 @@ export function SampleComments({ onSelectSample }: SampleCommentsProps) {
               style={{
                 fontSize: 11,
                 fontWeight: 500,
-                color: "#7C9CBF",
+                color: "#ffffff",
                 textTransform: "uppercase",
                 letterSpacing: "0.06em",
                 fontFamily: "'Space Grotesk', sans-serif",

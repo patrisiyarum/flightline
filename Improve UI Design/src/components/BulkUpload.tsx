@@ -376,7 +376,7 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
           <div className="overflow-hidden" style={{ height: 4, backgroundColor: "#1a1a1a", borderRadius: 2 }}>
             <div
               className="transition-all"
-              style={{ width: `${progress}%`, height: "100%", backgroundColor: "#7C9CBF", borderRadius: 2 }}
+              style={{ width: `${progress}%`, height: "100%", backgroundColor: "#ffffff", borderRadius: 2 }}
             />
           </div>
         </div>

@@ -20,7 +20,7 @@ export function UploadHistory({ uploads, currentUploadId, onSelectUpload, loadin
   if (uploads.length === 0 && !loading) return null;
 
   return (
-    <div className="p-5" style={{ borderTop: "1px solid #1e1e1e" }}>
+    <div className="p-5" style={{ marginTop: 24 }}>
       <div className="flex items-center gap-2 mb-3">
         <History className="w-3.5 h-3.5" style={{ color: "#444" }} strokeWidth={1.5} />
         <h3 style={{ fontSize: 10, fontWeight: 300, color: "#444", letterSpacing: "0.1em", textTransform: "uppercase" }}>RECENT UPLOADS</h3>
