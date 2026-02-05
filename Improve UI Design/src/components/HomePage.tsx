@@ -141,7 +141,7 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
       </div>
 
       {/* Action cards */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 48 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24, marginBottom: 48 }}>
         {[
           {
             icon: Upload,
@@ -166,26 +166,23 @@ export function HomePage({ onNavigate, modelLoaded, totalUploads }: HomePageProp
             key={title}
             onClick={action}
             style={{
-              backgroundColor: "#212121",
-              border: "1px solid #3e3e3e",
-              padding: "20px",
-              borderRadius: 12,
+              backgroundColor: "transparent",
+              border: "none",
+              padding: "16px 8px",
               cursor: "pointer",
-              textAlign: "left",
+              textAlign: "center",
               transition: "all 0.15s ease",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#2f2f2f";
-              e.currentTarget.style.borderColor = "#4e4e4e";
+              e.currentTarget.style.opacity = "0.7";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "#212121";
-              e.currentTarget.style.borderColor = "#3e3e3e";
+              e.currentTarget.style.opacity = "1";
             }}
           >
-            <Icon className="w-5 h-5 mb-3" style={{ color: "#8e8e8e" }} strokeWidth={2} />
+            <Icon className="w-6 h-6 mb-3 mx-auto" style={{ color: "#8e8e8e" }} strokeWidth={1.5} />
             <div style={{ fontSize: 15, fontWeight: 500, color: "#ececec", marginBottom: 4 }}>{title}</div>
-            <div style={{ fontSize: 13, color: "#8e8e8e" }}>{desc}</div>
+            <div style={{ fontSize: 13, color: "#6e6e6e" }}>{desc}</div>
           </button>
         ))}
       </div>

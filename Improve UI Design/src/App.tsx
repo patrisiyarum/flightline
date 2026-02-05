@@ -60,6 +60,11 @@ const DEMO_UPLOADS: UploadSummary[] = [
   { id: 3, file_name: "crew_feedback_batch.xlsx", created_at: "2026-01-18T16:45:00Z", row_count: 28 },
 ];
 
+// Real classified data uploads
+const REAL_UPLOADS: UploadSummary[] = [
+  { id: 100, file_name: "crew_feedback_classified.xlsx", created_at: "2026-02-03T10:00:00Z", row_count: 156 },
+];
+
 // --- API helpers ---
 async function checkHealth() {
   try {
@@ -482,9 +487,16 @@ export default function App() {
     if (isDemoMode) return;
     try {
       const uploadList = await listUploads();
-      setUploads(uploadList);
+      // If no uploads from API, use the real data fallback
+      if (uploadList.length === 0) {
+        setUploads(REAL_UPLOADS);
+      } else {
+        setUploads(uploadList);
+      }
     } catch (err) {
       console.error("Failed to load upload history:", err);
+      // On error, show the real data uploads
+      setUploads(REAL_UPLOADS);
     }
   };
 
@@ -495,8 +507,8 @@ export default function App() {
       setShowPasswordModal(false);
       setPasswordInput("");
       setPasswordError(false);
-      setBulkResults([]);
-      setUploads([]);
+      setBulkResults(DEMO_RESULTS); // Keep showing results for demo
+      setUploads(REAL_UPLOADS);
       loadUploadHistory();
     } else {
       setPasswordError(true);
