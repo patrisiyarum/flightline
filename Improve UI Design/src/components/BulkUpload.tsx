@@ -293,7 +293,7 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
           >
             <CheckCircle2 className="h-4 w-4 flex-shrink-0" style={{ color: "#4ade80" }} strokeWidth={1.5} />
             <span style={{ fontSize: 13, color: "#4ade80", fontWeight: 400 }}>
-              File ready — {previewData.length} rows preview (showing last 4 columns)
+              File ready — {previewData.length} rows preview (showing first 4 columns)
             </span>
           </div>
 
@@ -303,8 +303,8 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
                 <tr style={{ backgroundColor: "#1a1a1a" }}>
                   {(() => {
                     const allKeys = Object.keys(previewData[0]);
-                    const lastKeys = allKeys.slice(-4);
-                    return lastKeys.map((header, idx) => (
+                    const firstKeys = allKeys.slice(0, 4);
+                    return firstKeys.map((header, idx) => (
                       <th
                         key={idx}
                         className="px-4 py-3 text-left whitespace-nowrap"
@@ -319,10 +319,10 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
               <tbody>
                 {previewData.map((row, idx) => {
                   const allKeys = Object.keys(row);
-                  const lastKeys = allKeys.slice(-4);
+                  const firstKeys = allKeys.slice(0, 4);
                   return (
                     <tr key={idx} style={{ borderTop: "1px solid #1f1f1f" }}>
-                      {lastKeys.map((key, cellIdx) => (
+                      {firstKeys.map((key, cellIdx) => (
                         <td
                           key={cellIdx}
                           className="px-4 py-2.5"
