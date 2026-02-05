@@ -293,7 +293,7 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
           >
             <CheckCircle2 className="h-4 w-4 flex-shrink-0" style={{ color: "#4ade80" }} strokeWidth={1.5} />
             <span style={{ fontSize: 13, color: "#4ade80", fontWeight: 400 }}>
-              File ready — preview of first 5 rows shown below
+              File ready — {previewData.length} rows preview (showing last 4 columns)
             </span>
           </div>
 
@@ -301,33 +301,41 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
             <table className="w-full text-sm">
               <thead>
                 <tr style={{ backgroundColor: "#1a1a1a" }}>
-                  {Object.keys(previewData[0]).map((header, idx) => (
-                    <th
-                      key={idx}
-                      className="px-4 py-3 text-left whitespace-nowrap"
-                      style={{ color: "#666666", fontSize: 11, fontWeight: 500, letterSpacing: "0.06em", textTransform: "uppercase" }}
-                    >
-                      {header}
-                    </th>
-                  ))}
+                  {(() => {
+                    const allKeys = Object.keys(previewData[0]);
+                    const lastKeys = allKeys.slice(-4);
+                    return lastKeys.map((header, idx) => (
+                      <th
+                        key={idx}
+                        className="px-4 py-3 text-left whitespace-nowrap"
+                        style={{ color: "#666666", fontSize: 11, fontWeight: 500, letterSpacing: "0.06em", textTransform: "uppercase" }}
+                      >
+                        {header}
+                      </th>
+                    ));
+                  })()}
                 </tr>
               </thead>
               <tbody>
-                {previewData.map((row, idx) => (
-                  <tr key={idx} style={{ borderTop: "1px solid #1f1f1f" }}>
-                    {Object.values(row).map((value: any, cellIdx) => (
-                      <td
-                        key={cellIdx}
-                        className="px-4 py-2.5 whitespace-nowrap"
-                        style={{ color: "#cccccc", fontWeight: 300, fontSize: 13 }}
-                      >
-                        {String(value).length > 50
-                          ? String(value).substring(0, 50) + "..."
-                          : value}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
+                {previewData.map((row, idx) => {
+                  const allKeys = Object.keys(row);
+                  const lastKeys = allKeys.slice(-4);
+                  return (
+                    <tr key={idx} style={{ borderTop: "1px solid #1f1f1f" }}>
+                      {lastKeys.map((key, cellIdx) => (
+                        <td
+                          key={cellIdx}
+                          className="px-4 py-2.5"
+                          style={{ color: "#cccccc", fontWeight: 300, fontSize: 13, maxWidth: 300 }}
+                        >
+                          {String(row[key]).length > 80
+                            ? String(row[key]).substring(0, 80) + "..."
+                            : row[key]}
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -336,16 +344,17 @@ export function BulkUpload({ onPredict, onUploadComplete }: BulkUploadProps) {
             <button
               onClick={handleProcess}
               disabled={processing}
-              className="mt-6 w-full py-3 text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="mt-6 w-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               style={{
                 backgroundColor: "#ffffff",
                 color: "#0a0a0a",
                 textTransform: "uppercase",
                 letterSpacing: "0.08em",
-                fontWeight: 500,
-                fontSize: 12,
+                fontWeight: 600,
+                fontSize: 14,
+                padding: "18px 24px",
               }}
-              onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = "#eeeeee"; }}
+              onMouseEnter={(e) => { if (!e.currentTarget.disabled) e.currentTarget.style.backgroundColor = "#f0f0f0"; }}
               onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "#ffffff"; }}
             >
               {processing ? "Processing..." : "Start Prediction"}
