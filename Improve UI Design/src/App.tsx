@@ -21,7 +21,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from "recharts";
 
-const API_URL = "https://feedback-webapp-5zc2.onrender.com";
+const API_URL = "https://feedback-webapp-hn6g.onrender.com";
 
 // Hashed password for accessing real data (SHA-256)
 const DATA_PASSWORD_HASH = "6a1cf639aef5ec43c46e152839e76859319a8847b86fc00e5e592b973b3829e0";
